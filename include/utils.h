@@ -3,7 +3,7 @@
 
 void drawTitle(const char *);
 void clearScreen();
-void readName(char *string);
+void readString(char *string, int size);
 void clearInput();
 void story();
 

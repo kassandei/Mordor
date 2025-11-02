@@ -21,28 +21,29 @@ void clearInput() {
     while((ch = getchar()) != EOF && ch != '\n');
 }
 
-void readName(char *string) {
+void readString(char *string, int size) {
     clearInput();
-    while(1) {
-        if(fgets(string, NAMESIZE, stdin) == NULL) {
+    while (1) {
+        if (fgets(string, size, stdin) == NULL) {
             puts("Errore di lettura, riprova");
-            continue;
-        }
-        
-        char *newline = strchr(string, '\n');
-        if(newline) {
-            *newline = '\0';
-        } else {
-            puts("Il nome è troppo lungo, riprova");
             clearInput();
             continue;
         }
-        
-        if(string[0] == '\0') {
-            puts("Il nome non può essere vuoto, riprova");
+
+        char *newline = strchr(string, '\n');
+        if (newline) {
+            *newline = '\0';
+        } else {
+            puts("La stringa è troppo lunga, riprova");
+            clearInput();
             continue;
         }
-        
+
+        if (string[0] == '\0') {
+            puts("La stringa non può essere vuota, riprova");
+            continue;
+        }
+
         break;
     }
 }

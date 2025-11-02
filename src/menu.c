@@ -1,10 +1,9 @@
 #include <stdio.h>
-#include <utils.h>
 #include <stdlib.h>
-#include "types.h"
 #include "menu.h"
-
-extern Player HERO;
+#include "global.h"
+#include "utils.h"
+#include "game.h"
 
 void menu() {
     clearScreen();
@@ -40,10 +39,15 @@ void newGame() {
     clearScreen();
     story();
     puts("Inserisci il tuo nome:");
-    readName(HERO.name);
-
+    readString(HERO.name, NAMESIZE);
+    initGame();
+    villageMenu();
 }
 
 void loadGame() {
     puts("Carica partita");
+}
+
+void villageMenu() {
+
 }
