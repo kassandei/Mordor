@@ -13,11 +13,11 @@ void menu() {
     puts("2. Carica un salvataggio");
     puts("3. Esci");
     
-    printf("Seleziona una delle opzioni [1-3]: ");
+    puts("Seleziona una delle opzioni [1-3]: ");
     
     while((ch = getchar()) != '1' && ch != '2' && ch != '3') {
         clearInput();
-        printf("Opzione non valida riprova: ");
+        puts("Opzione non valida riprova: ");
     }
 
 

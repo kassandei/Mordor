@@ -2,6 +2,7 @@
 #define MENU
 
 #include "types.h"
+
 void menu();
 void newGame();
 void loadGame();
