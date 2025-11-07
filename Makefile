@@ -7,6 +7,6 @@ SRCS = $(wildcard $(SRC_DIR)/*.c)
 TARGET = game
 
 all:
-	$(CC) $(CFLAGS) $(SRCS) -o $(TARGET)
+	$(CC) $(CFLAGS) $(SRCS) -o $(TARGET) 
 	./$(TARGET)
 

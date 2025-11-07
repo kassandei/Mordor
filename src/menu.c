@@ -7,7 +7,7 @@
 #include "global.h"
 
 void menu() {
-    char ch;
+    char choice;
 
     while(1) {  
         clearScreen();
@@ -17,10 +17,9 @@ void menu() {
         puts("3. Esci");
         
         printf("Seleziona una delle opzioni [1-3]: ");
-        ch = readOption("123");
+        choice = readOption("123");
         
-        clearInput();
-        switch (ch) {
+        switch (choice) {
         case '1':
             newGame();
             break;
@@ -49,7 +48,7 @@ void loadGame() {
 }
 
 void villageMenu() {
-    char ch;
+    char choice;
 
     while(1) {  
         clearScreen();
@@ -61,9 +60,8 @@ void villageMenu() {
         puts("5. Torna al menu di gioco");
         playerStats();
         printf("Seleziona una delle opzioni [1-5]: ");
-        ch = readOption("12345");
-        clearInput();
-        switch (ch) {
+        choice = readOption("12345");
+        switch (choice) {
         case '1':
             dungeonMenu();
             break;
@@ -79,13 +77,8 @@ void villageMenu() {
         case '5':
             clearScreen();
             printf("Sei sicuro di voler uscire? Perderai i progressi non salvati\nS/N : ");
-            char confirm;
-            while((confirm = getchar()) != 'S' && confirm != 'N') {
-                clearInput();
-                puts("Opzione non valida riprova: "); 
-            }
-            clearInput();
-            if(confirm == 'S') {
+            choice = readOption("SN");
+            if(choice == 'S') {
                 return;  // torna al menu
             }
             break;
@@ -103,20 +96,39 @@ void rest() {
     HERO.hp = MAX_HP;
     printf("Dopo un riposo accanto a un falo l'eroe %s è tornato in piene forze\n", HERO.name);
     puts("I punti vita sono stati riprestinati");
-    clearInput();
+    printf("Premi un tasto per proseguire...");
+    clearInput(); 
 }
 
-void inventoryMenu() {
-    int ch;
+void inventoryMenu() {    
+    char choice;
+    clearScreen();
     playerStats();
-    printf("Possiedi %d pozioni curative\n", HERO.potions);
-    printf(HERO.hasDmgBuff ? "Possiedi" : "Non possiedi" " la spada potenziata\n");
-    printf(HERO.hasArmor ? "Possiedi" : "Non possiedi" " l'armatura\n");
-    printf(HERO.hasHeroSword ? "Possiedi" : "Non possiedi" " la spada dell'erore\n");
-    printf(HERO.hasCastleKey ? "Possiedi" : "Non possiedi" " la chiave del castello del Signor Oscuro\n");
 
-    puts("Vuoi usare una pozione curativa? S/N: ");
-    //while((ch = getchar()) != "");
+    printf("Possiedi %d pozioni curative\n", HERO.potions);
+    printf("%s la spada potenziata\n", HERO.hasDmgBuff ? "Possiedi" : "Non possiedi");
+    printf("%s l'armatura\n", HERO.hasArmor ? "Possiedi" : "Non possiedi");
+    printf("%s la spada dell'eroe\n", HERO.hasHeroSword ? "Possiedi" : "Non possiedi");
+    printf("%s la chiave del castello del Signor Oscuro\n", HERO.hasCastleKey ? "Possiedi" : "Non possiedi");
+    printf("Vuoi usare una pozione curativa? S/N: ");
+    while(1) {
+        choice = readOption("SN");
+        if(choice == 'S') {
+            // restore hp based on random number;
+            if(HERO.potions > 0) {
+                // restore hp based on random number;
+                HERO.potions--;
+                printf("Vuoi usare una pozione curativa? S/N: ");
+                continue;
+            }
+            else {
+                printf("Non hai pozioni curative da usare...");
+                clearInput();
+            }
+        }
+        break;
+    }
+
 
 }
 

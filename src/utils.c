@@ -18,7 +18,7 @@ void clearScreen() {
 }
 
 void clearInput() {
-    int ch;
+    int ch; // int per rilevare l'EOF (-1)
     while((ch = getchar()) != EOF && ch != '\n');
 }
 
@@ -73,10 +73,11 @@ void playerStats() {
 
 
 char readOption(const char *valid) {
-    int ch;
+    char ch;
     while((ch = getchar()) && !strchr(valid, ch)) {
         clearInput();
         printf("Opzione non valida riprova: ");
     }
+    clearInput();
     return (char)ch;
 }
