@@ -4,8 +4,9 @@
 #include "menu.h"
 #include "utils.h"
 #include "game.h"
+#include "global.h"
 
-void menu(Player *hero) {
+void menu() {
     char ch;
 
     while(1) {  
@@ -21,7 +22,7 @@ void menu(Player *hero) {
         clearInput();
         switch (ch) {
         case '1':
-            newGame(hero);
+            newGame();
             break;
         case '2':
             loadGame();
@@ -34,21 +35,20 @@ void menu(Player *hero) {
     }
 }
 
-void newGame(Player *hero) {
+void newGame() {
     clearScreen();
     story();
     printf("Inserisci il tuo nome: ");
-    readString(hero->name, NAMESIZE);
-    initGame(hero);
-    villageMenu(hero);
+    readString(HERO.name, NAMESIZE);
+    initGame();
+    villageMenu();
 }
 
 void loadGame() {
     puts("Carica partita");
 }
 
-void villageMenu(Player *hero) {
-    const char *villageOptions = "12345";
+void villageMenu() {
     char ch;
 
     while(1) {  
@@ -59,8 +59,8 @@ void villageMenu(Player *hero) {
         puts("3. Inventario");
         puts("4. Salva partita");
         puts("5. Torna al menu di gioco");
-        playerStats(hero);
-        printf("Seleziona una delle opzioni [1-6]: ");
+        playerStats();
+        printf("Seleziona una delle opzioni [1-5]: ");
         ch = readOption("12345");
         clearInput();
         switch (ch) {
@@ -68,10 +68,10 @@ void villageMenu(Player *hero) {
             dungeonMenu();
             break;
         case '2': 
-            rest(hero);
+            rest();
             break;
         case '3':
-            inventoryMenu(hero);
+            inventoryMenu();
             break;
         case '4': 
             saveGame();
@@ -98,22 +98,22 @@ void villageMenu(Player *hero) {
 void dungeonMenu() {
 }
 
-void rest(Player *hero) {
+void rest() {
     clearScreen();
-    hero->hp = MAX_HP;
-    printf("Dopo un riposo accanto a un falo l'eroe %s è tornato in piene forze\n", hero->name);
+    HERO.hp = MAX_HP;
+    printf("Dopo un riposo accanto a un falo l'eroe %s è tornato in piene forze\n", HERO.name);
     puts("I punti vita sono stati riprestinati");
     clearInput();
 }
 
-void inventoryMenu(Player *hero) {
+void inventoryMenu() {
     int ch;
-    playerStats(hero);
-    printf("Possiedi %d pozioni curative\n", hero->potions);
-    printf(hero->hasDmgBuff ? "Possiedi" : "Non possiedi" " la spada potenziata\n");
-    printf(hero->hasArmor ? "Possiedi" : "Non possiedi" " l'armatura\n");
-    printf(hero->hasHeroSword ? "Possiedi" : "Non possiedi" " la spada dell'erore\n");
-    printf(hero->hasCastleKey ? "Possiedi" : "Non possiedi" " la chiave del castello del Signor Oscuro\n");
+    playerStats();
+    printf("Possiedi %d pozioni curative\n", HERO.potions);
+    printf(HERO.hasDmgBuff ? "Possiedi" : "Non possiedi" " la spada potenziata\n");
+    printf(HERO.hasArmor ? "Possiedi" : "Non possiedi" " l'armatura\n");
+    printf(HERO.hasHeroSword ? "Possiedi" : "Non possiedi" " la spada dell'erore\n");
+    printf(HERO.hasCastleKey ? "Possiedi" : "Non possiedi" " la chiave del castello del Signor Oscuro\n");
 
     puts("Vuoi usare una pozione curativa? S/N: ");
     //while((ch = getchar()) != "");

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "types.h"
 #include "utils.h"
+#include "global.h"
 
 void drawTitle(const char *string) {
     int len = strlen(string);
@@ -54,19 +55,19 @@ void story() {
         "devastate e nemici implacabili.\n");
 }
 
-int missionCompleted(const Player *hero) {
+int missionCompleted() {
     int completed = 0;
     for (int i = 0; i < QUESTS; i++) {
-        completed += hero->missionComplete[i];
+        completed += HERO.missionComplete[i];
     }
 
     return completed;
 }
 
 
-void playerStats(const Player *hero) {
+void playerStats() {
     printf("\n%s | HP: %d | COINS: %d | MISSION COMPLETED %d/3\n\n", 
-        hero->name, hero->hp, hero->coins, missionCompleted(hero));
+        HERO.name, HERO.hp, HERO.coins, missionCompleted());
 
 }
 

@@ -3,14 +3,14 @@
 
 #include "types.h"
 
-void menu(Player *hero);
-void newGame(Player *hero);
+void menu();
+void newGame();
 void loadGame();
-void villageMenu(Player *hero);
+void villageMenu();
 void dungeonMenu();
-void rest(Player *hero);
+void rest();
 void shopMenu();
 void saveGame();
-void inventoryMenu(Player *hero);
+void inventoryMenu();
 
 #endif

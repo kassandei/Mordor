@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include "game.h"
+#include "global.h"
 
-void initGame(Player *hero) {
-    hero->hp = 20;
-    hero->coins = 0;
-    hero->potions = 0;
+void initGame() {
+    HERO.hp = 20;
+    HERO.coins = 0;
+    HERO.potions = 0;
     for(int i = 0; i < QUESTS; i++) {
-        hero->missionComplete[i] = 0;
+        HERO.missionComplete[i] = 0;
     }
 }
 
