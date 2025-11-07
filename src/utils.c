@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "types.h"
 #include "utils.h"
+#include "global.h"
 
 void drawTitle(const char *string) {
     int len = strlen(string);
@@ -22,7 +23,6 @@ void clearInput() {
 }
 
 void readString(char *string, int size) {
-    clearInput();
     while (1) {
         if (fgets(string, size, stdin) == NULL) {
             puts("Errore di lettura, riprova");
@@ -34,13 +34,13 @@ void readString(char *string, int size) {
         if (newline) {
             *newline = '\0';
         } else {
-            puts("La stringa è troppo lunga, riprova");
+            printf("La stringa è troppo lunga, riprova: ");
             clearInput();
             continue;
         }
 
         if (string[0] == '\0') {
-            puts("La stringa non può essere vuota, riprova");
+            printf("La stringa non può essere vuota, riprova: ");
             continue;
         }
 
@@ -53,4 +53,14 @@ void story() {
         "Tu, semplice abitante scelto dal villaggio, devi fermare \n"
         "il Signore Oscuro e riportare la luce, affrontando terre \n"
         "devastate e nemici implacabili.\n");
+}
+
+int missionCompleted() {
+    int completed = 0;
+    for (int i = 0; i < QUESTS; i++) {
+        if(HERO.missionComplete[i] == 1)
+            completed++;
+    }
+
+    return completed;
 }
