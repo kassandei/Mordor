@@ -4,6 +4,6 @@
 
 #include "types.h"
 
-void initGame();
+void initGame(Player *hero);
 
 #endif

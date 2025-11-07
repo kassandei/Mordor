@@ -7,8 +7,8 @@
 int main(void) {
     
     srand(time(NULL));
-    initGame();
-    menu();
+    Player hero;
+    menu(&hero);
 
     return 0;
 

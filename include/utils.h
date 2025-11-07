@@ -3,10 +3,11 @@
 
 void drawTitle(const char *);
 void clearScreen();
-void readString(char *string, int size);
+void readString(char *buffer, int size);
 void clearInput();
 void story();
-int missionCompleted();
-
+void playerStats(const Player *hero);
+int missionCompleted(const Player *hero);
+char readOption(const char *valid);
 
 #endif

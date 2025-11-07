@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include "types.h"
 #include "utils.h"
-#include "global.h"
 
 void drawTitle(const char *string) {
     int len = strlen(string);
@@ -22,15 +21,15 @@ void clearInput() {
     while((ch = getchar()) != EOF && ch != '\n');
 }
 
-void readString(char *string, int size) {
+void readString(char *buffer, int size) {
     while (1) {
-        if (fgets(string, size, stdin) == NULL) {
+        if (fgets(buffer, size, stdin) == NULL) {
             puts("Errore di lettura, riprova");
             clearInput();
             continue;
         }
 
-        char *newline = strchr(string, '\n');
+        char *newline = strchr(buffer, '\n');
         if (newline) {
             *newline = '\0';
         } else {
@@ -39,7 +38,7 @@ void readString(char *string, int size) {
             continue;
         }
 
-        if (string[0] == '\0') {
+        if (buffer[0] == '\0') {
             printf("La stringa non può essere vuota, riprova: ");
             continue;
         }
@@ -55,12 +54,28 @@ void story() {
         "devastate e nemici implacabili.\n");
 }
 
-int missionCompleted() {
+int missionCompleted(const Player *hero) {
     int completed = 0;
     for (int i = 0; i < QUESTS; i++) {
-        if(HERO.missionComplete[i] == 1)
-            completed++;
+        completed += hero->missionComplete[i];
     }
 
     return completed;
+}
+
+
+void playerStats(const Player *hero) {
+    printf("\n%s | HP: %d | COINS: %d | MISSION COMPLETED %d/3\n\n", 
+        hero->name, hero->hp, hero->coins, missionCompleted(hero));
+
+}
+
+
+char readOption(const char *valid) {
+    int ch;
+    while((ch = getchar()) && !strchr(valid, ch)) {
+        clearInput();
+        printf("Opzione non valida riprova: ");
+    }
+    return (char)ch;
 }
