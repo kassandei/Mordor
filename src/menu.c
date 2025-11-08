@@ -20,16 +20,16 @@ void menu() {
         choice = readOption("123");
         
         switch (choice) {
-        case '1':
-            newGame();
-            break;
-        case '2':
-            loadGame();
-            break;
-        case '3':
-            exit(EXIT_SUCCESS);
-        default:
-            break;
+            case '1':
+                newGame();
+                break;
+            case '2':
+                loadGame();
+                break;
+            case '3':
+                exit(EXIT_SUCCESS);
+            default:
+                break;
         }
     }
 }
@@ -62,33 +62,57 @@ void villageMenu() {
         printf("Seleziona una delle opzioni [1-5]: ");
         choice = readOption("12345");
         switch (choice) {
-        case '1':
-            dungeonMenu();
-            break;
-        case '2': 
-            rest();
-            break;
-        case '3':
-            inventoryMenu();
-            break;
-        case '4': 
-            saveGame();
-            break;
-        case '5':
-            clearScreen();
-            printf("Sei sicuro di voler uscire? Perderai i progressi non salvati\nS/N : ");
-            choice = readOption("SN");
-            if(choice == 'S') {
-                return;  // torna al menu
-            }
-            break;
-        default:
-            break;
+            case '1':
+                dungeonMenu();
+                break;
+            case '2': 
+                rest();
+                break;
+            case '3':
+                inventoryMenu();
+                break;
+            case '4': 
+                saveGame();
+                break;
+            case '5':
+                clearScreen();
+                printf("Sei sicuro di voler uscire? Perderai i progressi non salvati\nS/N : ");
+                choice = readOption("SN");
+                if(choice == 'S') {
+                    return;  // torna al menu
+                }
+                break;
+            default:
+                break;
         }
     }
 }
 
 void dungeonMenu() {
+    char choice;
+
+    clearScreen();
+    drawTitle("MISSIONI");
+    puts("1. Palude Putrescente");
+    puts("2. Magione Infestata");
+    puts("3. Grotta di Cristallo");
+    printf("Seleziona una delle opzioni [1-3]: ");
+    choice = readOption("123");
+
+    switch (choice) {
+        case '1':
+            swampDungeon();
+            break;
+        case '2':
+            mansionDungeon();
+            break;
+        case '3':
+            caveDungeon();
+            break;
+        default:
+            break;
+    }
+
 }
 
 void rest() {
@@ -114,9 +138,9 @@ void inventoryMenu() {
     while(1) {
         choice = readOption("SN");
         if(choice == 'S') {
-            // restore hp based on random number;
             if(HERO.potions > 0) {
-                // restore hp based on random number;
+                HERO.hp += rand() % 6;
+                if(HERO.hp > 20) HERO.hp = 20;
                 HERO.potions--;
                 printf("Vuoi usare una pozione curativa? S/N: ");
                 continue;
@@ -140,3 +164,10 @@ void saveGame() {
 
 }
 
+void missionMenu() {
+    puts("1. Esplora la stanza del Dungeon");
+    puts("2. Negozio");
+    puts("3. Inventario");
+    puts("4. Torna al Villaggio ( Paga 50 Monete )");
+    printf("Seleziona una delle opzioni del menu [1 -4]: ");
+}

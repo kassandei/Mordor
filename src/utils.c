@@ -64,9 +64,8 @@ int missionCompleted() {
     return completed;
 }
 
-
 void playerStats() {
-    printf("\n%s | HP: %d | COINS: %d | MISSION COMPLETED %d/3\n\n", 
+    printf("\n%s | HP: %d | MONETE: %d | MISSIONI COMPLETATE %d/3\n\n", 
         HERO.name, HERO.hp, HERO.coins, missionCompleted());
 
 }
@@ -80,4 +79,15 @@ char readOption(const char *valid) {
     }
     clearInput();
     return (char)ch;
+}
+
+void returnHome(int prize) {
+    if(HERO.coins >= prize) {
+        puts("Hai pagato 50 monete...");
+        clearInput();
+        HERO.coins -= prize;
+        return;
+    }
+    puts("Non hai abbstanza soldi...");
+    clearInput(); 
 }

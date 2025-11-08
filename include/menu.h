@@ -12,5 +12,7 @@ void rest();
 void shopMenu();
 void saveGame();
 void inventoryMenu();
+void missionMenu();
+
 
 #endif

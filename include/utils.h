@@ -9,5 +9,6 @@ void story();
 void playerStats();
 int missionCompleted();
 char readOption(const char *valid);
+void returnHome(int prize);
 
 #endif
