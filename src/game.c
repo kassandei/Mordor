@@ -4,7 +4,20 @@
 #include "game.h"
 #include "utils.h"
 #include "menu.h"
-#include "global.h"
+
+Player HERO;
+
+static Monster swampMonsters[] = {
+    {"Cane Selvaggio", 2, 1, 0},      // fatalBlow, dmg, coin
+    {"Goblin", 3, 2, 2},
+    {"Scheletro", 4, 2, 4},
+    {"Orco", 3, 4, 6},
+    {"Generale Orco", 6, 3, 12}
+};
+
+static Trap swampTrap = {
+    .name = "Acquitrino Velenoso",
+};
 
 void initGame() {
     HERO.hp = MAX_HP;
