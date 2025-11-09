@@ -51,7 +51,7 @@ typedef struct {
 } Room;
 
 typedef struct {
-    Room *room;
+    Room* room;
     int rooms;
     DungeonType mission;
     bool canExit;

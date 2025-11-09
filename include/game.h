@@ -7,10 +7,10 @@
 void initGame();
 
 Room *generateRoom(Dungeon *dungeon);
+Room *trapRoom(Room *area, Dungeon *dungeon);
+Room *combatRoom(Room *area, Dungeon *dungeon);
 
 void swampDungeon();
-Room *generateSwampRoom(Dungeon *dungeon);
-
 void mansionDungeon();
 void caveDungeon();
 

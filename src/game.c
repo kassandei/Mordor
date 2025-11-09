@@ -4,28 +4,11 @@
 #include "game.h"
 #include "utils.h"
 #include "menu.h"
-
-// Uso una variabile globale visto che il giocatore è unico e uno solo
-// evitando di passare la struttura per ogni funzione come parametro
-Player HERO;
-
-static Monster swampMonsters[] = {
-    {"Cane Selvaggio", 2, 1, 0},      // fatalBlow, dmg, coin
-    {"Goblin", 3, 2, 2},
-    {"Scheletro", 4, 2, 4},
-    {"Orco", 3, 4, 6},
-    {"Generale Orco", 6, 3, 12}
-};
-
-static Trap swampTrap = {
-    .name = "Acquitrino Velenoso",
-};
-
+#include "global.h"
 
 void initGame() {
-    srand(time(NULL)); // Inizializza il generatore casuale
     HERO.hp = MAX_HP;
-    HERO.coins = 50;
+    HERO.coins = 0;
     HERO.potions = 0;
     HERO.hasDmgBuff = false;
     HERO.hasArmor = false;
@@ -39,31 +22,36 @@ void initGame() {
 Room* generateRoom(Dungeon* dungeon) {
     Room *area = (Room*)malloc(sizeof(Room));
     area->type = rand() % 3;
-    if(area->type == EMPTY)
-        return NULL;
-    if(area->type == TRAP) {
-        if(dungeon->mission == SWAMP) {
-            area->trap.dmg = rand() % 6 + 1;        
-        }
-        return area;
+    if(area->type == TRAP)
+        trapRoom(area, dungeon);
+    if(area->type == COMBAT) {
+        combatRoom(area, dungeon);
     }
+    return area;
+}
+
+Room* trapRoom(Room* area, Dungeon* dungeon) {
+
+}
+
+Room* combatRoom(Room* area, Dungeon* dungeon) {
 
 }
 
 
 void swampDungeon() {
-    Dungeon swamp;
-    int obj = 3;
-    int nRoom = 0;
-    swamp.mission = SWAMP;
-    swamp.canExit = false;
+    Dungeon dungeon;
+    int obj = 0;
+    dungeon.rooms = 0;
+    dungeon.mission = SWAMP;
+    dungeon.canExit = false;
     char choice;
     while(1) {
         clearScreen();
         drawTitle("Palude Putrescente");
         puts("Obiettivo : Eliminare 3 Generali Orco");
-        printf("Stato di avanzamento : Generale Orco %d/3", 0);
-        printf("Stanza numero %d", swamp.rooms + 1);
+        printf("Stato di avanzamento : Generale Orco %d/3\n", obj);
+        printf("Stanza numero %d\n", dungeon.rooms + 1);
         playerStats();
         missionMenu();
         choice = readOption("1234");
@@ -71,16 +59,18 @@ void swampDungeon() {
         switch (choice) {
             case '1':
                 clearScreen();
-                swamp.room = generateRoom(&swamp);
-                if(swamp.room == NULL) {
+                dungeon.room = generateRoom(&dungeon);
+                if(dungeon.room->type == EMPTY) {
                     puts("La stanza è vuota...");
-                    swamp.rooms++; 
                 }
-                if(swamp.room->type == TRAP) { 
-                    printf("Sei caduto nella trappola %s", swampTrap.name);
-                    printf("Hai subito %d", swampTrap.dmg);
+                if(dungeon.room->type == TRAP) { 
+                    printf("Sei caduto nella trappola %s\n", swampTrap.name);
+                    printf("Hai subito %d", dungeon.room->trap.dmg);
+                    HERO.hp -= dungeon.room->trap.dmg;
                 }
-                free(swamp.room);
+                dungeon.rooms++; 
+                free(dungeon.room);
+                clearInput();
                 break;
             case '2':
                 break;

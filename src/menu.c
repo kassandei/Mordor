@@ -169,5 +169,5 @@ void missionMenu() {
     puts("2. Negozio");
     puts("3. Inventario");
     puts("4. Torna al Villaggio ( Paga 50 Monete )");
-    printf("Seleziona una delle opzioni del menu [1 -4]: ");
+    printf("Seleziona una delle opzioni del menu [1-4]: ");
 }

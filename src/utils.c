@@ -67,7 +67,6 @@ int missionCompleted() {
 void playerStats() {
     printf("\n%s | HP: %d | MONETE: %d | MISSIONI COMPLETATE %d/3\n\n", 
         HERO.name, HERO.hp, HERO.coins, missionCompleted());
-
 }
 
 
