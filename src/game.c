@@ -4,20 +4,9 @@
 #include "game.h"
 #include "utils.h"
 #include "menu.h"
+#include "dungeon.h"
 
 Player HERO;
-
-static Monster swampMonsters[] = {
-    {"Cane Selvaggio", 2, 1, 0},      // fatalBlow, dmg, coin
-    {"Goblin", 3, 2, 2},
-    {"Scheletro", 4, 2, 4},
-    {"Orco", 3, 4, 6},
-    {"Generale Orco", 6, 3, 12}
-};
-
-static Trap swampTrap = {
-    .name = "Acquitrino Velenoso",
-};
 
 void initGame() {
     HERO.hp = MAX_HP;
@@ -27,30 +16,11 @@ void initGame() {
     HERO.hasArmor = false;
     HERO.hasCastleKey = false;
     HERO.hasHeroSword = false;
+    HERO.isAlive = true;
     for(int i = 0; i < QUESTS; i++) {
         HERO.missionComplete[i] = false;
     }
 }
-
-Room* generateRoom(Dungeon* dungeon) {
-    Room *area = (Room*)malloc(sizeof(Room));
-    area->type = rand() % 3;
-    if(area->type == TRAP)
-        trapRoom(area, dungeon);
-    if(area->type == COMBAT) {
-        combatRoom(area, dungeon);
-    }
-    return area;
-}
-
-Room* trapRoom(Room* area, Dungeon* dungeon) {
-
-}
-
-Room* combatRoom(Room* area, Dungeon* dungeon) {
-
-}
-
 
 void swampDungeon() {
     Dungeon dungeon;
@@ -59,7 +29,7 @@ void swampDungeon() {
     dungeon.mission = SWAMP;
     dungeon.canExit = false;
     char choice;
-    while(1) {
+    while(HERO.isAlive) {
         clearScreen();
         drawTitle("Palude Putrescente");
         puts("Obiettivo : Eliminare 3 Generali Orco");
@@ -73,14 +43,13 @@ void swampDungeon() {
             case '1':
                 clearScreen();
                 dungeon.room = generateRoom(&dungeon);
-                if(dungeon.room->type == EMPTY) {
-                    puts("La stanza è vuota...");
-                }
                 if(dungeon.room->type == TRAP) { 
-                    printf("Sei caduto nella trappola %s\n", swampTrap.name);
+                    printf("Sei caduto nella trappola %s\n", dungeon.room->trap.name);
                     printf("Hai subito %d", dungeon.room->trap.dmg);
                     HERO.hp -= dungeon.room->trap.dmg;
+                    if(HERO.hp <= 0) gameOver();
                 }
+                else combat(&dungeon.room->monster);
                 dungeon.rooms++; 
                 free(dungeon.room);
                 clearInput();
@@ -101,7 +70,7 @@ void swampDungeon() {
 void mansionDungeon() {
     char choice;
     
-    while(1) {
+    while(HERO.isAlive) {
         clearScreen();
         drawTitle("Magione Infestata");
         puts("Obiettivo : Recupera la chiave del Castello del Signore Oscuro, e sconfiggi un Vampiro Superiore.");
@@ -131,7 +100,7 @@ void caveDungeon() {
     char choice;
     
 
-    while(1) {
+    while(HERO.isAlive) {
         clearScreen();
         drawTitle("Grotta di Cristallo");
         puts("Obiettivo : Recupera la spada del’Eroe.");
@@ -156,3 +125,37 @@ void caveDungeon() {
     }
 }
 
+int rollDice() {
+    return (rand() % 6 + 1);
+}
+
+void gameOver() {
+    printf("\nSei stato sconfitto!\n");
+    HERO.isAlive = false;
+    clearInput();
+}
+
+void combat(Monster* monster) {
+    printf("Hai incontrato %s\n", monster->name);
+    while(1) {
+        int dice = rollDice();
+        printf("Premi un tasto per tirare il dado...");
+        clearInput();
+        printf("Dal tiro del dado è uscito %d\n", dice);
+        if(dice >= monster->fatalBlow) {
+            HERO.coins += monster->coin;
+            printf("Hai battuto il nemico! (%d >= %d)\n", dice, monster->fatalBlow);
+            printf("Hai ottenuto %d monete\n", monster->coin);
+            printf("Premi un tasto per uscire...");
+            break;
+        }
+        else {
+            printf("Hai subito %d danni! (%d < %d)\n", monster->dmg, dice, monster->fatalBlow);
+            HERO.hp -= monster->dmg;
+            if(HERO.hp <= 0) {
+                gameOver();
+                break;
+            }
+        }
+    }
+}
