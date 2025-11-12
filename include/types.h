@@ -1,7 +1,7 @@
 #ifndef TYPE
 #define TYPE
 
-#define NAMESIZE 20
+#define NAMESIZE 30
 #define QUESTS 3
 #define MAX_HP 20
 #define PRICE_RETURN 50
@@ -29,22 +29,22 @@ typedef struct {
     bool hasCastleKey;
     bool hasHeroSword;
     bool missionComplete[QUESTS];
+    bool isAlive;
 } Player;
 
 typedef struct {
-    char name[NAMESIZE];
+    char* name;
     int fatalBlow;
     int dmg;
     int coin;
 } Monster;
 
 typedef struct {
-    char name[NAMESIZE];
+    char* name;
     int dmg;
 } Trap;
 
 typedef struct {
-    char name[NAMESIZE];
     RoomType type;
     Monster monster;
     Trap trap;

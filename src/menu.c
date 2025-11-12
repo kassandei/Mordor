@@ -50,7 +50,7 @@ void loadGame() {
 void villageMenu() {
     char choice;
 
-    while(1) {  
+    while(HERO.isAlive) {  
         clearScreen();
         drawTitle("VILLAGIO");
         puts("1. Inizia una missione");
