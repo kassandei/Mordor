@@ -136,8 +136,8 @@ void inventoryMenu() {
     printf("%s la chiave del castello del Signor Oscuro\n", HERO.hasCastleKey ? "Possiedi" : "Non possiedi");
     printf("Vuoi usare una pozione curativa? S/N: ");
     while(1) {
-        choice = readOption("SN");
-        if(choice == 'S') {
+        choice = readOption("SNsn");
+        if(choice == 'S' || choice == 's') {
             if(HERO.potions > 0) {
                 HERO.hp += rand() % 6;
                 if(HERO.hp > 20) HERO.hp = 20;

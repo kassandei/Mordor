@@ -4,6 +4,14 @@
 
 #include "types.h"
 
+#define DUNGEON_ROOMS 10
+
+#define SWAMP_ORC 3
+#define SWAMP_MONSTERS 5
+extern Monster swampMonsters[SWAMP_MONSTERS];
+
+
+
 Room* generateRoom(Dungeon *dungeon);
 Room *generateRoomSwamp(Room *room);
 Room *generateRoomMansion(Room *room);

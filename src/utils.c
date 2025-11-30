@@ -71,7 +71,7 @@ void playerStats() {
 
 
 char readOption(const char *valid) {
-    char ch;
+    char ch;                    
     while((ch = getchar()) && !strchr(valid, ch)) {
         clearInput();
         printf("Opzione non valida riprova: ");

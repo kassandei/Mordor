@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 #include "game.h"
 #include "utils.h"
 #include "menu.h"
@@ -32,7 +33,7 @@ void swampDungeon() {
     while(HERO.isAlive) {
         clearScreen();
         drawTitle("Palude Putrescente");
-        puts("Obiettivo : Eliminare 3 Generali Orco");
+        printf("Obiettivo : Eliminare %d Generali Orco\n", SWAMP_ORC);
         printf("Stato di avanzamento : Generale Orco %d/3\n", obj);
         printf("Stanza numero %d\n", dungeon.rooms + 1);
         playerStats();
@@ -43,16 +44,34 @@ void swampDungeon() {
             case '1':
                 clearScreen();
                 dungeon.room = generateRoom(&dungeon);
+                dungeon.rooms++;
+                if (obj < SWAMP_ORC && dungeon.rooms >= DUNGEON_ROOMS - SWAMP_ORC + obj) {
+                    dungeon.room->type = COMBAT;
+                    dungeon.room->monster = swampMonsters[4];
+                }                
                 if(dungeon.room->type == TRAP) { 
                     printf("Sei caduto nella trappola %s\n", dungeon.room->trap.name);
                     printf("Hai subito %d", dungeon.room->trap.dmg);
                     HERO.hp -= dungeon.room->trap.dmg;
                     if(HERO.hp <= 0) gameOver();
                 }
-                else combat(&dungeon.room->monster);
-                dungeon.rooms++; 
+                else {
+                    combat(&dungeon.room->monster);
+                    
+                    if(strcmp(dungeon.room->monster.name, "Generale Orco") == 0) {
+                        obj++;
+                    }
+
+                }
                 free(dungeon.room);
                 clearInput();
+                if(obj == SWAMP_ORC) {
+                    clearScreen();
+                    puts("Hai completato il dungeon!");
+                    HERO.missionComplete[SWAMP] = true;
+                    clearInput();
+                    return;
+                }
                 break;
             case '2':
                 break;

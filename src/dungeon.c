@@ -2,9 +2,7 @@
 #include "game.h"
 #include "dungeon.h"
 
-#define SWAMP_MONSTERS 5
-
-static Monster swampMonsters[SWAMP_MONSTERS] = {
+Monster swampMonsters[SWAMP_MONSTERS] = {
     {"Cane Selvaggio", 2, 1, 0},      // fatalBlow, dmg, coin
     {"Goblin", 3, 2, 2},
     {"Scheletro", 4, 2, 4},
@@ -19,17 +17,17 @@ static Trap swampTrap = {
 Room* generateRoom(Dungeon* dungeon) {
     Room *area = (Room*)malloc(sizeof(Room));
     switch (dungeon->mission) {
-    case SWAMP:
-        area = generateRoomSwamp(area);
-        break;
-    case MANSION:
-        area = generateRoomMansion(area);
-        break;
-    case CAVE:
-        area = generateRoomCave(area);
-        break;
-    default:
-        break;
+        case SWAMP:
+            area = generateRoomSwamp(area);
+            break;
+        case MANSION:
+            area = generateRoomMansion(area);
+            break;
+        case CAVE:
+            area = generateRoomCave(area);
+            break;
+        default:
+            break;
     }
     return area;
 }

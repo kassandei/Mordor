@@ -5,7 +5,6 @@
 #include "types.h"
 
 void initGame();
-
 void swampDungeon();
 void mansionDungeon();
 void caveDungeon();

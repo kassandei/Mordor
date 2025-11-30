@@ -8,7 +8,7 @@
 #include <stdbool.h>
 
 typedef enum {
-    EMPTY,
+    EMPTY,              
     TRAP,
     COMBAT
 } RoomType;
