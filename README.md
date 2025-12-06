@@ -12,10 +12,6 @@ cd Mordor
 ## Compile & Run
 
 ```bash
-# Compile
-make compile
-
-# Run
 make
 ```
 
