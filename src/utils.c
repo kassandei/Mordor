@@ -69,6 +69,22 @@ void playerStats() {
         HERO.name, HERO.hp, HERO.coins, missionCompleted());
 }
 
+void rest() {
+    clearScreen();
+    HERO.hp = MAX_HP;
+    printf("Dopo un riposo accanto a un falo l'eroe %s è tornato in piene forze\n", HERO.name);
+    puts("I punti vita sono stati riprestinati");
+    printf("Premi un tasto per proseguire...");
+    clearInput(); 
+}
+
+void missionMenu() {
+    puts("1. Esplora la stanza del Dungeon");
+    puts("2. Negozio");
+    puts("3. Inventario");
+    puts("4. Torna al Villaggio ( Paga 50 Monete )");
+    printf("Seleziona una delle opzioni del menu [1-4]: ");
+}
 
 char readOption(const char *valid) {
     char ch;                    
@@ -89,4 +105,18 @@ void returnHome(int prize) {
     }
     puts("Non hai abbstanza soldi...");
     clearInput(); 
+}
+
+// calcola il danno effettivo considerando l'armatura
+int calculateDamage(int baseDamage) {
+    return baseDamage + (HERO.hasArmor ? ARMOR_REDUCEDMG : 0);
+}
+
+// calcola il bonus al dado
+int calculateDiceBonus() {
+    return HERO.hasDmgBuff ? DMGBUFF : 0;
+}
+
+int rollDice() {
+    return (rand() % 6 + 1);
 }

@@ -5,6 +5,7 @@
 #include "utils.h"
 #include "game.h"
 #include "global.h"
+#include "types.h"
 
 void menu() {
     char choice;
@@ -115,59 +116,110 @@ void dungeonMenu() {
 
 }
 
-void rest() {
-    clearScreen();
-    HERO.hp = MAX_HP;
-    printf("Dopo un riposo accanto a un falo l'eroe %s è tornato in piene forze\n", HERO.name);
-    puts("I punti vita sono stati riprestinati");
-    printf("Premi un tasto per proseguire...");
-    clearInput(); 
-}
-
 void inventoryMenu() {    
     char choice;
-    clearScreen();
-    playerStats();
+    int restoreHP;
 
-    printf("Possiedi %d pozioni curative\n", HERO.potions);
-    printf("%s la spada potenziata\n", HERO.hasDmgBuff ? "Possiedi" : "Non possiedi");
-    printf("%s l'armatura\n", HERO.hasArmor ? "Possiedi" : "Non possiedi");
-    printf("%s la spada dell'eroe\n", HERO.hasHeroSword ? "Possiedi" : "Non possiedi");
-    printf("%s la chiave del castello del Signor Oscuro\n", HERO.hasCastleKey ? "Possiedi" : "Non possiedi");
-    printf("Vuoi usare una pozione curativa? S/N: ");
     while(1) {
-        choice = readOption("SNsn");
-        if(choice == 'S' || choice == 's') {
-            if(HERO.potions > 0) {
-                HERO.hp += rand() % 6;
-                if(HERO.hp > 20) HERO.hp = 20;
-                HERO.potions--;
-                printf("Vuoi usare una pozione curativa? S/N: ");
-                continue;
-            }
-            else {
-                printf("Non hai pozioni curative da usare...");
-                clearInput();
-            }
+        clearScreen();
+        playerStats();
+
+        printf("Possiedi %d pozioni curative\n", HERO.potions);
+        printf("%s la spada potenziata\n", HERO.hasDmgBuff ? "Possiedi" : "Non possiedi");
+        printf("%s l'armatura\n", HERO.hasArmor ? "Possiedi" : "Non possiedi");
+        printf("%s la spada dell'eroe\n", HERO.hasHeroSword ? "Possiedi" : "Non possiedi");
+        printf("%s la chiave del castello del Signor Oscuro\n", HERO.hasCastleKey ? "Possiedi" : "Non possiedi");
+        
+        if(HERO.potions == 0) {
+            printf("\nNon hai pozioni curative da usare...\n");
+            clearInput();
+            break;
         }
-        break;
+        
+        printf("\nVuoi usare una pozione curativa? S/N: ");
+        choice = readOption("SNsn");
+        
+        if(choice == 'S' || choice == 's') {
+            if(HERO.hp >= MAX_HP) {
+                printf("\nHai già i punti vita al massimo!\n");
+                clearInput();
+                break;
+            }
+            int hpBefore = HERO.hp;
+            restoreHP = 1 + (rand() % 6);  
+            HERO.hp += restoreHP;
+            
+            if(HERO.hp > MAX_HP) {
+                restoreHP = MAX_HP - hpBefore;
+                HERO.hp = MAX_HP;
+            }
+            
+            HERO.potions--;
+            printf("\nHai ripristinato %d punti vita!\n", restoreHP);
+            clearInput();
+        } else {
+            break;
+        }
     }
-
-
 }
-
 void shopMenu() {
+    char choice;
 
+    while(1) {
+        clearScreen();
+        drawTitle("NEGOZIO");
+        puts("Benvenuto nel negozio avventuriero!\n");
+        printf(" | OGGETTI            | DESCRIZIONE                     | POSSEDUTI       | COSTO\n");
+        printf("-|--------------------|---------------------------------|-----------------|------\n");
+        printf("1| Pozione curativa   | Ripristina fino a 6 Punti Vita  | %15d | %d\n", HERO.potions, POTION_PRICE);
+        printf("2| Spada potenziata   | +1 all'attacco dell'eroe        | %15s | %d\n", HERO.hasDmgBuff ? "POSSIEDI" : "NON POSSIEDI", DMGBUFF_PRICE);
+        printf("3| Armatura           | -1 al danno del nemico/trappola | %15s | %d\n", HERO.hasArmor ? "POSSIEDI" : "NON POSSIEDI", ARMOR_PRICE);
+        printf("4| Esci\n");
+        printf("\nMonete disponibili: %d\n", HERO.coins);
+        printf("Seleziona una delle opzioni [1-4]: ");
+        choice = readOption("1234");
+        switch (choice) {
+            case '1':
+                if(HERO.coins >= POTION_PRICE) {
+                    HERO.coins -= POTION_PRICE;
+                    HERO.potions++;
+                    puts("Hai acquistato una pozione!");
+                } else {
+                    puts("Non hai abbastanza soldi...");
+                }
+                clearInput();
+                break;
+            case '2':
+                if(HERO.hasDmgBuff) {
+                    puts("Possiedi già il potenziamento alla spada");
+                } else if(HERO.coins >= DMGBUFF_PRICE) {
+                    HERO.hasDmgBuff = true;
+                    HERO.coins -= DMGBUFF_PRICE;
+                    puts("Hai acquistato il potenziamento alla spada!");
+                } else {
+                    puts("Non hai abbastanza soldi...");
+                }
+                clearInput();
+                break;
+            case '3':
+                if(HERO.hasArmor) {
+                    puts("Possiedi già l'armatura");
+                } else if(HERO.coins >= ARMOR_PRICE) {
+                    HERO.hasArmor = true;
+                    HERO.coins -= ARMOR_PRICE;
+                    puts("Hai acquistato l'armatura!");
+                } else {
+                    puts("Non hai abbastanza soldi...");
+                }
+                clearInput();
+                break;
+            case '4':
+                return;
+        }
+    }
 }
 
 void saveGame() {
 
 }
 
-void missionMenu() {
-    puts("1. Esplora la stanza del Dungeon");
-    puts("2. Negozio");
-    puts("3. Inventario");
-    puts("4. Torna al Villaggio ( Paga 50 Monete )");
-    printf("Seleziona una delle opzioni del menu [1-4]: ");
-}

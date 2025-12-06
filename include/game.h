@@ -9,7 +9,6 @@ void swampDungeon();
 void mansionDungeon();
 void caveDungeon();
 
-int rollDice();
 void gameOver();
 void combat(Monster* monster);
 

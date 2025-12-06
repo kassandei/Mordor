@@ -50,9 +50,10 @@ void swampDungeon() {
                     dungeon.room->monster = swampMonsters[4];
                 }                
                 if(dungeon.room->type == TRAP) { 
+                    int trapDamage = calculateDamage(dungeon.room->trap.dmg);
                     printf("Sei caduto nella trappola %s\n", dungeon.room->trap.name);
-                    printf("Hai subito %d", dungeon.room->trap.dmg);
-                    HERO.hp -= dungeon.room->trap.dmg;
+                    printf("Hai subito %d danni\n", trapDamage);
+                    HERO.hp -= trapDamage;
                     if(HERO.hp <= 0) gameOver();
                 }
                 else {
@@ -61,7 +62,6 @@ void swampDungeon() {
                     if(strcmp(dungeon.room->monster.name, "Generale Orco") == 0) {
                         obj++;
                     }
-
                 }
                 free(dungeon.room);
                 clearInput();
@@ -74,8 +74,10 @@ void swampDungeon() {
                 }
                 break;
             case '2':
+                shopMenu();
                 break;
             case '3':
+                inventoryMenu();
                 break;
             case '4':
                 returnHome(PRICE_RETURN);
@@ -103,8 +105,10 @@ void mansionDungeon() {
                 /* code */
                 break;
             case '2':
+                shopMenu();
                 break;
             case '3':
+                inventoryMenu();
                 break;
             case '4':
                 returnHome(PRICE_RETURN);
@@ -118,7 +122,6 @@ void mansionDungeon() {
 void caveDungeon() {
     char choice;
     
-
     while(HERO.isAlive) {
         clearScreen();
         drawTitle("Grotta di Cristallo");
@@ -132,8 +135,10 @@ void caveDungeon() {
             case '1':
                 break;
             case '2':
+                shopMenu();
                 break;
             case '3':
+                inventoryMenu();
                 break;
             case '4':
                 returnHome(PRICE_RETURN);
@@ -144,22 +149,19 @@ void caveDungeon() {
     }
 }
 
-int rollDice() {
-    return (rand() % 6 + 1);
-}
-
 void gameOver() {
     printf("\nSei stato sconfitto!\n");
     HERO.isAlive = false;
-    clearInput();
 }
 
 void combat(Monster* monster) {
     printf("Hai incontrato %s\n", monster->name);
     while(1) {
-        int dice = rollDice();
+        int dice = rollDice() + calculateDiceBonus();
+
         printf("Premi un tasto per tirare il dado...");
         clearInput();
+
         printf("Dal tiro del dado è uscito %d\n", dice);
         if(dice >= monster->fatalBlow) {
             HERO.coins += monster->coin;
@@ -169,8 +171,9 @@ void combat(Monster* monster) {
             break;
         }
         else {
-            printf("Hai subito %d danni! (%d < %d)\n", monster->dmg, dice, monster->fatalBlow);
-            HERO.hp -= monster->dmg;
+            int monsterDamage = calculateDamage(monster->dmg);
+            printf("Hai subito %d danni! (%d < %d)\n", monsterDamage, dice, monster->fatalBlow);
+            HERO.hp -= monsterDamage;
             if(HERO.hp <= 0) {
                 gameOver();
                 break;
