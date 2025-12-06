@@ -18,7 +18,6 @@ make
 ## Only compile
 
 ```bash
-# Compile
 make compile
 ```
 
