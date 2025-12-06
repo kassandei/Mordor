@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "game.h"
 #include "dungeon.h"
 
@@ -16,6 +17,10 @@ static Trap swampTrap = {
 
 Room* generateRoom(Dungeon* dungeon) {
     Room *area = (Room*)malloc(sizeof(Room));
+    if (!area) {
+        fprintf(stderr, "Errore: memoria insufficiente\n");
+        exit(EXIT_FAILURE);
+    }
     switch (dungeon->mission) {
         case SWAMP:
             area = generateRoomSwamp(area);

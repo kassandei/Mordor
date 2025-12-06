@@ -43,13 +43,19 @@ void swampDungeon() {
         switch (choice) {
             case '1':
                 clearScreen();
-                dungeon.room = generateRoom(&dungeon);
-                dungeon.rooms++;
-                if (obj < SWAMP_ORC && dungeon.rooms >= DUNGEON_ROOMS - SWAMP_ORC + obj) {
+                
+                // Forza boss nelle ultime 3 stanze se necessario
+                if (obj < SWAMP_ORC && dungeon.rooms >= DUNGEON_ROOMS - SWAMP_ORC) {
+                    dungeon.room = (Room*)malloc(sizeof(Room));
                     dungeon.room->type = COMBAT;
                     dungeon.room->monster = swampMonsters[4];
-                }                
-                if(dungeon.room->type == TRAP) { 
+                } else {
+                    dungeon.room = generateRoom(&dungeon);
+                }
+                
+                dungeon.rooms++;
+                
+                if(dungeon.room->type == TRAP) {
                     int trapDamage = calculateDamage(dungeon.room->trap.dmg);
                     printf("Sei caduto nella trappola %s\n", dungeon.room->trap.name);
                     printf("Hai subito %d danni\n", trapDamage);
@@ -80,7 +86,7 @@ void swampDungeon() {
                 inventoryMenu();
                 break;
             case '4':
-                returnHome(PRICE_RETURN);
+                if(returnHome(PRICE_RETURN)) return;
                 break;
             default:
                 break;

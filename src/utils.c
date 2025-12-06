@@ -8,7 +8,7 @@
 void drawTitle(const char *string) {
     int len = strlen(string);
     for(int i = 0; i < len+4; i++) putchar('*');
-    printf("\n* %20s *\n", string);
+    printf("\n* %s *\n", string);
     for(int i = 0; i < len+4; i++) putchar('*');
     putchar('\n');
 }
@@ -96,15 +96,17 @@ char readOption(const char *valid) {
     return (char)ch;
 }
 
-void returnHome(int prize) {
+bool returnHome(int prize) {
+    bool home = false;
     if(HERO.coins >= prize) {
         puts("Hai pagato 50 monete...");
-        clearInput();
         HERO.coins -= prize;
-        return;
+        home = true;
     }
-    puts("Non hai abbstanza soldi...");
+    else 
+        puts("Non hai abbastanza soldi...");        
     clearInput(); 
+    return home;
 }
 
 // calcola il danno effettivo considerando l'armatura
