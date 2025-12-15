@@ -5,7 +5,7 @@ Text-based RPG game - University project
 ## Download
 
 ```bash
-git clone https://github.com/tuousername/Mordor.git
+git clone https://github.com/kassandei/Mordor.git
 cd Mordor
 ```
 
