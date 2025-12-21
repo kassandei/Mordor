@@ -46,6 +46,11 @@ void swampDungeon() {
         case '1':
             clearScreen();
 
+            if(currentRoom == NULL) {
+                puts("Hai completato il dungeon! Ritorna al villaggio per nuove avventure");
+                clearInput();
+                break;
+            }
             // Forza boss nelle ultime 3 stanze se necessario
             if (obj < SWAMP_ORC && currentRoom->roomNumber >= DUNGEON_ROOMS - SWAMP_ORC) {
                 currentRoom->type = COMBAT;
@@ -71,10 +76,10 @@ void swampDungeon() {
             clearInput();
             if (obj == SWAMP_ORC) {
                 clearScreen();
-                puts("Hai completato il dungeon!");
+                puts("Hai completato tutti gli obiettivi, ritorna al villaggio per nuove avventure!");
                 HERO.missionComplete[SWAMP] = true;
+                dungeon->canExit = true;
                 clearInput();
-                freeDungeon(dungeon);
                 return;
             }
             break;
@@ -85,7 +90,12 @@ void swampDungeon() {
             inventoryMenu();
             break;
         case '4':
-            if (returnHome(PRICE_RETURN)) {
+            bool home = false;
+            if(dungeon->canExit)
+                home = true;
+            else if (returnHome(PRICE_RETURN)) 
+                home = true;
+            if(home) { 
                 freeDungeon(dungeon);
                 return;
             }
@@ -94,12 +104,14 @@ void swampDungeon() {
             break;
         }
     }
+    // in caso di morte
     freeDungeon(dungeon);
 }
 
 void mansionDungeon() {
     Dungeon *dungeon = (Dungeon*)malloc(sizeof(Dungeon));
     bool obj = false;
+    dungeon->canExit = false;
     dungeon->mission = MANSION;
     dungeon = generateDungeon(dungeon);
     Room* currentRoom = dungeon->room;
@@ -119,6 +131,11 @@ void mansionDungeon() {
         case '1':
             clearScreen();
 
+            if(currentRoom == NULL) {
+                puts("Hai completato il dungeon! Ritorna al villaggio per nuove avventure");
+                clearInput();
+                break;
+            }
             // Forza la chiave e il vampiro superiore nelle ultime 2 stanze se necessario
             if (!obj && currentRoom->roomNumber >= DUNGEON_ROOMS - 2) {
                 currentRoom->type = COMBAT;
@@ -151,10 +168,10 @@ void mansionDungeon() {
             clearInput();
             if (obj && HERO.hasCastleKey) {
                 clearScreen();
-                puts("Hai completato il dungeon!");
+                puts("Hai completato tutti gli obiettivi, ritorna al villaggio per nuove avventure!");
                 HERO.missionComplete[MANSION] = true;
+                dungeon->canExit = true;
                 clearInput();
-                freeDungeon(dungeon);
                 return;
             }
             break;
@@ -165,7 +182,12 @@ void mansionDungeon() {
             inventoryMenu();
             break;
         case '4':
-            if (returnHome(PRICE_RETURN)) {
+            bool home = false;
+            if(dungeon->canExit)
+                home = true;
+            else if (returnHome(PRICE_RETURN)) 
+                home = true;
+            if(home) { 
                 freeDungeon(dungeon);
                 return;
             }
@@ -174,6 +196,7 @@ void mansionDungeon() {
             break;
         }
     }
+    // in caso di morte
     freeDungeon(dungeon);
 }
 
