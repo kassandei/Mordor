@@ -49,15 +49,16 @@ typedef struct {
     int dmg;
 } Trap;
 
-typedef struct {
+typedef struct Room {
+    int roomNumber;
     RoomType type;
     Monster monster;
     Trap trap;
+    struct Room* nextRoom;
 } Room;
 
 typedef struct {
     Room* room;
-    int rooms;
     DungeonType mission;
     bool canExit;
 } Dungeon;
