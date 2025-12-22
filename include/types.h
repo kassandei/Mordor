@@ -12,12 +12,19 @@
 #define ARMOR_PRICE 10
 #define DMGBUFF 1
 #define ARMOR_REDUCEDMG -1
+#define BOSS_FIGHT_ROUNDS 5
 
 typedef enum {
     EMPTY,              
     TRAP,
     COMBAT
 } RoomType;
+
+typedef enum {
+    SHIELD,
+    MAGIC,
+    SWORD
+} Move;
 
 typedef enum {
     HEAD, 
@@ -71,5 +78,10 @@ typedef struct {
     int roomCount;
 } Dungeon;
 
+typedef struct {
+    int round;
+    int win;
+    int lose;
+} BossRoom;
 
 #endif

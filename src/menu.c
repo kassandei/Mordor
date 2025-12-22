@@ -93,45 +93,29 @@ void dungeonMenu() {
     char choice;
 
     while (HERO.isAlive) {
-        int index = 0;
-        int map[3];
-
         clearScreen();
         drawTitle("MISSIONI");
 
-        if (!isCompleted(SWAMP)) {
-            printf("%d. Palude Putrescente\n", ++index);
-            map[index - 1] = SWAMP;
-        }
-        if (!isCompleted(MANSION)) {
-            printf("%d. Magione Infestata\n", ++index);
-            map[index - 1] = MANSION;
-        }
-        if (!isCompleted(CAVE)) {
-            printf("%d. Grotta di Cristallo\n", ++index);
-            map[index - 1] = CAVE;
-        }
-
-        if (index == 0) {
+        if (missionCompleted() == 3) {
             puts("Hai completato tutte le missioni. Affrontare il Signor Oscuro? S/N:");
-            if (readOption("SN") == 'S') bossMenu();
+            if (readOption("SN") == 'S')    bossFight();
             return;
         }
 
-        printf("Seleziona una missione [1-%d]: ", index);
+        if (!isCompleted(SWAMP))
+            printf("1. Palude Putrescente\n");
+        if (!isCompleted(MANSION))
+            printf("2. Magione Infestata\n");
+        if (!isCompleted(CAVE))
+            printf("3. Grotta di Cristallo\n");
+
+        printf("Seleziona una delle opzioni [1-3]: ");
         choice = readOption("123");
 
-        if (map[choice - '1'] == SWAMP)   swampDungeon();
-        if (map[choice - '1'] == MANSION) mansionDungeon();
-        if (map[choice - '1'] == CAVE)    caveDungeon();
-
-        return;
+        if (choice == '1' && !isCompleted(SWAMP))   { swampDungeon();   return; }
+        if (choice == '2' && !isCompleted(MANSION)) { mansionDungeon(); return; }
+        if (choice == '3' && !isCompleted(CAVE))    { caveDungeon();    return; }
     }
-}
-
-
-void bossMenu() {
-    clearInput();
 }
 
 void inventoryMenu() {    

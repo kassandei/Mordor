@@ -212,7 +212,7 @@ void caveDungeon() {
             }
 
             handleRoomEvent(currentRoom);
-            if(currentRoom->type == TRAP) {
+            if(currentRoom->type == TRAP && currentRoom->trap.coin > 0) {
                 printf("Hai ottenuto %d monete\n", currentRoom->trap.coin);
             }
 
@@ -250,6 +250,41 @@ void caveDungeon() {
         }
     }
     freeDungeon(dungeon);
+}
+
+void bossFight() {
+    char choice;
+    Move move;
+    BossRoom* room = (BossRoom*)malloc(sizeof(BossRoom));
+    room->round = 0;
+    room->win = 0;
+    room->lose = 0;
+
+    while(HERO.isAlive) {
+        clearScreen();
+        drawTitle("Signore Oscuro");
+        puts("Obiettivo : Sconfiggi il male che domina le terre del nostro mondo");
+        printf("Scontro Finale | Round %d su %d| Eroe %d - Signore Oscuro %d.\n",
+                room->round, BOSS_FIGHT_ROUNDS, room->win, room->lose);
+        printf("\nMosse disponibili:\n1. Scudo\n2. Magia\n3. Spada\n");
+        printf("Seleziona una delle opzioni del menu [1-3]: ");
+        choice = readOption("123");
+        switch (choice)
+        {
+        case '1':
+            move = SHIELD;
+            break;
+        case '2':
+            move = MAGIC;
+            break;
+        case '3':
+            move = SWORD;
+            break;
+        default:
+            break;
+        }
+        finalcombat(move, room);
+    }
 }
 
 void gameOver() {
@@ -308,5 +343,69 @@ void combat(Monster *monster) {
                 break;
             }
         }
+    }
+}
+
+void finalcombat(Move playerMove, BossRoom* room) {
+    Move bossMove = rand() % 3;
+    
+    printf("Il Signore Oscuro nel frattempo ha scelto...");
+    if(bossMove == SHIELD)
+        printf("SCUDO\n\n");
+    else if(bossMove == SWORD)
+        printf("SPADA\n\n");
+    else
+        printf("MAGIA\n\n");
+    
+    if(playerMove == bossMove) {
+        printf("Pareggio! Entrambi avete scelto la stessa mossa.\n");
+        clearInput();
+        return;
+    }
+    else if((playerMove == SHIELD && bossMove == SWORD) ||
+            (playerMove == SWORD && bossMove == MAGIC) ||
+            (playerMove == MAGIC && bossMove == SHIELD)) {
+        // Eroe vince in caso di pareggio
+        room->win++;
+        
+        if(playerMove == SHIELD && bossMove == SWORD)
+            printf("L'eroe para e si difende dalla Spada del Signore Oscuro. L'eroe si aggiudica il Round.\n");
+        else if(playerMove == SWORD && bossMove == MAGIC)
+            printf("L'eroe taglia la Magia del Signore Oscuro con la sua Spada. L'eroe si aggiudica il Round.\n");
+        else if(playerMove == MAGIC && bossMove == SHIELD)
+            printf("La Magia dell'eroe supera lo Scudo del Signore Oscuro. L'eroe si aggiudica il Round.\n");
+    }
+    else {
+        // Boss vince
+        room->lose++;
+        
+        if(bossMove == SHIELD && playerMove == SWORD)
+            printf("Il Signore Oscuro para la tua Spada con il suo Scudo. Il Signore Oscuro si aggiudica il Round.\n");
+        else if(bossMove == SWORD && playerMove == MAGIC)
+            printf("Il Signore Oscuro taglia la tua Magia con la sua Spada. Il Signore Oscuro si aggiudica il Round.\n");
+        else if(bossMove == MAGIC && playerMove == SHIELD)
+            printf("La Magia del Signore Oscuro supera il tuo Scudo. Il Signore Oscuro si aggiudica il Round.\n");
+    }
+    
+    room->round++;
+    clearInput();
+    
+    if(room->win == 3) {
+        clearScreen();
+        drawTitle("VITTORIA!");
+        puts("\n*** HAI SCONFITTO IL SIGNORE OSCURO! ***\n");
+        puts("Il male è stato debellato e la luce torna a splendere sul mondo.");
+        puts("Sei il salvatore del regno!\n");
+        printf("Premi un tasto per tornare al villaggio...");
+        clearInput();
+        HERO.isAlive = false;  // Fine gioco
+    }
+    else if(room->lose == 3) {
+        clearScreen();
+        drawTitle("SCONFITTA");
+        puts("\n*** IL SIGNORE OSCURO TI HA SCONFITTO! ***\n");
+        puts("Le tenebre continuano a dominare il mondo...\n");
+        gameOver();
+        clearInput();
     }
 }
