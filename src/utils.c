@@ -116,17 +116,25 @@ int calculateDamage(int baseDamage) {
 
 // calcola il bonus al dado
 int calculateDiceBonus() {
-    return HERO.hasDmgBuff ? DMGBUFF : 0;
+    if (HERO.hasHeroSword)
+        return 2;
+
+    if (HERO.hasDmgBuff)
+        return 1;
+
+    return 0;
 }
 
 int rollDice() {
     return (rand() % 6 + 1);
 }
 
+CoinFace flipCoin() {
+    return rand() % 2;
+}
+
 bool isCompleted(DungeonType type) {
-    if(HERO.missionComplete[type])
-        return true;
-    else false;
+    return (HERO.missionComplete[type]) ? true : false;
 }
 
 void printDungeon(Dungeon* dungeon) {

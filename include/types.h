@@ -20,6 +20,11 @@ typedef enum {
 } RoomType;
 
 typedef enum {
+    HEAD, 
+    TAIL
+} CoinFace;
+
+typedef enum {
     SWAMP,
     MANSION,
     CAVE
@@ -48,6 +53,7 @@ typedef struct {
 typedef struct {
     char* name;
     int dmg;
+    int coin;
 } Trap;
 
 typedef struct Room {

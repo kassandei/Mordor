@@ -1,6 +1,8 @@
 #ifndef UTILS
 #define UTILS
 
+#include "types.h"
+
 // Input/Output
 void drawTitle(const char *);
 void clearScreen();
@@ -21,6 +23,7 @@ bool returnHome(int prize);
 int calculateDamage(int baseDamage);
 int calculateDiceBonus();
 int rollDice();
+CoinFace flipCoin();
 
 // funzioni per il dungeon
 void printDungeon(Dungeon* dungeon);

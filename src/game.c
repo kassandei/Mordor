@@ -32,9 +32,11 @@ static void handleRoomEvent(Room* currentRoom) {
         if (HERO.hp <= 0)
             gameOver();
     }
-    else {
+    else if (currentRoom->type == COMBAT) {
         combat(&currentRoom->monster);
     }
+    else
+        puts("Sei entrato in una stanza vuota");
 }
 
 void swampDungeon() {
@@ -50,7 +52,7 @@ void swampDungeon() {
         drawTitle("Palude Putrescente");
         printf("Obiettivo : Eliminare %d Generali Orco\n", SWAMP_ORC);
         printf("Stato di avanzamento : Generale Orco %d/3\n", obj);
-        printf("Stanza numero %d/%d\n", dungeon->roomCount + 1, DUNGEON_ROOMS);
+        printf("Stanza numero %d\n", dungeon->roomCount + 1);
         playerStats();
         missionMenu();
         choice = readOption("1234");
@@ -68,8 +70,9 @@ void swampDungeon() {
 
             handleRoomEvent(currentRoom);
 
-            if (currentRoom->type == COMBAT && strcmp(currentRoom->monster.name, "Generale Orco") == 0) {
-                obj++;
+            if(HERO.hp > 0) {
+                if (currentRoom->type == COMBAT && strcmp(currentRoom->monster.name, "Generale Orco") == 0)
+                    obj++;
             }
 
             clearInput();
@@ -116,7 +119,7 @@ void mansionDungeon() {
         drawTitle("Magione Infestata");
         puts("Obiettivo : Recupera la chiave del Castello del Signore Oscuro, e sconfiggi un Vampiro Superiore.");
         printf("Stato di avanzamento : Chiave %d/1 | Vampiro Superiore %d/1\n", HERO.hasCastleKey, obj);
-        printf("Stanza numero %d/%d\n", dungeon->roomCount + 1, DUNGEON_ROOMS);
+        printf("Stanza numero %d\n", dungeon->roomCount + 1);
         playerStats();
         missionMenu();
         choice = readOption("1234");
@@ -139,12 +142,12 @@ void mansionDungeon() {
 
             handleRoomEvent(currentRoom);
 
-            if (currentRoom->type == COMBAT) {
-                if (strcmp(currentRoom->monster.name, "Vampiro Superiore") == 0) {
-                    obj = true;
-                }
-                if (strcmp(currentRoom->monster.name, "Demone Custode") == 0) {
-                    HERO.hasCastleKey = true;
+            if(HERO.hp > 0) {
+                if (currentRoom->type == COMBAT) {
+                    if (strcmp(currentRoom->monster.name, "Vampiro Superiore") == 0)
+                        obj = true;
+                    if (strcmp(currentRoom->monster.name, "Demone Custode") == 0)
+                        HERO.hasCastleKey = true;
                 }
             }
 
@@ -179,15 +182,19 @@ void mansionDungeon() {
     freeDungeon(dungeon);
 }
 
-void caveDungeon()
-{
+void caveDungeon() {
+    Dungeon *dungeon = (Dungeon*)malloc(sizeof(Dungeon));
+    bool obj = false;
+    dungeon->mission = CAVE;
+    dungeon = generateDungeon(dungeon);
+    Room* currentRoom = NULL;
     char choice;
 
     while (HERO.isAlive) {
         clearScreen();
         drawTitle("Grotta di Cristallo");
         puts("Obiettivo : Recupera la spada del’Eroe.");
-        printf("Stato di avanzamento : spada %d/1", 0);
+        printf("Stanza numero %d\n", dungeon->roomCount + 1);
         playerStats();
         missionMenu();
         choice = readOption("1234");
@@ -195,6 +202,35 @@ void caveDungeon()
         switch (choice)
         {
         case '1':
+            clearScreen();
+            currentRoom = addRoom(dungeon);
+
+            // Forza il drago antico
+            if (!obj && dungeon->roomCount > DUNGEON_ROOMS - 1) {
+                currentRoom->type = COMBAT;
+                currentRoom->monster = caveMonster;
+            }
+
+            handleRoomEvent(currentRoom);
+            if(currentRoom->type == TRAP) {
+                printf("Hai ottenuto %d monete\n", currentRoom->trap.coin);
+            }
+
+            if(HERO.hp > 0) {
+                if(currentRoom->type == COMBAT)
+                    obj = true;
+            }
+
+            clearInput();
+            if (obj) {
+                clearScreen();
+                puts("Hai completato il dungeon!");
+                HERO.missionComplete[CAVE] = true;
+                printDungeon(dungeon);
+                clearInput();
+                freeDungeon(dungeon);
+                return;
+            }            
             break;
         case '2':
             shopMenu();
@@ -203,13 +239,16 @@ void caveDungeon()
             inventoryMenu();
             break;
         case '4':
-            returnHome(PRICE_RETURN);
+            if (returnHome(PRICE_RETURN)) {
+                freeDungeon(dungeon);
+                return;
+            }
             break;
         default:
             break;
         }
     }
-    //freeDungeon(dungeon);
+    freeDungeon(dungeon);
 }
 
 void gameOver() {

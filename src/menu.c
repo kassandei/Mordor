@@ -108,14 +108,15 @@ void dungeonMenu() {
                     continue; 
                 }
                 swampDungeon();
-                break;
+                return;
             case '2':
                 if(isCompleted(MANSION)) { 
                     puts("Missione già completata"); 
                     clearInput();
                     continue; 
                 }
-                break;
+                mansionDungeon();
+                return;
             case '3':
                 if(isCompleted(CAVE)) {
                     puts("Missione già completata"); 
@@ -123,7 +124,7 @@ void dungeonMenu() {
                     continue; 
                 }
                 caveDungeon();
-                break;
+                return;
             default:
                 break;
         }

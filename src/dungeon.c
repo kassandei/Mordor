@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+#include "utils.h"
 #include "game.h"
 #include "dungeon.h"
 #include "types.h"
@@ -27,6 +29,20 @@ Monster mansionMonsters[MANSION_MONSTERS] = {
 static Trap mansionTrap = {
     .name = "Botola Buia",
     .dmg = 3
+};
+
+Monster caveMonster = {
+    .name = "Drago Antico",
+    .fatalBlow = 5,
+    .dmg = 10,
+    .coin = 12
+};
+
+static Trap caveTraps[CAVE_TRAPS] = {
+    {"Cristalli cadenti", 2, 0},
+    {"Ponte pericolante", 0, -3},
+    {"Forziere Misteriose", 2, 10},
+    {"Rupe scoscesa", 6, 0}
 };
 
 Dungeon* generateDungeon(Dungeon* dungeon) {
@@ -89,6 +105,7 @@ Room* generateRoomSwamp(Room* area) {
     }
     return area;
 }
+
 Room* generateRoomMansion(Room* area) {
     int roomType = rand() % 2 + 1;
     int randomMonster = rand() % MANSION_MONSTERS;
@@ -101,33 +118,55 @@ Room* generateRoomMansion(Room* area) {
     }
     return area;
 }
+
 Room* generateRoomCave(Room* area) {
-    // TODO: Implementare generazione stanze per la grotta
-    area->type = COMBAT;
+    int roomType = rand() % 3; // considera anche la stanza vuota
+    int randomTrap = rand() % CAVE_TRAPS;
+    area->type = roomType;
+    if(area->type == TRAP) {
+        area = trapRoom(area, CAVE, randomTrap);
+    }
+    else {
+        area = combatRoom(area, CAVE, -1);
+    }
     return area;
 }
-
 
 Room* trapRoom(Room* area, DungeonType type, int random) {
     if(type == SWAMP) {
         area->trap.name = swampTrap.name;
         area->trap.dmg = random;
     }
-    if(type == MANSION) {
+    else if(type == MANSION) {
         area->trap.name = mansionTrap.name;
         area->trap.dmg = random;
+    }
+    else if(type == CAVE) {
+        area->trap.name = caveTraps[random].name;
+        if(strcmp("Forziere Misterioso", area->trap.name) == 0) {
+            CoinFace toss = flipCoin();
+            if(toss == HEAD) {
+                area->trap.dmg = 0;
+            }
+            else area->trap.coin = 0;
+        }
+        else if(strcmp("Rupe scoscesa", area->trap.name) == 0) {
+            area->trap.dmg = rollDice();
+        }
+        else 
+            area->trap.dmg = caveTraps[random].dmg;
     }
 
     return area;
 }
 
 Room* combatRoom(Room* area, DungeonType type, int random) {
-    if(type == SWAMP) {
+    if(type == SWAMP) 
         area->monster = swampMonsters[random];
-    }
-    if(type == MANSION) {
+    else if(type == MANSION)
         area->monster = mansionMonsters[random];
-    }
+    else if(type == CAVE)
+        area->monster = caveMonster;
 
     return area;
 }
