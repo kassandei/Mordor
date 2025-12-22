@@ -23,7 +23,7 @@ void initGame() {
     }
 }
 
-static void handleRoomEvent(Room* currentRoom) {
+static void handleRoomEvent(Room *currentRoom) {
     if (currentRoom->type == TRAP) {
         int trapDamage = calculateDamage(currentRoom->trap.dmg);
         printf("Sei caduto nella trappola %s\n", currentRoom->trap.name);
@@ -40,43 +40,46 @@ static void handleRoomEvent(Room* currentRoom) {
 }
 
 void swampDungeon() {
-    Dungeon *dungeon = (Dungeon*)malloc(sizeof(Dungeon));
-    int obj = 0;
+    Dungeon *dungeon = (Dungeon *)malloc(sizeof(Dungeon));
+    int orcGeneralKilled = 0;
     dungeon->mission = SWAMP;
     dungeon = generateDungeon(dungeon);
-    Room* currentRoom = NULL;
+    Room *currentRoom = NULL;
     char choice;
 
-    while (HERO.isAlive) {
+    while (HERO.isAlive)
+    {
         clearScreen();
         drawTitle("Palude Putrescente");
         printf("Obiettivo : Eliminare %d Generali Orco\n", SWAMP_ORC);
-        printf("Stato di avanzamento : Generale Orco %d/3\n", obj);
+        printf("Stato di avanzamento : Generale Orco %d/3\n", orcGeneralKilled);
         printf("Stanza numero %d\n", dungeon->roomCount + 1);
         playerStats();
         missionMenu();
         choice = readOption("1234");
 
-        switch (choice) {
+        switch (choice)
+        {
         case '1':
             clearScreen();
             currentRoom = addRoom(dungeon);
 
             // Forza boss nelle ultime 3 stanze se necessario
-            if (obj < SWAMP_ORC && dungeon->roomCount > DUNGEON_ROOMS - SWAMP_ORC) {
+            if (orcGeneralKilled < SWAMP_ORC && dungeon->roomCount > DUNGEON_ROOMS - SWAMP_ORC) {
                 currentRoom->type = COMBAT;
                 currentRoom->monster = swampMonsters[4];
             }
 
             handleRoomEvent(currentRoom);
 
-            if(HERO.hp > 0) {
+            if (HERO.hp > 0)
+            {
                 if (currentRoom->type == COMBAT && strcmp(currentRoom->monster.name, "Generale Orco") == 0)
-                    obj++;
+                    orcGeneralKilled++;
             }
 
             clearInput();
-            if (obj == SWAMP_ORC) {
+            if (orcGeneralKilled == SWAMP_ORC) {
                 clearScreen();
                 puts("Hai completato il dungeon!");
                 HERO.missionComplete[SWAMP] = true;
@@ -107,31 +110,30 @@ void swampDungeon() {
 }
 
 void mansionDungeon() {
-    Dungeon *dungeon = (Dungeon*)malloc(sizeof(Dungeon));
-    bool obj = false;
+    Dungeon *dungeon = (Dungeon *)malloc(sizeof(Dungeon));
+    bool vampireKilled = false;
     dungeon->mission = MANSION;
     dungeon = generateDungeon(dungeon);
-    Room* currentRoom = NULL;
+    Room *currentRoom = NULL;
     char choice;
 
     while (HERO.isAlive) {
         clearScreen();
         drawTitle("Magione Infestata");
         puts("Obiettivo : Recupera la chiave del Castello del Signore Oscuro, e sconfiggi un Vampiro Superiore.");
-        printf("Stato di avanzamento : Chiave %d/1 | Vampiro Superiore %d/1\n", HERO.hasCastleKey, obj);
+        printf("Stato di avanzamento : Chiave %d/1 | Vampiro Superiore %d/1\n", HERO.hasCastleKey, vampireKilled);
         printf("Stanza numero %d\n", dungeon->roomCount + 1);
         playerStats();
         missionMenu();
         choice = readOption("1234");
 
-        switch (choice)
-        {
+        switch (choice) {
         case '1':
             clearScreen();
             currentRoom = addRoom(dungeon);
 
             // Forza la chiave e il vampiro superiore nelle ultime 2 stanze se necessario
-            if (!obj && dungeon->roomCount > DUNGEON_ROOMS - 2) {
+            if (!vampireKilled && dungeon->roomCount > DUNGEON_ROOMS - 2) {
                 currentRoom->type = COMBAT;
                 currentRoom->monster = mansionMonsters[3];
             }
@@ -142,17 +144,17 @@ void mansionDungeon() {
 
             handleRoomEvent(currentRoom);
 
-            if(HERO.hp > 0) {
+            if (HERO.hp > 0) {
                 if (currentRoom->type == COMBAT) {
                     if (strcmp(currentRoom->monster.name, "Vampiro Superiore") == 0)
-                        obj = true;
+                        vampireKilled = true;
                     if (strcmp(currentRoom->monster.name, "Demone Custode") == 0)
                         HERO.hasCastleKey = true;
                 }
             }
 
             clearInput();
-            if (obj && HERO.hasCastleKey) {
+            if (vampireKilled && HERO.hasCastleKey) {
                 clearScreen();
                 puts("Hai completato il dungeon!");
                 HERO.missionComplete[MANSION] = true;
@@ -183,11 +185,11 @@ void mansionDungeon() {
 }
 
 void caveDungeon() {
-    Dungeon *dungeon = (Dungeon*)malloc(sizeof(Dungeon));
-    bool obj = false;
+    Dungeon *dungeon = (Dungeon *)malloc(sizeof(Dungeon));
+    bool dragonKilled = false;
     dungeon->mission = CAVE;
     dungeon = generateDungeon(dungeon);
-    Room* currentRoom = NULL;
+    Room *currentRoom = NULL;
     char choice;
 
     while (HERO.isAlive) {
@@ -199,31 +201,31 @@ void caveDungeon() {
         missionMenu();
         choice = readOption("1234");
 
-        switch (choice)
-        {
+        switch (choice) {
         case '1':
             clearScreen();
             currentRoom = addRoom(dungeon);
 
             // Forza il drago antico
-            if (!obj && dungeon->roomCount > DUNGEON_ROOMS - 1) {
+            if (!dragonKilled && dungeon->roomCount > DUNGEON_ROOMS - 1) {
                 currentRoom->type = COMBAT;
                 currentRoom->monster = caveMonster;
             }
 
             handleRoomEvent(currentRoom);
-            if(currentRoom->type == TRAP && currentRoom->trap.coin > 0) {
+            if (currentRoom->type == TRAP && currentRoom->trap.coin > 0) {
                 printf("Hai ottenuto %d monete\n", currentRoom->trap.coin);
             }
 
-            if(HERO.hp > 0) {
-                if(currentRoom->type == COMBAT)
-                    obj = true;
+            if (HERO.hp > 0) {
+                if (currentRoom->type == COMBAT) {
+                    dragonKilled = true;
                     HERO.hasHeroSword = true;
+                }
             }
 
             clearInput();
-            if (obj) {
+            if (dragonKilled) {
                 clearScreen();
                 puts("Hai completato il dungeon!");
                 HERO.missionComplete[CAVE] = true;
@@ -231,7 +233,7 @@ void caveDungeon() {
                 clearInput();
                 freeDungeon(dungeon);
                 return;
-            }            
+            }
             break;
         case '2':
             shopMenu();
@@ -255,22 +257,21 @@ void caveDungeon() {
 void bossFight() {
     char choice;
     Move move;
-    BossRoom* room = (BossRoom*)malloc(sizeof(BossRoom));
+    BossRoom *room = (BossRoom *)malloc(sizeof(BossRoom));
     room->round = 0;
     room->win = 0;
     room->lose = 0;
 
-    while(HERO.isAlive) {
+    while (HERO.isAlive) {
         clearScreen();
         drawTitle("Signore Oscuro");
         puts("Obiettivo : Sconfiggi il male che domina le terre del nostro mondo");
         printf("Scontro Finale | Round %d su %d| Eroe %d - Signore Oscuro %d.\n",
-                room->round, BOSS_FIGHT_ROUNDS, room->win, room->lose);
+               room->round, BOSS_FIGHT_ROUNDS, room->win, room->lose);
         printf("\nMosse disponibili:\n1. Scudo\n2. Magia\n3. Spada\n");
         printf("Seleziona una delle opzioni del menu [1-3]: ");
         choice = readOption("123");
-        switch (choice)
-        {
+        switch (choice) {
         case '1':
             move = SHIELD;
             break;
@@ -295,7 +296,7 @@ void gameOver() {
 void combat(Monster *monster) {
     printf("Hai incontrato %s\n", monster->name);
     bool isDragon = (strcmp(monster->name, "Drago Antico") == 0);
-    
+
     while (1) {
         HERO.hp = MAX_HP;
         int dice = rollDice() + calculateDiceBonus();
@@ -313,31 +314,29 @@ void combat(Monster *monster) {
         }
         else {
             int monsterDamage = calculateDamage(monster->dmg);
-            
-            // Quiz del Drago sulla sequenza di Padovan
+
             if (isDragon) {
                 int randomNum = rand() % 500 + 1;
-                bool correctAnswer = isPadovanNumber(randomNum);
-                
                 printf("\n=== IL DRAGO TI SFIDA ===\n");
                 printf("Il numero %d appartiene alla sequenza di Padovan?\n", randomNum);
                 printf("Rispondi [S/N]: ");
-                
+
                 char choice = readOption("SN");
-                
+
                 if (choice == 'S' && isPadovanNumber(randomNum)) {
                     printf("\nRisposta CORRETTA! Il Drago è impressionato dalla tua saggezza.\n");
                     printf("Il danno viene annullato!\n\n");
                     monsterDamage = 0;
-                } else
+                }
+                else
                     printf("\nRisposta ERRATA! Il Drago infligge il colpo con furia!\n");
             }
-            
+
             if (monsterDamage > 0) {
                 printf("Hai subito %d danni! (%d < %d)\n", monsterDamage, dice, monster->fatalBlow);
                 HERO.hp -= monsterDamage;
             }
-            
+
             if (HERO.hp <= 0) {
                 gameOver();
                 break;
@@ -346,51 +345,51 @@ void combat(Monster *monster) {
     }
 }
 
-void finalcombat(Move playerMove, BossRoom* room) {
+void finalcombat(Move playerMove, BossRoom *room) {
     Move bossMove = rand() % 3;
-    
+
     printf("Il Signore Oscuro nel frattempo ha scelto...");
-    if(bossMove == SHIELD)
+    if (bossMove == SHIELD)
         printf("SCUDO\n\n");
-    else if(bossMove == SWORD)
+    else if (bossMove == SWORD)
         printf("SPADA\n\n");
     else
         printf("MAGIA\n\n");
-    
-    if(playerMove == bossMove) {
+
+    if (playerMove == bossMove) {
         printf("Pareggio! Entrambi avete scelto la stessa mossa.\n");
         clearInput();
         return;
     }
-    else if((playerMove == SHIELD && bossMove == SWORD) ||
-            (playerMove == SWORD && bossMove == MAGIC) ||
-            (playerMove == MAGIC && bossMove == SHIELD)) {
+    else if ((playerMove == SHIELD && bossMove == SWORD) ||
+             (playerMove == SWORD && bossMove == MAGIC) ||
+             (playerMove == MAGIC && bossMove == SHIELD)) {
         // Eroe vince in caso di pareggio
         room->win++;
-        
-        if(playerMove == SHIELD && bossMove == SWORD)
+
+        if (playerMove == SHIELD && bossMove == SWORD)
             printf("L'eroe para e si difende dalla Spada del Signore Oscuro. L'eroe si aggiudica il Round.\n");
-        else if(playerMove == SWORD && bossMove == MAGIC)
+        else if (playerMove == SWORD && bossMove == MAGIC)
             printf("L'eroe taglia la Magia del Signore Oscuro con la sua Spada. L'eroe si aggiudica il Round.\n");
-        else if(playerMove == MAGIC && bossMove == SHIELD)
+        else if (playerMove == MAGIC && bossMove == SHIELD)
             printf("La Magia dell'eroe supera lo Scudo del Signore Oscuro. L'eroe si aggiudica il Round.\n");
     }
     else {
         // Boss vince
         room->lose++;
-        
-        if(bossMove == SHIELD && playerMove == SWORD)
+
+        if (bossMove == SHIELD && playerMove == SWORD)
             printf("Il Signore Oscuro para la tua Spada con il suo Scudo. Il Signore Oscuro si aggiudica il Round.\n");
-        else if(bossMove == SWORD && playerMove == MAGIC)
+        else if (bossMove == SWORD && playerMove == MAGIC)
             printf("Il Signore Oscuro taglia la tua Magia con la sua Spada. Il Signore Oscuro si aggiudica il Round.\n");
-        else if(bossMove == MAGIC && playerMove == SHIELD)
+        else if (bossMove == MAGIC && playerMove == SHIELD)
             printf("La Magia del Signore Oscuro supera il tuo Scudo. Il Signore Oscuro si aggiudica il Round.\n");
     }
-    
+
     room->round++;
     clearInput();
-    
-    if(room->win == 3) {
+
+    if (room->win == 3) {
         clearScreen();
         drawTitle("VITTORIA!");
         puts("\n*** HAI SCONFITTO IL SIGNORE OSCURO! ***\n");
@@ -398,9 +397,9 @@ void finalcombat(Move playerMove, BossRoom* room) {
         puts("Sei il salvatore del regno!\n");
         printf("Premi un tasto per tornare al villaggio...");
         clearInput();
-        HERO.isAlive = false;  // Fine gioco
+        HERO.isAlive = false; // Fine gioco
     }
-    else if(room->lose == 3) {
+    else if (room->lose == 3) {
         clearScreen();
         drawTitle("SCONFITTA");
         puts("\n*** IL SIGNORE OSCURO TI HA SCONFITTO! ***\n");

@@ -72,113 +72,112 @@ Room* addRoom(Dungeon* dungeon) {
 
 
 Room* generateRoom(Dungeon* dungeon) {
-    Room *area = (Room*)malloc(sizeof(Room));
-    if (!area) {
+    Room *room = (Room*)malloc(sizeof(Room));
+    if (!room) {
         fprintf(stderr, "Errore: memoria insufficiente\n");
         exit(EXIT_FAILURE);
     }
     switch (dungeon->mission) {
         case SWAMP:
-            area = generateRoomSwamp(area);
+            room = generateRoomSwamp(room);
             break;
         case MANSION:
-            area = generateRoomMansion(area);
+            room = generateRoomMansion(room);
             break;
         case CAVE:
-            area = generateRoomCave(area);
+            room = generateRoomCave(room);
             break;
         default:
             break;
     }
-    return area;
+    return room;
 }
 
-Room* generateRoomSwamp(Room* area) {
+Room* generateRoomSwamp(Room* room) {
     int roomType = rand() % 2 + 1;
-    int randomMonster = rand() % SWAMP_MONSTERS;
-    area->type = roomType;
-    if(area->type == TRAP) {
-        area = trapRoom(area, SWAMP, rand() % 5 + 1);
+    int monsterIndex = rand() % SWAMP_MONSTERS;
+    room->type = roomType;
+    if(room->type == TRAP) {
+        room = trapRoom(room, SWAMP, rand() % 5 + 1);
     }
     else {
-        area = combatRoom(area, SWAMP, randomMonster);
+        room = combatRoom(room, SWAMP, monsterIndex);
     }
-    return area;
+    return room;
 }
 
-Room* generateRoomMansion(Room* area) {
+Room* generateRoomMansion(Room* room) {
     int roomType = rand() % 2 + 1;
-    int randomMonster = rand() % MANSION_MONSTERS;
-    area->type = roomType;
-    if(area->type == TRAP) {
-       area = trapRoom(area, MANSION, mansionTrap.dmg);
+    int monsterIndex = rand() % MANSION_MONSTERS;
+    room->type = roomType;
+    if(room->type == TRAP) {
+       room = trapRoom(room, MANSION, mansionTrap.dmg);
     }
     else {
-        area = combatRoom(area, MANSION, randomMonster);
+        room = combatRoom(room, MANSION, monsterIndex);
     }
-    return area;
+    return room;
 }
 
-Room* generateRoomCave(Room* area) {
+Room* generateRoomCave(Room* room) {
     int roomType = rand() % 3; // considera anche la stanza vuota
-    int randomTrap = rand() % CAVE_TRAPS;
-    area->type = roomType;
-    if(area->type == TRAP) {
-        area = trapRoom(area, CAVE, randomTrap);
+    int trapIndex = rand() % CAVE_TRAPS;
+    room->type = roomType;
+    if(room->type == TRAP) {
+        room = trapRoom(room, CAVE, trapIndex);
     }
     else {
-        area = combatRoom(area, CAVE, -1);
+        room = combatRoom(room, CAVE, -1);
     }
-    return area;
+    return room;
 }
 
-Room* trapRoom(Room* area, DungeonType type, int random) {
+Room* trapRoom(Room* room, DungeonType type, int randomIndex) {
     if(type == SWAMP) {
-        area->trap.name = swampTrap.name;
-        area->trap.dmg = random;
+        room->trap.name = swampTrap.name;
+        room->trap.dmg = randomIndex;
     }
     else if(type == MANSION) {
-        area->trap.name = mansionTrap.name;
-        area->trap.dmg = random;
+        room->trap.name = mansionTrap.name;
+        room->trap.dmg = randomIndex;
     }
     else if(type == CAVE) {
-        area->trap.name = caveTraps[random].name;
-        if(strcmp("Forziere Misterioso", area->trap.name) == 0) {
+        room->trap.name = caveTraps[randomIndex].name;
+        if(strcmp("Forziere Misterioso", room->trap.name) == 0) {
             // Decide se infliggere danni o guadagnare monete
             CoinFace toss = flipCoin();
             if(toss == HEAD) {
-                area->trap.dmg = 0;
+                room->trap.dmg = 0;
             }
-            else area->trap.coin = 0;
+            else room->trap.coin = 0;
         }
-        else if(strcmp("Rupe scoscesa", area->trap.name) == 0) {
-            area->trap.dmg = rollDice();
+        else if(strcmp("Rupe scoscesa", room->trap.name) == 0) {
+            room->trap.dmg = rollDice();
         }
         else 
-            area->trap.dmg = caveTraps[random].dmg;
+            room->trap.dmg = caveTraps[randomIndex].dmg;
     }
-
-    return area;
+    return room;
 }
 
-Room* combatRoom(Room* area, DungeonType type, int random) {
+Room* combatRoom(Room* room, DungeonType type, int monsterIndex) {
     if(type == SWAMP) 
-        area->monster = swampMonsters[random];
+        room->monster = swampMonsters[monsterIndex];
     else if(type == MANSION)
-        area->monster = mansionMonsters[random];
+        room->monster = mansionMonsters[monsterIndex];
     else if(type == CAVE)
-        area->monster = caveMonster;
+        room->monster = caveMonster;
 
-    return area;
+    return room;
 }
 
 
 void freeDungeon(Dungeon* dungeon) {
     Room* current = dungeon->start;
     while(current != NULL) {
-        Room* tmp = current->nextRoom;
+        Room* nextRoom = current->nextRoom;
         free(current);
-        current = tmp;
+        current = nextRoom;
     }
     free(dungeon);
 }
