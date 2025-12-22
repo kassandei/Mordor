@@ -7,10 +7,19 @@
 
 void drawTitle(const char *string) {
     int len = strlen(string);
-    for(int i = 0; i < len+4; i++) putchar('*');
-    printf("\n* %s *\n", string);
-    for(int i = 0; i < len+4; i++) putchar('*');
-    putchar('\n');
+    
+    // Bordo superiore
+    printf("╔");
+    for(int i = 0; i < len+2; i++) printf("═");
+    printf("╗\n");
+    
+    // Titolo
+    printf("║ %s ║\n", string);
+    
+    // Bordo inferiore
+    printf("╚");
+    for(int i = 0; i < len+2; i++) printf("═");
+    printf("╝\n");
 }
 
 void clearScreen() {
