@@ -91,29 +91,43 @@ void villageMenu() {
 
 void dungeonMenu() {
     char choice;
+    while(HERO.isAlive) {
+        clearScreen();
+        drawTitle("MISSIONI");
+        printf("1. Palude Putrescente %s\n", HERO.missionComplete[SWAMP] ? "[COMPLETATA]" : "");
+        printf("2. Magione Infestata %s\n", HERO.missionComplete[MANSION] ? "[COMPLETATA]" : "");
+        printf("3. Grotta di Cristallo %s\n", HERO.missionComplete[CAVE] ? "[COMPLETATA]" : "");
+        printf("Seleziona una delle opzioni [1-3]: ");
+        choice = readOption("123");
 
-    clearScreen();
-    drawTitle("MISSIONI");
-    puts("1. Palude Putrescente");
-    puts("2. Magione Infestata");
-    puts("3. Grotta di Cristallo");
-    printf("Seleziona una delle opzioni [1-3]: ");
-    choice = readOption("123");
-
-    switch (choice) {
-        case '1':
-            swampDungeon();
-            break;
-        case '2':
-            mansionDungeon();
-            break;
-        case '3':
-            caveDungeon();
-            break;
-        default:
-            break;
+        switch (choice) {
+            case '1':
+                if(isCompleted(SWAMP)) { 
+                    puts("Missione già completata"); 
+                    clearInput();
+                    continue; 
+                }
+                swampDungeon();
+                break;
+            case '2':
+                if(isCompleted(MANSION)) { 
+                    puts("Missione già completata"); 
+                    clearInput();
+                    continue; 
+                }
+                break;
+            case '3':
+                if(isCompleted(CAVE)) {
+                    puts("Missione già completata"); 
+                    clearInput();
+                    continue; 
+                }
+                caveDungeon();
+                break;
+            default:
+                break;
+        }
     }
-
 }
 
 void inventoryMenu() {    

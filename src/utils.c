@@ -122,3 +122,26 @@ int calculateDiceBonus() {
 int rollDice() {
     return (rand() % 6 + 1);
 }
+
+bool isCompleted(DungeonType type) {
+    if(HERO.missionComplete[type])
+        return true;
+    else false;
+}
+
+void printDungeon(Dungeon* dungeon) {
+    puts("\n========== PERCORSO COMPLETATO ==========");
+    Room* current = dungeon->start;
+    while (current != NULL) {
+        printf("Stanza %d: ", current->roomNumber + 1);
+        if (current->type == TRAP) {
+            printf("[TRAPPOLA] %s\n", current->trap.name);
+        } else if (current->type == COMBAT) {
+            printf("[COMBATTIMENTO] %s\n", current->monster.name);
+        } else {
+            printf("[VUOTA]\n");
+        }
+        current = current->nextRoom;
+    }
+    puts("==========================================\n");
+}

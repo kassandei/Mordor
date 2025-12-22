@@ -23,13 +23,26 @@ void initGame() {
     }
 }
 
+static void handleRoomEvent(Room* currentRoom) {
+    if (currentRoom->type == TRAP) {
+        int trapDamage = calculateDamage(currentRoom->trap.dmg);
+        printf("Sei caduto nella trappola %s\n", currentRoom->trap.name);
+        printf("Hai subito %d danni\n", trapDamage);
+        HERO.hp -= trapDamage;
+        if (HERO.hp <= 0)
+            gameOver();
+    }
+    else {
+        combat(&currentRoom->monster);
+    }
+}
+
 void swampDungeon() {
     Dungeon *dungeon = (Dungeon*)malloc(sizeof(Dungeon));
     int obj = 0;
     dungeon->mission = SWAMP;
-    dungeon->canExit = false;
     dungeon = generateDungeon(dungeon);
-    Room* currentRoom = dungeon->room;
+    Room* currentRoom = NULL;
     char choice;
 
     while (HERO.isAlive) {
@@ -37,7 +50,7 @@ void swampDungeon() {
         drawTitle("Palude Putrescente");
         printf("Obiettivo : Eliminare %d Generali Orco\n", SWAMP_ORC);
         printf("Stato di avanzamento : Generale Orco %d/3\n", obj);
-        printf("Stanza numero %d\n", currentRoom->roomNumber + 1);
+        printf("Stanza numero %d/%d\n", dungeon->roomCount + 1, DUNGEON_ROOMS);
         playerStats();
         missionMenu();
         choice = readOption("1234");
@@ -45,41 +58,28 @@ void swampDungeon() {
         switch (choice) {
         case '1':
             clearScreen();
+            currentRoom = addRoom(dungeon);
 
-            if(currentRoom == NULL) {
-                puts("Hai completato il dungeon! Ritorna al villaggio per nuove avventure");
-                clearInput();
-                break;
-            }
             // Forza boss nelle ultime 3 stanze se necessario
-            if (obj < SWAMP_ORC && currentRoom->roomNumber >= DUNGEON_ROOMS - SWAMP_ORC) {
+            if (obj < SWAMP_ORC && dungeon->roomCount > DUNGEON_ROOMS - SWAMP_ORC) {
                 currentRoom->type = COMBAT;
                 currentRoom->monster = swampMonsters[4];
             }
 
-            if (currentRoom->type == TRAP) {
-                int trapDamage = calculateDamage(currentRoom->trap.dmg);
-                printf("Sei caduto nella trappola %s\n", currentRoom->trap.name);
-                printf("Hai subito %d danni\n", trapDamage);
-                HERO.hp -= trapDamage;
-                if (HERO.hp <= 0)
-                    gameOver();
-            }
-            else {
-                combat(&currentRoom->monster);
+            handleRoomEvent(currentRoom);
 
-                if (strcmp(currentRoom->monster.name, "Generale Orco") == 0) {
-                    obj++;
-                }
+            if (currentRoom->type == COMBAT && strcmp(currentRoom->monster.name, "Generale Orco") == 0) {
+                obj++;
             }
-            currentRoom = currentRoom->nextRoom;
+
             clearInput();
             if (obj == SWAMP_ORC) {
                 clearScreen();
-                puts("Hai completato tutti gli obiettivi, ritorna al villaggio per nuove avventure!");
+                puts("Hai completato il dungeon!");
                 HERO.missionComplete[SWAMP] = true;
-                dungeon->canExit = true;
+                printDungeon(dungeon);
                 clearInput();
+                freeDungeon(dungeon);
                 return;
             }
             break;
@@ -90,12 +90,7 @@ void swampDungeon() {
             inventoryMenu();
             break;
         case '4':
-            bool home = false;
-            if(dungeon->canExit)
-                home = true;
-            else if (returnHome(PRICE_RETURN)) 
-                home = true;
-            if(home) { 
+            if (returnHome(PRICE_RETURN)) {
                 freeDungeon(dungeon);
                 return;
             }
@@ -111,17 +106,17 @@ void swampDungeon() {
 void mansionDungeon() {
     Dungeon *dungeon = (Dungeon*)malloc(sizeof(Dungeon));
     bool obj = false;
-    dungeon->canExit = false;
     dungeon->mission = MANSION;
     dungeon = generateDungeon(dungeon);
-    Room* currentRoom = dungeon->room;
+    Room* currentRoom = NULL;
     char choice;
 
     while (HERO.isAlive) {
         clearScreen();
         drawTitle("Magione Infestata");
         puts("Obiettivo : Recupera la chiave del Castello del Signore Oscuro, e sconfiggi un Vampiro Superiore.");
-        printf("Stato di avanzamento : Chiave %d/1 | Vampiro Superiore %d/1", HERO.hasCastleKey, obj);
+        printf("Stato di avanzamento : Chiave %d/1 | Vampiro Superiore %d/1\n", HERO.hasCastleKey, obj);
+        printf("Stanza numero %d/%d\n", dungeon->roomCount + 1, DUNGEON_ROOMS);
         playerStats();
         missionMenu();
         choice = readOption("1234");
@@ -130,33 +125,21 @@ void mansionDungeon() {
         {
         case '1':
             clearScreen();
+            currentRoom = addRoom(dungeon);
 
-            if(currentRoom == NULL) {
-                puts("Hai completato il dungeon! Ritorna al villaggio per nuove avventure");
-                clearInput();
-                break;
-            }
             // Forza la chiave e il vampiro superiore nelle ultime 2 stanze se necessario
-            if (!obj && currentRoom->roomNumber >= DUNGEON_ROOMS - 2) {
+            if (!obj && dungeon->roomCount > DUNGEON_ROOMS - 2) {
                 currentRoom->type = COMBAT;
                 currentRoom->monster = mansionMonsters[3];
             }
-            else if (!HERO.hasCastleKey && currentRoom->roomNumber >= DUNGEON_ROOMS - 2) {
+            else if (!HERO.hasCastleKey && dungeon->roomCount > DUNGEON_ROOMS - 2) {
                 currentRoom->type = COMBAT;
                 currentRoom->monster = mansionMonsters[4];
             }
 
-            if (currentRoom->type == TRAP) {
-                int trapDamage = calculateDamage(currentRoom->trap.dmg);
-                printf("Sei caduto nella trappola %s\n", currentRoom->trap.name);
-                printf("Hai subito %d danni\n", trapDamage);
-                HERO.hp -= trapDamage;
-                if (HERO.hp <= 0)
-                    gameOver();
-            }
-            else {
-                combat(&currentRoom->monster);
+            handleRoomEvent(currentRoom);
 
+            if (currentRoom->type == COMBAT) {
                 if (strcmp(currentRoom->monster.name, "Vampiro Superiore") == 0) {
                     obj = true;
                 }
@@ -164,14 +147,15 @@ void mansionDungeon() {
                     HERO.hasCastleKey = true;
                 }
             }
-            currentRoom = currentRoom->nextRoom;
+
             clearInput();
             if (obj && HERO.hasCastleKey) {
                 clearScreen();
-                puts("Hai completato tutti gli obiettivi, ritorna al villaggio per nuove avventure!");
+                puts("Hai completato il dungeon!");
                 HERO.missionComplete[MANSION] = true;
-                dungeon->canExit = true;
+                printDungeon(dungeon);
                 clearInput();
+                freeDungeon(dungeon);
                 return;
             }
             break;
@@ -182,12 +166,7 @@ void mansionDungeon() {
             inventoryMenu();
             break;
         case '4':
-            bool home = false;
-            if(dungeon->canExit)
-                home = true;
-            else if (returnHome(PRICE_RETURN)) 
-                home = true;
-            if(home) { 
+            if (returnHome(PRICE_RETURN)) {
                 freeDungeon(dungeon);
                 return;
             }
@@ -241,6 +220,7 @@ void gameOver() {
 void combat(Monster *monster) {
     printf("Hai incontrato %s\n", monster->name);
     while (1) {
+        HERO.hp = MAX_HP;
         int dice = rollDice() + calculateDiceBonus();
 
         printf("Premi un tasto per tirare il dado...");

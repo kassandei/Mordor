@@ -1,6 +1,8 @@
 #ifndef TYPE
 #define TYPE
 
+#include <stdbool.h>
+
 #define NAMESIZE 30
 #define QUESTS 3
 #define MAX_HP 20
@@ -10,7 +12,6 @@
 #define ARMOR_PRICE 10
 #define DMGBUFF 1
 #define ARMOR_REDUCEDMG -1
-#include <stdbool.h>
 
 typedef enum {
     EMPTY,              
@@ -58,9 +59,10 @@ typedef struct Room {
 } Room;
 
 typedef struct {
-    Room* room;
+    Room* start;
+    Room* end;
     DungeonType mission;
-    bool canExit;
+    int roomCount;
 } Dungeon;
 
 

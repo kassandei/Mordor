@@ -14,11 +14,15 @@ void playerStats();
 void rest();
 void missionMenu();
 int missionCompleted();
+bool isCompleted(DungeonType type);
 
 // funzioni per game.c
 bool returnHome(int prize);
 int calculateDamage(int baseDamage);
 int calculateDiceBonus();
 int rollDice();
+
+// funzioni per il dungeon
+void printDungeon(Dungeon* dungeon);
 
 #endif
