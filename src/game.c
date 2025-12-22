@@ -41,11 +41,16 @@ static void handleRoomEvent(Room *currentRoom) {
 
 void swampDungeon() {
     Dungeon *dungeon = (Dungeon *)malloc(sizeof(Dungeon));
-    int orcGeneralKilled = 0;
-    dungeon->mission = SWAMP;
-    dungeon = generateDungeon(dungeon);
+    if (!dungeon) {
+        fprintf(stderr, "Errore: memoria insufficiente\n");
+        exit(EXIT_FAILURE);
+    }
     Room *currentRoom = NULL;
     char choice;
+    int orcGeneralKilled = 0;
+    
+    dungeon->mission = SWAMP;
+    dungeon = generateDungeon(dungeon);
 
     while (HERO.isAlive)
     {
@@ -111,11 +116,16 @@ void swampDungeon() {
 
 void mansionDungeon() {
     Dungeon *dungeon = (Dungeon *)malloc(sizeof(Dungeon));
-    bool vampireKilled = false;
-    dungeon->mission = MANSION;
-    dungeon = generateDungeon(dungeon);
+    if (!dungeon) {
+        fprintf(stderr, "Errore: memoria insufficiente\n");
+        exit(EXIT_FAILURE);
+    }
     Room *currentRoom = NULL;
     char choice;
+    bool vampireKilled = false;
+    
+    dungeon->mission = MANSION;
+    dungeon = generateDungeon(dungeon);
 
     while (HERO.isAlive) {
         clearScreen();
@@ -186,11 +196,16 @@ void mansionDungeon() {
 
 void caveDungeon() {
     Dungeon *dungeon = (Dungeon *)malloc(sizeof(Dungeon));
-    bool dragonKilled = false;
-    dungeon->mission = CAVE;
-    dungeon = generateDungeon(dungeon);
+    if (!dungeon) {
+        fprintf(stderr, "Errore: memoria insufficiente\n");
+        exit(EXIT_FAILURE);
+    }
     Room *currentRoom = NULL;
     char choice;
+    bool dragonKilled = false;
+    
+    dungeon->mission = CAVE;
+    dungeon = generateDungeon(dungeon);
 
     while (HERO.isAlive) {
         clearScreen();
@@ -255,9 +270,14 @@ void caveDungeon() {
 }
 
 void bossFight() {
-    char choice;
-    Move move;
     BossRoom *room = (BossRoom *)malloc(sizeof(BossRoom));
+    if (!room) {
+        fprintf(stderr, "Errore: memoria insufficiente\n");
+        exit(EXIT_FAILURE);
+    }
+    Move move;
+    char choice;
+    
     room->round = 0;
     room->win = 0;
     room->lose = 0;
@@ -298,7 +318,6 @@ void combat(Monster *monster) {
     bool isDragon = (strcmp(monster->name, "Drago Antico") == 0);
 
     while (1) {
-        HERO.hp = MAX_HP;
         int dice = rollDice() + calculateDiceBonus();
 
         printf("Premi un tasto per tirare il dado...");
