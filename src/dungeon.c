@@ -29,24 +29,29 @@ static Trap mansionTrap = {
     .dmg = 3
 };
 
-
 Dungeon* generateDungeon(Dungeon* dungeon) {
-    // crea il primo nodo
-    Room* start = generateRoom(dungeon);
-    start->roomNumber = 0;
+    dungeon->start = NULL;
+    dungeon->end = NULL;
+    dungeon->roomCount = 0;
+    return dungeon;
+}
 
-    Room* current = start;
+Room* addRoom(Dungeon* dungeon) {
+    Room* newRoom = generateRoom(dungeon);
+    newRoom->roomNumber = dungeon->roomCount;
+    newRoom->nextRoom = NULL;
 
-    for (int i = 1; i < DUNGEON_ROOMS; i++) {
-        Room* next = generateRoom(dungeon);
-        next->roomNumber = i;
-        current->nextRoom = next;
-        current = next;
+    if(dungeon->start == NULL) {
+        dungeon->start = newRoom;
+        dungeon->end = newRoom;
+    }
+    else {
+        dungeon->end->nextRoom = newRoom;
+        dungeon->end = newRoom;
     }
 
-    current->nextRoom = NULL;
-    dungeon->room = start;
-    return dungeon;
+    dungeon->roomCount++;
+    return newRoom;
 }
 
 
@@ -129,7 +134,7 @@ Room* combatRoom(Room* area, DungeonType type, int random) {
 
 
 void freeDungeon(Dungeon* dungeon) {
-    Room* current = dungeon->room;
+    Room* current = dungeon->start;
     while(current != NULL) {
         Room* tmp = current->nextRoom;
         free(current);

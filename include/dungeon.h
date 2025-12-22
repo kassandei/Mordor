@@ -13,6 +13,7 @@ extern Monster swampMonsters[SWAMP_MONSTERS];
 extern Monster mansionMonsters[MANSION_MONSTERS];
 
 Dungeon* generateDungeon(Dungeon* dungeon);
+Room* addRoom(Dungeon* dungeon);
 Room* generateRoom(Dungeon *dungeon);
 Room *generateRoomSwamp(Room *room);
 Room *generateRoomMansion(Room *room);
