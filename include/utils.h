@@ -27,5 +27,7 @@ CoinFace flipCoin();
 
 // funzioni per il dungeon
 void printDungeon(Dungeon* dungeon);
+int padovanSequence(int number);
+bool isPadovanNumber(int target);
 
 #endif

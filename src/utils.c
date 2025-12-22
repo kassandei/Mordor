@@ -114,7 +114,7 @@ int calculateDamage(int baseDamage) {
     return baseDamage + (HERO.hasArmor ? ARMOR_REDUCEDMG : 0);
 }
 
-// calcola il bonus al dado
+// calcola il bonus al dado se si possiede una delle due spade
 int calculateDiceBonus() {
     if (HERO.hasHeroSword)
         return 2;
@@ -152,4 +152,30 @@ void printDungeon(Dungeon* dungeon) {
         current = current->nextRoom;
     }
     puts("==========================================\n");
+}
+
+int padovanSequence(int number) {
+    if(number <= 2)
+        return 1;
+    
+    return padovanSequence(number-2) + padovanSequence(number-3);
+}
+
+static bool checkPadovan(int index, int target) {
+    int currentValue = padovanSequence(index);
+    
+    if (currentValue == target)
+        return true;
+    
+    if (currentValue > target)
+        return false;
+    
+    return checkPadovan(index + 1, target);
+}
+
+bool isPadovanNumber(int target) {
+    if (target < 1) return false;
+    if (target == 1) return true;  
+    
+    return checkPadovan(0, target);
 }

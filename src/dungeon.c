@@ -144,6 +144,7 @@ Room* trapRoom(Room* area, DungeonType type, int random) {
     else if(type == CAVE) {
         area->trap.name = caveTraps[random].name;
         if(strcmp("Forziere Misterioso", area->trap.name) == 0) {
+            // Decide se infliggere danni o guadagnare monete
             CoinFace toss = flipCoin();
             if(toss == HEAD) {
                 area->trap.dmg = 0;

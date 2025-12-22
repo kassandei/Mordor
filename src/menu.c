@@ -94,6 +94,15 @@ void dungeonMenu() {
     while(HERO.isAlive) {
         clearScreen();
         drawTitle("MISSIONI");
+        
+        if(missionCompleted() == 3) {
+            puts("Hai completato tutte le missioni sei pronto ad affrontare il Signor Oscuro? S/N: ");
+            choice = readOption("SN");
+            if(choice == 'S') {
+                bossMenu();
+            } 
+            return;
+        }
         printf("1. Palude Putrescente %s\n", HERO.missionComplete[SWAMP] ? "[COMPLETATA]" : "");
         printf("2. Magione Infestata %s\n", HERO.missionComplete[MANSION] ? "[COMPLETATA]" : "");
         printf("3. Grotta di Cristallo %s\n", HERO.missionComplete[CAVE] ? "[COMPLETATA]" : "");
@@ -129,6 +138,10 @@ void dungeonMenu() {
                 break;
         }
     }
+}
+
+void bossMenu() {
+    clearInput();
 }
 
 void inventoryMenu() {    

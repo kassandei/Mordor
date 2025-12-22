@@ -219,6 +219,7 @@ void caveDungeon() {
             if(HERO.hp > 0) {
                 if(currentRoom->type == COMBAT)
                     obj = true;
+                    HERO.hasHeroSword = true;
             }
 
             clearInput();
@@ -258,6 +259,8 @@ void gameOver() {
 
 void combat(Monster *monster) {
     printf("Hai incontrato %s\n", monster->name);
+    bool isDragon = (strcmp(monster->name, "Drago Antico") == 0);
+    
     while (1) {
         HERO.hp = MAX_HP;
         int dice = rollDice() + calculateDiceBonus();
@@ -275,8 +278,31 @@ void combat(Monster *monster) {
         }
         else {
             int monsterDamage = calculateDamage(monster->dmg);
-            printf("Hai subito %d danni! (%d < %d)\n", monsterDamage, dice, monster->fatalBlow);
-            HERO.hp -= monsterDamage;
+            
+            // Quiz del Drago sulla sequenza di Padovan
+            if (isDragon) {
+                int randomNum = rand() % 500 + 1;
+                bool correctAnswer = isPadovanNumber(randomNum);
+                
+                printf("\n=== IL DRAGO TI SFIDA ===\n");
+                printf("Il numero %d appartiene alla sequenza di Padovan?\n", randomNum);
+                printf("Rispondi [S/N]: ");
+                
+                char choice = readOption("SN");
+                
+                if (choice == 'S' && isPadovanNumber(randomNum)) {
+                    printf("\nRisposta CORRETTA! Il Drago è impressionato dalla tua saggezza.\n");
+                    printf("Il danno viene annullato!\n\n");
+                    monsterDamage = 0;
+                } else
+                    printf("\nRisposta ERRATA! Il Drago infligge il colpo con furia!\n");
+            }
+            
+            if (monsterDamage > 0) {
+                printf("Hai subito %d danni! (%d < %d)\n", monsterDamage, dice, monster->fatalBlow);
+                HERO.hp -= monsterDamage;
+            }
+            
             if (HERO.hp <= 0) {
                 gameOver();
                 break;
