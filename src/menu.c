@@ -91,54 +91,44 @@ void villageMenu() {
 
 void dungeonMenu() {
     char choice;
-    while(HERO.isAlive) {
+
+    while (HERO.isAlive) {
+        int index = 0;
+        int map[3];
+
         clearScreen();
         drawTitle("MISSIONI");
-        
-        if(missionCompleted() == 3) {
-            puts("Hai completato tutte le missioni sei pronto ad affrontare il Signor Oscuro? S/N: ");
-            choice = readOption("SN");
-            if(choice == 'S') {
-                bossMenu();
-            } 
+
+        if (!isCompleted(SWAMP)) {
+            printf("%d. Palude Putrescente\n", ++index);
+            map[index - 1] = SWAMP;
+        }
+        if (!isCompleted(MANSION)) {
+            printf("%d. Magione Infestata\n", ++index);
+            map[index - 1] = MANSION;
+        }
+        if (!isCompleted(CAVE)) {
+            printf("%d. Grotta di Cristallo\n", ++index);
+            map[index - 1] = CAVE;
+        }
+
+        if (index == 0) {
+            puts("Hai completato tutte le missioni. Affrontare il Signor Oscuro? S/N:");
+            if (readOption("SN") == 'S') bossMenu();
             return;
         }
-        printf("1. Palude Putrescente %s\n", HERO.missionComplete[SWAMP] ? "[COMPLETATA]" : "");
-        printf("2. Magione Infestata %s\n", HERO.missionComplete[MANSION] ? "[COMPLETATA]" : "");
-        printf("3. Grotta di Cristallo %s\n", HERO.missionComplete[CAVE] ? "[COMPLETATA]" : "");
-        printf("Seleziona una delle opzioni [1-3]: ");
+
+        printf("Seleziona una missione [1-%d]: ", index);
         choice = readOption("123");
 
-        switch (choice) {
-            case '1':
-                if(isCompleted(SWAMP)) { 
-                    puts("Missione già completata"); 
-                    clearInput();
-                    continue; 
-                }
-                swampDungeon();
-                return;
-            case '2':
-                if(isCompleted(MANSION)) { 
-                    puts("Missione già completata"); 
-                    clearInput();
-                    continue; 
-                }
-                mansionDungeon();
-                return;
-            case '3':
-                if(isCompleted(CAVE)) {
-                    puts("Missione già completata"); 
-                    clearInput();
-                    continue; 
-                }
-                caveDungeon();
-                return;
-            default:
-                break;
-        }
+        if (map[choice - '1'] == SWAMP)   swampDungeon();
+        if (map[choice - '1'] == MANSION) mansionDungeon();
+        if (map[choice - '1'] == CAVE)    caveDungeon();
+
+        return;
     }
 }
+
 
 void bossMenu() {
     clearInput();
