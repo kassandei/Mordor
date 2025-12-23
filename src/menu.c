@@ -186,14 +186,19 @@ void shopMenu() {
         clearScreen();
         drawTitle("NEGOZIO");
         puts("Benvenuto nel negozio avventuriero!\n");
-        printf(" | OGGETTI            | DESCRIZIONE                     | POSSEDUTI       | COSTO\n");
-        printf("-|--------------------|---------------------------------|-----------------|------\n");
-        printf("1| Pozione curativa   | Ripristina fino a 6 Punti Vita  | %15d | %d\n", HERO.potions, POTION_PRICE);
-        printf("2| Spada potenziata   | +1 all'attacco dell'eroe        | %15s | %d\n", HERO.hasDmgBuff ? "POSSIEDI" : "NON POSSIEDI", DMGBUFF_PRICE);
-        printf("3| Armatura           | -1 al danno del nemico/trappola | %15s | %d\n", HERO.hasArmor ? "POSSIEDI" : "NON POSSIEDI", ARMOR_PRICE);
-        printf("4| Esci\n");
+        puts("╔════╦════════════════════════╦═════════════════════════════════╦═════════════════╦═══════╗");
+        puts("║ ID ║ OGGETTO                ║ DESCRIZIONE                     ║ POSSEDUTO       ║ COSTO ║");
+        puts("╠════╬════════════════════════╬═════════════════════════════════╬═════════════════╬═══════╣");
+        printf("║ 1  ║ Pozione curativa       ║ Ripristina fino a 6 Punti Vita  ║ %15d ║ %5d ║\n", HERO.potions, POTION_PRICE);
+        puts("╠════╬════════════════════════╬═════════════════════════════════╬═════════════════╬═══════╣");
+        printf("║ 2  ║ Spada potenziata       ║ +1 all'attacco dell'eroe        ║ %15s ║ %5d ║\n", HERO.hasDmgBuff ? "SI" : "NO", DMGBUFF_PRICE);
+        puts("╠════╬════════════════════════╬═════════════════════════════════╬═════════════════╬═══════╣");
+        printf("║ 3  ║ Armatura               ║ -1 al danno nemico/trappola     ║ %15s ║ %5d ║\n", HERO.hasArmor ? "SI" : "NO", ARMOR_PRICE);
+        puts("╠════╬════════════════════════╬═════════════════════════════════╬═════════════════╬═══════╣");
+        puts("║ 4  ║ Esci dal negozio                                                                   ║");
+        puts("╚════╩════════════════════════════════════════════════════════════════════════════════════╝");
         printf("\nMonete disponibili: %d\n", HERO.coins);
-        printf("Seleziona una delle opzioni [1-4]: ");
+        printf("\nSeleziona una delle opzioni [1-4]: ");
         choice = readOption("1234");
         switch (choice) {
             case '1':

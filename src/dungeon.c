@@ -16,6 +16,8 @@ Monster swampMonsters[SWAMP_MONSTERS] = {
 
 static Trap swampTrap = {
     .name = "Acquitrino Velenoso",
+    .dmg = 0,
+    .coin = 0
 };
 
 Monster mansionMonsters[MANSION_MONSTERS] = {
@@ -28,7 +30,8 @@ Monster mansionMonsters[MANSION_MONSTERS] = {
 
 static Trap mansionTrap = {
     .name = "Botola Buia",
-    .dmg = 3
+    .dmg = 3,
+    .coin = 0
 };
 
 Monster caveMonster = {
@@ -41,7 +44,7 @@ Monster caveMonster = {
 static Trap caveTraps[CAVE_TRAPS] = {
     {"Cristalli cadenti", 2, 0},
     {"Ponte pericolante", 0, -3},
-    {"Forziere Misteriose", 2, 10},
+    {"Forziere Misterioso", 2, 10},
     {"Rupe scoscesa", 6, 0}
 };
 
@@ -134,15 +137,15 @@ Room* generateRoomCave(Room* room) {
 
 Room* trapRoom(Room* room, DungeonType type, int randomIndex) {
     if(type == SWAMP) {
-        room->trap.name = swampTrap.name;
+        room->trap = swampTrap;
         room->trap.dmg = randomIndex;
     }
     else if(type == MANSION) {
-        room->trap.name = mansionTrap.name;
+        room->trap = mansionTrap;
         room->trap.dmg = randomIndex;
     }
     else if(type == CAVE) {
-        room->trap.name = caveTraps[randomIndex].name;
+        room->trap = caveTraps[randomIndex];
         if(strcmp("Forziere Misterioso", room->trap.name) == 0) {
             // Decide se infliggere danni o guadagnare monete
             CoinFace toss = flipCoin();
@@ -154,8 +157,6 @@ Room* trapRoom(Room* room, DungeonType type, int randomIndex) {
         else if(strcmp("Rupe scoscesa", room->trap.name) == 0) {
             room->trap.dmg = rollDice();
         }
-        else 
-            room->trap.dmg = caveTraps[randomIndex].dmg;
     }
     return room;
 }

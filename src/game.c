@@ -88,8 +88,7 @@ void swampDungeon() {
 
             handleRoomEvent(currentRoom);
 
-            if (HERO.hp > 0)
-            {
+            if (HERO.hp > 0) {
                 if (currentRoom->type == COMBAT && strcmp(currentRoom->monster.name, "Generale Orco") == 0)
                     orcGeneralKilled++;
             }

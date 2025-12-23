@@ -10,6 +10,7 @@
 #define SWAMP_MONSTERS 5
 #define MANSION_MONSTERS 5
 #define CAVE_TRAPS 4
+
 extern Monster swampMonsters[SWAMP_MONSTERS];
 extern Monster mansionMonsters[MANSION_MONSTERS];
 extern Monster caveMonster;
