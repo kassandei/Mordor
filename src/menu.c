@@ -16,9 +16,15 @@ void menu() {
         puts("1. Inzia una nuova partita");
         puts("2. Carica un salvataggio");
         puts("3. Esci");
-        
-        printf("Seleziona una delle opzioni [1-3]: ");
-        choice = readOption("123");
+        if(HERO.konamiCode) {
+            puts("4. TRUCCHI");
+            printf("Seleziona una delle opzioni [1-4]: ");
+            choice = readOption("1234");
+        }
+        else {
+            printf("Seleziona una delle opzioni [1-3]: ");
+            choice = readOption("123w");
+        }
         
         switch (choice) {
             case '1':
@@ -29,10 +35,18 @@ void menu() {
                 break;
             case '3':
                 exit(EXIT_SUCCESS);
-            default:
+            case '4':
+                cheatMenu();
+                break;
+            case 'w':
+                HERO.konamiCode = konamiCode();
                 break;
         }
     }
+}
+
+void cheatMenu() {
+
 }
 
 void newGame() {

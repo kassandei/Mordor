@@ -18,6 +18,7 @@ void initGame() {
     HERO.hasCastleKey = false;
     HERO.hasHeroSword = false;
     HERO.isAlive = true;
+    HERO.konamiCode = false;
     for (int i = 0; i < QUESTS; i++) {
         HERO.missionComplete[i] = false;
     }

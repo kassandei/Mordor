@@ -4,6 +4,7 @@
 #include "types.h"
 
 void menu();
+void cheatMenu();
 void newGame();
 void loadGame();
 void villageMenu();

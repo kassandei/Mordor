@@ -11,6 +11,7 @@ void clearInput();
 char readOption(const char *valid);
 
 // funzioni per il menu.c
+bool konamiCode();
 void story();
 void playerStats();
 void rest();

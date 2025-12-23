@@ -48,6 +48,7 @@ typedef struct {
     bool hasHeroSword;
     bool missionComplete[QUESTS];
     bool isAlive;
+    bool konamiCode;
 } Player;
 
 typedef struct {

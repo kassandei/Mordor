@@ -57,6 +57,20 @@ void readString(char *buffer, int size) {
     }
 }
 
+bool konamiCode() {
+    const char konamiSequence[] = {'w','s','s','a','d','a','d','b','a',' '};
+    char code;
+    for(int i = 0; i < sizeof(konamiSequence); i++) {
+        printf("Seleziona una delle opzioni [1-3]: ");
+        code = readOption("123wsadb ");
+        if(code != konamiSequence[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void story() {
     printf("Il mondo è in rovina sotto l’assedio dell’armata oscura.\n"
         "Tu, semplice abitante scelto dal villaggio, devi fermare \n"
