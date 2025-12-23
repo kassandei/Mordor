@@ -8,6 +8,7 @@
 #include "dungeon.h"
 
 Player HERO;
+GameSaves SAVES;
 
 void initGame() {
     HERO.hp = MAX_HP;
@@ -22,6 +23,15 @@ void initGame() {
     for (int i = 0; i < QUESTS; i++) {
         HERO.missionComplete[i] = false;
     }
+}
+
+void initGameSaves() {
+    SAVES.start = NULL;
+    SAVES.end = NULL;
+}
+
+void freeGameSaves() {
+
 }
 
 static void handleRoomEvent(Room *currentRoom) {
@@ -307,6 +317,7 @@ void bossFight() {
         }
         finalcombat(move, room);
     }
+    free(room);
 }
 
 void gameOver() {

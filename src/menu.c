@@ -34,6 +34,7 @@ void menu() {
                 loadGame();
                 break;
             case '3':
+                freeGameSaves();
                 exit(EXIT_SUCCESS);
             case '4':
                 cheatMenu();

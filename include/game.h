@@ -5,6 +5,9 @@
 #include "types.h"
 
 void initGame();
+void initGameSaves();
+void freeGameSaves();
+
 void swampDungeon();
 void mansionDungeon();
 void caveDungeon();

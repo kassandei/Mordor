@@ -8,6 +8,7 @@ int main(void) {
     
     srand(time(NULL));
     initGame();
+    initGameSaves();
     menu();
 
     return 0;

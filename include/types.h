@@ -4,6 +4,7 @@
 #include <stdbool.h>
 
 #define NAMESIZE 30
+#define DATESIZE 30
 #define QUESTS 3
 #define MAX_HP 20
 #define PRICE_RETURN 50
@@ -37,7 +38,7 @@ typedef enum {
     CAVE
 } DungeonType;
 
-typedef struct {
+typedef struct Player {
     char name[NAMESIZE];
     int hp;
     int coins;
@@ -84,5 +85,17 @@ typedef struct {
     int win;
     int lose;
 } BossRoom;
+
+typedef struct SaveFile {
+    char date[DATESIZE];
+    int number;
+    Player player;
+    struct SaveFile* nextSaveFile;
+} SaveFile;
+
+typedef struct {
+    SaveFile* start;
+    SaveFile* end;
+} GameSaves;
 
 #endif
