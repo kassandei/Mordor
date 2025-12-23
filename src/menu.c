@@ -111,6 +111,7 @@ void cheatMenu() {
 void newGame() {
     clearScreen();
     story();
+    initGame();
     printf("Inserisci il tuo nome: ");
     readString(HERO.name, NAMESIZE);
     villageMenu();
@@ -309,7 +310,7 @@ void shopMenu() {
         drawTitle("NEGOZIO");
         puts("Benvenuto nel negozio avventuriero!\n");
         puts("+====+========================+=================================+=================+=======+");
-        puts("| ID | OGGETTO                | DESCRIZIONE                     | POSSEDUTO       | COSTO |");
+        puts("|    | OGGETTO                | DESCRIZIONE                     | POSSEDUTO       | COSTO |");
         puts("+====+========================+=================================+=================+=======+");
         printf("| 1  | Pozione curativa       | Ripristina fino a 6 Punti Vita  | %15d | %5d |\n", HERO.potions, POTION_PRICE);
         puts("+----+------------------------+---------------------------------+-----------------+-------+");
@@ -318,7 +319,7 @@ void shopMenu() {
         printf("| 3  | Armatura               | -1 al danno nemico/trappola     | %15s | %5d |\n", HERO.hasArmor ? "SI" : "NO", ARMOR_PRICE);
         puts("+----+------------------------+---------------------------------+-----------------+-------+");
         puts("| 4  | Esci dal negozio                                                                   |");
-        puts("+====+========================================================================================+");
+        puts("+====+====================================================================================+");
         printf("\nMonete disponibili: %d\n", HERO.coins);
         printf("\nSeleziona una delle opzioni [1-4]: ");
         choice = readOption("1234");
