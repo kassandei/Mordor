@@ -16,7 +16,7 @@ void story();
 void playerStats();
 void rest();
 void missionMenu();
-int missionCompleted();
+int missionCompleted(Player *player);
 bool isCompleted(DungeonType type);
 
 // funzioni per game.c

@@ -31,7 +31,11 @@ void initGameSaves() {
 }
 
 void freeGameSaves() {
-
+    while(SAVES.start != NULL) {
+        SaveFile* tmp = SAVES.start;
+        SAVES.start = SAVES.start->nextSaveFile;
+        free(tmp);
+    }
 }
 
 static void handleRoomEvent(Room *currentRoom) {

@@ -6,7 +6,7 @@
 void menu();
 void cheatMenu();
 void newGame();
-void loadGame();
+void loadGame(bool fromCheatMenu);
 void villageMenu();
 void dungeonMenu();
 void shopMenu();

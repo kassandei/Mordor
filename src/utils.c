@@ -9,17 +9,17 @@ void drawTitle(const char *string) {
     int len = strlen(string);
     
     // Bordo superiore
-    printf("╔");
-    for(int i = 0; i < len+2; i++) printf("═");
-    printf("╗\n");
+    printf("+");
+    for(int i = 0; i < len+2; i++) printf("=");
+    printf("+\n");
     
     // Titolo
-    printf("║ %s ║\n", string);
+    printf("| %s |\n", string);
     
     // Bordo inferiore
-    printf("╚");
-    for(int i = 0; i < len+2; i++) printf("═");
-    printf("╝\n");
+    printf("+");
+    for(int i = 0; i < len+2; i++) printf("=");
+    printf("+\n");
 }
 
 void clearScreen() {
@@ -78,10 +78,10 @@ void story() {
         "devastate e nemici implacabili.\n");
 }
 
-int missionCompleted() {
+int missionCompleted(Player* HERO) {
     int completed = 0;
     for (int i = 0; i < QUESTS; i++) {
-        completed += HERO.missionComplete[i];
+        completed += HERO->missionComplete[i];
     }
 
     return completed;
@@ -89,12 +89,12 @@ int missionCompleted() {
 
 void playerStats() {
     printf("\n%s | HP: %d | MONETE: %d | MISSIONI COMPLETATE %d/3\n\n", 
-        HERO.name, HERO.hp, HERO.coins, missionCompleted());
+        HERO.name, HERO.hp, HERO.coins, missionCompleted(&HERO));
 }
 
 void rest() {
     clearScreen();
-    HERO.hp = MAX_HP;
+    if(HERO.hp < MAX_HP) HERO.hp = MAX_HP;
     printf("Dopo un riposo accanto a un falo l'eroe %s è tornato in piene forze\n", HERO.name);
     puts("I punti vita sono stati riprestinati");
     printf("Premi un tasto per proseguire...");

@@ -6,6 +6,7 @@
 #include "game.h"
 #include "global.h"
 #include "types.h"
+#include "save.h"
 
 void menu() {
     char choice;
@@ -31,13 +32,13 @@ void menu() {
                 newGame();
                 break;
             case '2':
-                loadGame();
+                loadGame(false);
                 break;
             case '3':
                 freeGameSaves();
                 exit(EXIT_SUCCESS);
             case '4':
-                cheatMenu();
+                loadGame(true);
                 break;
             case 'w':
                 HERO.konamiCode = konamiCode();
@@ -47,7 +48,64 @@ void menu() {
 }
 
 void cheatMenu() {
+    char hpInput[NAMESIZE];
+    char coinInput[NAMESIZE];
+    char choice;
 
+    while(1) {
+        clearScreen();
+        drawTitle("MENU TRUCCHI");
+        printf("Giocatore: %s\n", HERO.name);
+        printf("HP attuali: %d\n", HERO.hp);
+        printf("Monete attuali: %d\n", HERO.coins);
+        printf("Chiave castello: %s\n\n", HERO.hasCastleKey ? "SI" : "NO");
+        
+        puts("1. Modifica HP");
+        puts("2. Modifica Monete");
+        puts("3. Sblocca tutte le missioni e la chiave del castello");
+        puts("4. Vai al villaggio");
+        printf("Seleziona un'opzione [1-4]: ");
+        choice = readOption("1234");
+        
+        switch(choice) {
+            case '1':
+                printf("\nInserisci nuovi HP [1-9999]: ");
+                readString(hpInput, NAMESIZE);
+                int newHP = atoi(hpInput);
+                if(newHP > 0 && newHP <= 9999) {
+                    HERO.hp = newHP;
+                    printf("HP modificati con successo!");
+                } else {
+                    printf("Valore non valido!");
+                }
+                clearInput();
+                break;
+                
+            case '2':
+                printf("\nInserisci nuove monete [0-9999]: ");
+                readString(coinInput, NAMESIZE);
+                int newCoins = atoi(coinInput);
+                if(newCoins >= 0 && newCoins <= 9999) {
+                    HERO.coins = newCoins;
+                    printf("Monete modificate con successo!");
+                } else {
+                    printf("Valore non valido!");
+                }
+                clearInput();
+                break;
+                
+            case '3':
+                HERO.hasCastleKey = true;
+                for(int i = 0; i < QUESTS; i++) {
+                    HERO.missionComplete[i] = true;
+                }
+                printf("Tutte le missioni sbloccate e chiave del castello ottenuta!");
+                clearInput();
+                break;               
+            case '4':
+                return;
+        }
+    }
 }
 
 void newGame() {
@@ -55,12 +113,75 @@ void newGame() {
     story();
     printf("Inserisci il tuo nome: ");
     readString(HERO.name, NAMESIZE);
-    initGame();
     villageMenu();
 }
 
-void loadGame() {
-    puts("Carica partita");
+void loadGame(bool fromCheatMenu) {
+    char saveNumber[NAMESIZE];
+    int selectedSave;
+    char choice;
+
+    while(1) {
+        clearScreen();
+        drawTitle("SALVATAGGI");
+        if(SAVES.start == NULL) {
+            printf("Non ci sono salvataggi presenti in memoria...");
+            clearInput();
+            return;
+        }
+        showSaves();
+        printf("\nSeleziona un salvataggio [1-%d]: ", SAVES.end->number);
+        readString(saveNumber, NAMESIZE);
+        selectedSave = atoi(saveNumber);
+        while(selectedSave <= 0 || selectedSave > SAVES.end->number) {
+            printf("Salvataggio non valido inserisci un numero valido: ");
+            readString(saveNumber, NAMESIZE);
+            selectedSave = atoi(saveNumber);
+        }
+
+        printf("\nSeleziona un'opzione per il salvataggio %d:\n", selectedSave);
+        puts("1. Carica");
+        puts("2. Elimina");
+        puts("3. Esci");
+        if(fromCheatMenu) {
+            puts("4. Carica e modifica");
+            printf("Seleziona una delle opzioni [1-4]: ");
+            choice = readOption("1234");
+        }
+        else {
+            printf("Seleziona una delle opzioni [1-3]: ");
+            choice = readOption("123");
+        }
+
+        switch (choice)
+        {
+            case '1':
+                loadSave(selectedSave);
+                clearInput();
+                villageMenu();
+                return;
+            case '2':
+                removeSave(selectedSave);
+                clearInput();
+                break;
+            case '3': 
+                return;
+            case '4':
+                loadSave(selectedSave);
+                clearInput();
+                cheatMenu();
+                villageMenu();
+                return;
+            default:
+                break;
+        }
+    }
+}
+
+void saveGame() {
+    addSave();
+    printf("Partita salvata...");
+    clearInput();
 }
 
 void villageMenu() {
@@ -91,12 +212,13 @@ void villageMenu() {
                 saveGame();
                 break;
             case '5':
-                clearScreen();
-                printf("Sei sicuro di voler uscire? Perderai i progressi non salvati\nS/N : ");
+                printf("Stai per tornare al menu principale del gioco, "
+                       "vuoi salvare l'attuale partita? S/N : ");
                 choice = readOption("SN");
                 if(choice == 'S') {
-                    return;  // torna al menu
+                    addSave();
                 }
+                return;  // torna al menu
                 break;
             default:
                 break;
@@ -111,7 +233,7 @@ void dungeonMenu() {
         clearScreen();
         drawTitle("MISSIONI");
 
-        if (missionCompleted() == 3) {
+        if (missionCompleted(&HERO) == 3) {
             puts("Hai completato tutte le missioni. Affrontare il Signor Oscuro? S/N:");
             if (readOption("SN") == 'S')    bossFight();
             return;
@@ -186,17 +308,17 @@ void shopMenu() {
         clearScreen();
         drawTitle("NEGOZIO");
         puts("Benvenuto nel negozio avventuriero!\n");
-        puts("╔════╦════════════════════════╦═════════════════════════════════╦═════════════════╦═══════╗");
-        puts("║ ID ║ OGGETTO                ║ DESCRIZIONE                     ║ POSSEDUTO       ║ COSTO ║");
-        puts("╠════╬════════════════════════╬═════════════════════════════════╬═════════════════╬═══════╣");
-        printf("║ 1  ║ Pozione curativa       ║ Ripristina fino a 6 Punti Vita  ║ %15d ║ %5d ║\n", HERO.potions, POTION_PRICE);
-        puts("╠════╬════════════════════════╬═════════════════════════════════╬═════════════════╬═══════╣");
-        printf("║ 2  ║ Spada potenziata       ║ +1 all'attacco dell'eroe        ║ %15s ║ %5d ║\n", HERO.hasDmgBuff ? "SI" : "NO", DMGBUFF_PRICE);
-        puts("╠════╬════════════════════════╬═════════════════════════════════╬═════════════════╬═══════╣");
-        printf("║ 3  ║ Armatura               ║ -1 al danno nemico/trappola     ║ %15s ║ %5d ║\n", HERO.hasArmor ? "SI" : "NO", ARMOR_PRICE);
-        puts("╠════╬════════════════════════╬═════════════════════════════════╬═════════════════╬═══════╣");
-        puts("║ 4  ║ Esci dal negozio                                                                   ║");
-        puts("╚════╩════════════════════════════════════════════════════════════════════════════════════╝");
+        puts("+====+========================+=================================+=================+=======+");
+        puts("| ID | OGGETTO                | DESCRIZIONE                     | POSSEDUTO       | COSTO |");
+        puts("+====+========================+=================================+=================+=======+");
+        printf("| 1  | Pozione curativa       | Ripristina fino a 6 Punti Vita  | %15d | %5d |\n", HERO.potions, POTION_PRICE);
+        puts("+----+------------------------+---------------------------------+-----------------+-------+");
+        printf("| 2  | Spada potenziata       | +1 all'attacco dell'eroe        | %15s | %5d |\n", HERO.hasDmgBuff ? "SI" : "NO", DMGBUFF_PRICE);
+        puts("+----+------------------------+---------------------------------+-----------------+-------+");
+        printf("| 3  | Armatura               | -1 al danno nemico/trappola     | %15s | %5d |\n", HERO.hasArmor ? "SI" : "NO", ARMOR_PRICE);
+        puts("+----+------------------------+---------------------------------+-----------------+-------+");
+        puts("| 4  | Esci dal negozio                                                                   |");
+        puts("+====+========================================================================================+");
         printf("\nMonete disponibili: %d\n", HERO.coins);
         printf("\nSeleziona una delle opzioni [1-4]: ");
         choice = readOption("1234");
@@ -241,7 +363,4 @@ void shopMenu() {
     }
 }
 
-void saveGame() {
-
-}
 
