@@ -3,14 +3,14 @@
 
 #include "types.h"
 
-void menu();
-void cheatMenu();
-void newGame();
-void loadGame(bool fromCheatMenu);
-void villageMenu();
-void dungeonMenu();
-void shopMenu();
-void saveGame();
-void inventoryMenu();
+void menu(Player *player, GameSaves *saves);
+void cheatMenu(Player *player);
+void newGame(Player *player, GameSaves *saves);
+void loadGame(Player *player, GameSaves *saves, bool fromCheatMenu);
+void villageMenu(Player *player, GameSaves *saves);
+void dungeonMenu(Player *player);
+void shopMenu(Player *player);
+void saveGame(Player *player, GameSaves *saves);
+void inventoryMenu(Player *player);
 
 #endif

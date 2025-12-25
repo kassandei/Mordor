@@ -13,16 +13,16 @@ char readOption(const char *valid);
 // funzioni per il menu.c
 bool konamiCode();
 void story();
-void playerStats();
-void rest();
+void playerStats(Player *player);
+void rest(Player *player);
 void missionMenu();
 int missionCompleted(Player *player);
-bool isCompleted(DungeonType type);
+bool isCompleted(Player *player, DungeonType type);
 
 // funzioni per game.c
-bool returnHome(int prize);
-int calculateDamage(int baseDamage);
-int calculateDiceBonus();
+bool returnHome(Player *player, int prize);
+int calculateDamage(Player *player, int baseDamage);
+int calculateDiceBonus(Player *player);
 int rollDice();
 CoinFace flipCoin();
 

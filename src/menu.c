@@ -4,11 +4,10 @@
 #include "menu.h"
 #include "utils.h"
 #include "game.h"
-#include "global.h"
 #include "types.h"
 #include "save.h"
 
-void menu() {
+void menu(Player *player, GameSaves *saves) {
     char choice;
 
     while(1) {  
@@ -17,7 +16,7 @@ void menu() {
         puts("1. Inzia una nuova partita");
         puts("2. Carica un salvataggio");
         puts("3. Esci");
-        if(HERO.konamiCode) {
+        if(player->konamiCode) {
             puts("4. TRUCCHI");
             printf("Seleziona una delle opzioni [1-4]: ");
             choice = readOption("1234");
@@ -29,25 +28,25 @@ void menu() {
         
         switch (choice) {
             case '1':
-                newGame();
+                newGame(player, saves);
                 break;
             case '2':
-                loadGame(false);
+                loadGame(player, saves, false);
                 break;
             case '3':
-                freeGameSaves();
+                freeGameSaves(saves);
                 exit(EXIT_SUCCESS);
             case '4':
-                loadGame(true);
+                loadGame(player, saves, true);
                 break;
             case 'w':
-                HERO.konamiCode = konamiCode();
+                player->konamiCode = konamiCode();
                 break;
         }
     }
 }
 
-void cheatMenu() {
+void cheatMenu(Player *player) {
     char hpInput[NAMESIZE];
     char coinInput[NAMESIZE];
     char choice;
@@ -55,10 +54,10 @@ void cheatMenu() {
     while(1) {
         clearScreen();
         drawTitle("MENU TRUCCHI");
-        printf("Giocatore: %s\n", HERO.name);
-        printf("HP attuali: %d\n", HERO.hp);
-        printf("Monete attuali: %d\n", HERO.coins);
-        printf("Chiave castello: %s\n\n", HERO.hasCastleKey ? "SI" : "NO");
+        printf("Giocatore: %s\n", player->name);
+        printf("HP attuali: %d\n", player->hp);
+        printf("Monete attuali: %d\n", player->coins);
+        printf("Chiave castello: %s\n\n", player->inventory.hasCastleKey ? "SI" : "NO");
         
         puts("1. Modifica HP");
         puts("2. Modifica Monete");
@@ -73,7 +72,7 @@ void cheatMenu() {
                 readString(hpInput, NAMESIZE);
                 int newHP = atoi(hpInput);
                 if(newHP > 0 && newHP <= 9999) {
-                    HERO.hp = newHP;
+                    player->hp = newHP;
                     printf("HP modificati con successo!");
                 } else {
                     printf("Valore non valido!");
@@ -86,7 +85,7 @@ void cheatMenu() {
                 readString(coinInput, NAMESIZE);
                 int newCoins = atoi(coinInput);
                 if(newCoins >= 0 && newCoins <= 9999) {
-                    HERO.coins = newCoins;
+                    player->coins = newCoins;
                     printf("Monete modificate con successo!");
                 } else {
                     printf("Valore non valido!");
@@ -95,9 +94,9 @@ void cheatMenu() {
                 break;
                 
             case '3':
-                HERO.hasCastleKey = true;
+                player->inventory.hasCastleKey = true;
                 for(int i = 0; i < QUESTS; i++) {
-                    HERO.missionComplete[i] = true;
+                    player->missionComplete[i] = true;
                 }
                 printf("Tutte le missioni sbloccate e chiave del castello ottenuta!");
                 clearInput();
@@ -108,16 +107,16 @@ void cheatMenu() {
     }
 }
 
-void newGame() {
+void newGame(Player *player, GameSaves *saves) {
     clearScreen();
     story();
-    initGame();
+    initGame(player);
     printf("Inserisci il tuo nome: ");
-    readString(HERO.name, NAMESIZE);
-    villageMenu();
+    readString(player->name, NAMESIZE);
+    villageMenu(player, saves);
 }
 
-void loadGame(bool fromCheatMenu) {
+void loadGame(Player *player, GameSaves *saves, bool fromCheatMenu) {
     char saveNumber[NAMESIZE];
     int selectedSave;
     char choice;
@@ -125,16 +124,16 @@ void loadGame(bool fromCheatMenu) {
     while(1) {
         clearScreen();
         drawTitle("SALVATAGGI");
-        if(SAVES.start == NULL) {
+        if(saves->start == NULL) {
             printf("Non ci sono salvataggi presenti in memoria...");
             clearInput();
             return;
         }
-        showSaves();
-        printf("\nSeleziona un salvataggio [1-%d]: ", SAVES.end->number);
+        showSaves(saves);
+        printf("\nSeleziona un salvataggio [1-%d]: ", saves->end->number);
         readString(saveNumber, NAMESIZE);
         selectedSave = atoi(saveNumber);
-        while(selectedSave <= 0 || selectedSave > SAVES.end->number) {
+        while(selectedSave <= 0 || selectedSave > saves->end->number) {
             printf("Salvataggio non valido inserisci un numero valido: ");
             readString(saveNumber, NAMESIZE);
             selectedSave = atoi(saveNumber);
@@ -157,21 +156,21 @@ void loadGame(bool fromCheatMenu) {
         switch (choice)
         {
             case '1':
-                loadSave(selectedSave);
+                loadSave(player, saves, selectedSave);
                 clearInput();
-                villageMenu();
+                villageMenu(player, saves);
                 return;
             case '2':
-                removeSave(selectedSave);
+                removeSave(saves, selectedSave);
                 clearInput();
                 break;
             case '3': 
                 return;
             case '4':
-                loadSave(selectedSave);
+                loadSave(player, saves, selectedSave);
                 clearInput();
-                cheatMenu();
-                villageMenu();
+                cheatMenu(player);
+                villageMenu(player, saves);
                 return;
             default:
                 break;
@@ -179,16 +178,16 @@ void loadGame(bool fromCheatMenu) {
     }
 }
 
-void saveGame() {
-    addSave();
+void saveGame(Player *player, GameSaves *saves) {
+    addSave(player, saves);
     printf("Partita salvata...");
     clearInput();
 }
 
-void villageMenu() {
+void villageMenu(Player *player, GameSaves *saves) {
     char choice;
 
-    while(HERO.isAlive) {  
+    while(player->isAlive) {  
         clearScreen();
         drawTitle("VILLAGIO");
         puts("1. Inizia una missione");
@@ -196,28 +195,28 @@ void villageMenu() {
         puts("3. Inventario");
         puts("4. Salva partita");
         puts("5. Torna al menu di gioco");
-        playerStats();
+        playerStats(player);
         printf("Seleziona una delle opzioni [1-5]: ");
         choice = readOption("12345");
         switch (choice) {
             case '1':
-                dungeonMenu();
+                dungeonMenu(player);
                 break;
             case '2': 
-                rest();
+                rest(player);
                 break;
             case '3':
-                inventoryMenu();
+                inventoryMenu(player);
                 break;
             case '4': 
-                saveGame();
+                saveGame(player, saves);
                 break;
             case '5':
                 printf("Stai per tornare al menu principale del gioco, "
                        "vuoi salvare l'attuale partita? S/N : ");
                 choice = readOption("SN");
                 if(choice == 'S') {
-                    addSave();
+                    addSave(player, saves);
                 }
                 return;  // torna al menu
                 break;
@@ -227,50 +226,50 @@ void villageMenu() {
     }
 }
 
-void dungeonMenu() {
+void dungeonMenu(Player *player) {
     char choice;
 
-    while (HERO.isAlive) {
+    while (player->isAlive) {
         clearScreen();
         drawTitle("MISSIONI");
 
-        if (missionCompleted(&HERO) == 3) {
+        if (missionCompleted(player) == 3) {
             puts("Hai completato tutte le missioni. Affrontare il Signor Oscuro? S/N:");
-            if (readOption("SN") == 'S')    bossFight();
+            if (readOption("SN") == 'S')    bossFight(player);
             return;
         }
 
-        if (!isCompleted(SWAMP))
+        if (!isCompleted(player, SWAMP))
             printf("1. Palude Putrescente\n");
-        if (!isCompleted(MANSION))
+        if (!isCompleted(player, MANSION))
             printf("2. Magione Infestata\n");
-        if (!isCompleted(CAVE))
+        if (!isCompleted(player, CAVE))
             printf("3. Grotta di Cristallo\n");
 
         printf("Seleziona una delle opzioni [1-3]: ");
         choice = readOption("123");
 
-        if (choice == '1' && !isCompleted(SWAMP))   { swampDungeon();   return; }
-        if (choice == '2' && !isCompleted(MANSION)) { mansionDungeon(); return; }
-        if (choice == '3' && !isCompleted(CAVE))    { caveDungeon();    return; }
+        if (choice == '1' && !isCompleted(player, SWAMP))   { swampDungeon(player);   return; }
+        if (choice == '2' && !isCompleted(player, MANSION)) { mansionDungeon(player); return; }
+        if (choice == '3' && !isCompleted(player, CAVE))    { caveDungeon(player);    return; }
     }
 }
 
-void inventoryMenu() {    
+void inventoryMenu(Player *player) {    
     char choice;
     int restoreHP;
 
     while(1) {
         clearScreen();
-        playerStats();
+        playerStats(player);
 
-        printf("Possiedi %d pozioni curative\n", HERO.potions);
-        printf("%s la spada potenziata\n", HERO.hasDmgBuff ? "Possiedi" : "Non possiedi");
-        printf("%s l'armatura\n", HERO.hasArmor ? "Possiedi" : "Non possiedi");
-        printf("%s la spada dell'eroe\n", HERO.hasHeroSword ? "Possiedi" : "Non possiedi");
-        printf("%s la chiave del castello del Signor Oscuro\n", HERO.hasCastleKey ? "Possiedi" : "Non possiedi");
+        printf("Possiedi %d pozioni curative\n", player->inventory.potions);
+        printf("%s la spada potenziata\n", player->inventory.hasDmgBuff ? "Possiedi" : "Non possiedi");
+        printf("%s l'armatura\n", player->inventory.hasArmor ? "Possiedi" : "Non possiedi");
+        printf("%s la spada dell'eroe\n", player->inventory.hasHeroSword ? "Possiedi" : "Non possiedi");
+        printf("%s la chiave del castello del Signor Oscuro\n", player->inventory.hasCastleKey ? "Possiedi" : "Non possiedi");
         
-        if(HERO.potions == 0) {
+        if(player->inventory.potions == 0) {
             printf("\nNon hai pozioni curative da usare...\n");
             clearInput();
             break;
@@ -280,21 +279,21 @@ void inventoryMenu() {
         choice = readOption("SNsn");
         
         if(choice == 'S' || choice == 's') {
-            if(HERO.hp >= MAX_HP) {
+            if(player->hp >= MAX_HP) {
                 printf("\nHai già i punti vita al massimo!\n");
                 clearInput();
                 break;
             }
-            int hpBefore = HERO.hp;
+            int hpBefore = player->hp;
             restoreHP = 1 + (rand() % 6);  
-            HERO.hp += restoreHP;
+            player->hp += restoreHP;
             
-            if(HERO.hp > MAX_HP) {
+            if(player->hp > MAX_HP) {
                 restoreHP = MAX_HP - hpBefore;
-                HERO.hp = MAX_HP;
+                player->hp = MAX_HP;
             }
             
-            HERO.potions--;
+            player->inventory.potions--;
             printf("\nHai ripristinato %d punti vita!\n", restoreHP);
             clearInput();
         } else {
@@ -302,7 +301,7 @@ void inventoryMenu() {
         }
     }
 }
-void shopMenu() {
+void shopMenu(Player *player) {
     char choice;
 
     while(1) {
@@ -312,22 +311,22 @@ void shopMenu() {
         puts("+====+========================+=================================+=================+=======+");
         puts("|    | OGGETTO                | DESCRIZIONE                     | POSSEDUTO       | COSTO |");
         puts("+====+========================+=================================+=================+=======+");
-        printf("| 1  | Pozione curativa       | Ripristina fino a 6 Punti Vita  | %15d | %5d |\n", HERO.potions, POTION_PRICE);
+        printf("| 1  | Pozione curativa       | Ripristina fino a 6 Punti Vita  | %15d | %5d |\n", player->inventory.potions, POTION_PRICE);
         puts("+----+------------------------+---------------------------------+-----------------+-------+");
-        printf("| 2  | Spada potenziata       | +1 all'attacco dell'eroe        | %15s | %5d |\n", HERO.hasDmgBuff ? "SI" : "NO", DMGBUFF_PRICE);
+        printf("| 2  | Spada potenziata       | +1 all'attacco dell'eroe        | %15s | %5d |\n", player->inventory.hasDmgBuff ? "SI" : "NO", DMGBUFF_PRICE);
         puts("+----+------------------------+---------------------------------+-----------------+-------+");
-        printf("| 3  | Armatura               | -1 al danno nemico/trappola     | %15s | %5d |\n", HERO.hasArmor ? "SI" : "NO", ARMOR_PRICE);
+        printf("| 3  | Armatura               | -1 al danno nemico/trappola     | %15s | %5d |\n", player->inventory.hasArmor ? "SI" : "NO", ARMOR_PRICE);
         puts("+----+------------------------+---------------------------------+-----------------+-------+");
         puts("| 4  | Esci dal negozio                                                                   |");
         puts("+====+====================================================================================+");
-        printf("\nMonete disponibili: %d\n", HERO.coins);
+        printf("\nMonete disponibili: %d\n", player->coins);
         printf("\nSeleziona una delle opzioni [1-4]: ");
         choice = readOption("1234");
         switch (choice) {
             case '1':
-                if(HERO.coins >= POTION_PRICE) {
-                    HERO.coins -= POTION_PRICE;
-                    HERO.potions++;
+                if(player->coins >= POTION_PRICE) {
+                    player->coins -= POTION_PRICE;
+                    player->inventory.potions++;
                     puts("Hai acquistato una pozione!");
                 } else {
                     puts("Non hai abbastanza soldi...");
@@ -335,11 +334,11 @@ void shopMenu() {
                 clearInput();
                 break;
             case '2':
-                if(HERO.hasDmgBuff) {
+                if(player->inventory.hasDmgBuff) {
                     puts("Possiedi già il potenziamento alla spada");
-                } else if(HERO.coins >= DMGBUFF_PRICE) {
-                    HERO.hasDmgBuff = true;
-                    HERO.coins -= DMGBUFF_PRICE;
+                } else if(player->coins >= DMGBUFF_PRICE) {
+                    player->inventory.hasDmgBuff = true;
+                    player->coins -= DMGBUFF_PRICE;
                     puts("Hai acquistato il potenziamento alla spada!");
                 } else {
                     puts("Non hai abbastanza soldi...");
@@ -347,11 +346,11 @@ void shopMenu() {
                 clearInput();
                 break;
             case '3':
-                if(HERO.hasArmor) {
+                if(player->inventory.hasArmor) {
                     puts("Possiedi già l'armatura");
-                } else if(HERO.coins >= ARMOR_PRICE) {
-                    HERO.hasArmor = true;
-                    HERO.coins -= ARMOR_PRICE;
+                } else if(player->coins >= ARMOR_PRICE) {
+                    player->inventory.hasArmor = true;
+                    player->coins -= ARMOR_PRICE;
                     puts("Hai acquistato l'armatura!");
                 } else {
                     puts("Non hai abbastanza soldi...");

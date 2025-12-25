@@ -7,54 +7,51 @@
 #include "menu.h"
 #include "dungeon.h"
 
-Player HERO;
-GameSaves SAVES;
-
-void initGame() {
-    HERO.hp = MAX_HP;
-    HERO.coins = 0;
-    HERO.potions = 0;
-    HERO.hasDmgBuff = false;
-    HERO.hasArmor = false;
-    HERO.hasCastleKey = false;
-    HERO.hasHeroSword = false;
-    HERO.isAlive = true;
-    HERO.konamiCode = false;
+void initGame(Player *player) {
+    player->hp = MAX_HP;
+    player->coins = 0;
+    player->inventory.potions = 0;
+    player->inventory.hasDmgBuff = false;
+    player->inventory.hasArmor = false;
+    player->inventory.hasCastleKey = false;
+    player->inventory.hasHeroSword = false;
+    player->isAlive = true;
+    player->konamiCode = false;
     for (int i = 0; i < QUESTS; i++) {
-        HERO.missionComplete[i] = false;
+        player->missionComplete[i] = false;
     }
 }
 
-void initGameSaves() {
-    SAVES.start = NULL;
-    SAVES.end = NULL;
+void initGameSaves(GameSaves *saves) {
+    saves->start = NULL;
+    saves->end = NULL;
 }
 
-void freeGameSaves() {
-    while(SAVES.start != NULL) {
-        SaveFile* tmp = SAVES.start;
-        SAVES.start = SAVES.start->nextSaveFile;
+void freeGameSaves(GameSaves *saves) {
+    while(saves->start != NULL) {
+        SaveFile* tmp = saves->start;
+        saves->start = saves->start->nextSaveFile;
         free(tmp);
     }
 }
 
-static void handleRoomEvent(Room *currentRoom) {
+static void handleRoomEvent(Player *player, Room *currentRoom) {
     if (currentRoom->type == TRAP) {
-        int trapDamage = calculateDamage(currentRoom->trap.dmg);
+        int trapDamage = calculateDamage(player, currentRoom->trap.dmg);
         printf("Sei caduto nella trappola %s\n", currentRoom->trap.name);
         printf("Hai subito %d danni\n", trapDamage);
-        HERO.hp -= trapDamage;
-        if (HERO.hp <= 0)
-            gameOver();
+        player->hp -= trapDamage;
+        if (player->hp <= 0)
+            gameOver(player);
     }
     else if (currentRoom->type == COMBAT) {
-        combat(&currentRoom->monster);
+        combat(player, &currentRoom->monster);
     }
     else
         puts("Sei entrato in una stanza vuota");
 }
 
-void swampDungeon() {
+void swampDungeon(Player *player) {
     Dungeon *dungeon = (Dungeon *)malloc(sizeof(Dungeon));
     if (!dungeon) {
         fprintf(stderr, "Errore: memoria insufficiente\n");
@@ -67,14 +64,14 @@ void swampDungeon() {
     dungeon->mission = SWAMP;
     dungeon = generateDungeon(dungeon);
 
-    while (HERO.isAlive)
+    while (player->isAlive)
     {
         clearScreen();
         drawTitle("Palude Putrescente");
         printf("Obiettivo : Eliminare %d Generali Orco\n", SWAMP_ORC);
         printf("Stato di avanzamento : Generale Orco %d/3\n", orcGeneralKilled);
         printf("Stanza numero %d\n", dungeon->roomCount + 1);
-        playerStats();
+        playerStats(player);
         missionMenu();
         choice = readOption("1234");
 
@@ -90,9 +87,9 @@ void swampDungeon() {
                 currentRoom->monster = swampMonsters[4];
             }
 
-            handleRoomEvent(currentRoom);
+            handleRoomEvent(player, currentRoom);
 
-            if (HERO.hp > 0) {
+            if (player->hp > 0) {
                 if (currentRoom->type == COMBAT && strcmp(currentRoom->monster.name, "Generale Orco") == 0)
                     orcGeneralKilled++;
             }
@@ -101,7 +98,7 @@ void swampDungeon() {
             if (orcGeneralKilled == SWAMP_ORC) {
                 clearScreen();
                 puts("Hai completato il dungeon!");
-                HERO.missionComplete[SWAMP] = true;
+                player->missionComplete[SWAMP] = true;
                 printDungeon(dungeon);
                 clearInput();
                 freeDungeon(dungeon);
@@ -109,13 +106,13 @@ void swampDungeon() {
             }
             break;
         case '2':
-            shopMenu();
+            shopMenu(player);
             break;
         case '3':
-            inventoryMenu();
+            inventoryMenu(player);
             break;
         case '4':
-            if (returnHome(PRICE_RETURN)) {
+            if (returnHome(player, PRICE_RETURN)) {
                 freeDungeon(dungeon);
                 return;
             }
@@ -128,7 +125,7 @@ void swampDungeon() {
     freeDungeon(dungeon);
 }
 
-void mansionDungeon() {
+void mansionDungeon(Player *player) {
     Dungeon *dungeon = (Dungeon *)malloc(sizeof(Dungeon));
     if (!dungeon) {
         fprintf(stderr, "Errore: memoria insufficiente\n");
@@ -141,13 +138,13 @@ void mansionDungeon() {
     dungeon->mission = MANSION;
     dungeon = generateDungeon(dungeon);
 
-    while (HERO.isAlive) {
+    while (player->isAlive) {
         clearScreen();
         drawTitle("Magione Infestata");
         puts("Obiettivo : Recupera la chiave del Castello del Signore Oscuro, e sconfiggi un Vampiro Superiore.");
-        printf("Stato di avanzamento : Chiave %d/1 | Vampiro Superiore %d/1\n", HERO.hasCastleKey, vampireKilled);
+        printf("Stato di avanzamento : Chiave %d/1 | Vampiro Superiore %d/1\n", player->inventory.hasCastleKey, vampireKilled);
         printf("Stanza numero %d\n", dungeon->roomCount + 1);
-        playerStats();
+        playerStats(player);
         missionMenu();
         choice = readOption("1234");
 
@@ -161,27 +158,27 @@ void mansionDungeon() {
                 currentRoom->type = COMBAT;
                 currentRoom->monster = mansionMonsters[3];
             }
-            else if (!HERO.hasCastleKey && dungeon->roomCount > DUNGEON_ROOMS - 2) {
+            else if (!player->inventory.hasCastleKey && dungeon->roomCount > DUNGEON_ROOMS - 2) {
                 currentRoom->type = COMBAT;
                 currentRoom->monster = mansionMonsters[4];
             }
 
-            handleRoomEvent(currentRoom);
+            handleRoomEvent(player, currentRoom);
 
-            if (HERO.hp > 0) {
+            if (player->hp > 0) {
                 if (currentRoom->type == COMBAT) {
                     if (strcmp(currentRoom->monster.name, "Vampiro Superiore") == 0)
                         vampireKilled = true;
                     if (strcmp(currentRoom->monster.name, "Demone Custode") == 0)
-                        HERO.hasCastleKey = true;
+                        player->inventory.hasCastleKey = true;
                 }
             }
 
             clearInput();
-            if (vampireKilled && HERO.hasCastleKey) {
+            if (vampireKilled && player->inventory.hasCastleKey) {
                 clearScreen();
                 puts("Hai completato il dungeon!");
-                HERO.missionComplete[MANSION] = true;
+                player->missionComplete[MANSION] = true;
                 printDungeon(dungeon);
                 clearInput();
                 freeDungeon(dungeon);
@@ -189,13 +186,13 @@ void mansionDungeon() {
             }
             break;
         case '2':
-            shopMenu();
+            shopMenu(player);
             break;
         case '3':
-            inventoryMenu();
+            inventoryMenu(player);
             break;
         case '4':
-            if (returnHome(PRICE_RETURN)) {
+            if (returnHome(player, PRICE_RETURN)) {
                 freeDungeon(dungeon);
                 return;
             }
@@ -208,7 +205,7 @@ void mansionDungeon() {
     freeDungeon(dungeon);
 }
 
-void caveDungeon() {
+void caveDungeon(Player *player) {
     Dungeon *dungeon = (Dungeon *)malloc(sizeof(Dungeon));
     if (!dungeon) {
         fprintf(stderr, "Errore: memoria insufficiente\n");
@@ -221,12 +218,12 @@ void caveDungeon() {
     dungeon->mission = CAVE;
     dungeon = generateDungeon(dungeon);
 
-    while (HERO.isAlive) {
+    while (player->isAlive) {
         clearScreen();
         drawTitle("Grotta di Cristallo");
         puts("Obiettivo : Recupera la spada del’Eroe.");
         printf("Stanza numero %d\n", dungeon->roomCount + 1);
-        playerStats();
+        playerStats(player);
         missionMenu();
         choice = readOption("1234");
 
@@ -241,15 +238,15 @@ void caveDungeon() {
                 currentRoom->monster = caveMonster;
             }
 
-            handleRoomEvent(currentRoom);
+            handleRoomEvent(player, currentRoom);
             if (currentRoom->type == TRAP && currentRoom->trap.coin > 0) {
                 printf("Hai ottenuto %d monete\n", currentRoom->trap.coin);
-            }
+                player->coins += currentRoom->trap.coin;            }
 
-            if (HERO.hp > 0) {
+            if (player->hp > 0) {
                 if (currentRoom->type == COMBAT) {
                     dragonKilled = true;
-                    HERO.hasHeroSword = true;
+                    player->inventory.hasHeroSword = true;
                 }
             }
 
@@ -257,7 +254,7 @@ void caveDungeon() {
             if (dragonKilled) {
                 clearScreen();
                 puts("Hai completato il dungeon!");
-                HERO.missionComplete[CAVE] = true;
+                player->missionComplete[CAVE] = true;
                 printDungeon(dungeon);
                 clearInput();
                 freeDungeon(dungeon);
@@ -265,13 +262,13 @@ void caveDungeon() {
             }
             break;
         case '2':
-            shopMenu();
+            shopMenu(player);
             break;
         case '3':
-            inventoryMenu();
+            inventoryMenu(player);
             break;
         case '4':
-            if (returnHome(PRICE_RETURN)) {
+            if (returnHome(player, PRICE_RETURN)) {
                 freeDungeon(dungeon);
                 return;
             }
@@ -283,7 +280,7 @@ void caveDungeon() {
     freeDungeon(dungeon);
 }
 
-void bossFight() {
+void bossFight(Player *player) {
     BossRoom *room = (BossRoom *)malloc(sizeof(BossRoom));
     if (!room) {
         fprintf(stderr, "Errore: memoria insufficiente\n");
@@ -296,7 +293,7 @@ void bossFight() {
     room->win = 0;
     room->lose = 0;
 
-    while (HERO.isAlive) {
+    while (player->isAlive) {
         clearScreen();
         drawTitle("Signore Oscuro");
         puts("Obiettivo : Sconfiggi il male che domina le terre del nostro mondo");
@@ -318,36 +315,36 @@ void bossFight() {
         default:
             break;
         }
-        finalcombat(move, room);
+        finalcombat(player, move, room);
     }
     free(room);
 }
 
-void gameOver() {
+void gameOver(Player *player) {
     printf("\nSei stato sconfitto!\n");
-    HERO.isAlive = false;
+    player->isAlive = false;
 }
 
-void combat(Monster *monster) {
+void combat(Player *player, Monster *monster) {
     printf("Hai incontrato %s\n", monster->name);
     bool isDragon = (strcmp(monster->name, "Drago Antico") == 0);
 
     while (1) {
-        int dice = rollDice() + calculateDiceBonus();
+        int dice = rollDice() + calculateDiceBonus(player);
 
         printf("Premi un tasto per tirare il dado...");
         clearInput();
 
         printf("Dal tiro del dado è uscito %d\n", dice);
         if (dice >= monster->fatalBlow) {
-            HERO.coins += monster->coin;
+            player->coins += monster->coin;
             printf("Hai battuto il nemico! (%d >= %d)\n", dice, monster->fatalBlow);
             printf("Hai ottenuto %d monete\n", monster->coin);
             printf("Premi un tasto per uscire...");
             break;
         }
         else {
-            int monsterDamage = calculateDamage(monster->dmg);
+            int monsterDamage = calculateDamage(player, monster->dmg);
 
             if (isDragon) {
                 int randomNum = rand() % 500 + 1;
@@ -368,18 +365,18 @@ void combat(Monster *monster) {
 
             if (monsterDamage > 0) {
                 printf("Hai subito %d danni! (%d < %d)\n", monsterDamage, dice, monster->fatalBlow);
-                HERO.hp -= monsterDamage;
+                player->hp -= monsterDamage;
             }
 
-            if (HERO.hp <= 0) {
-                gameOver();
+            if (player->hp <= 0) {
+                gameOver(player);
                 break;
             }
         }
     }
 }
 
-void finalcombat(Move playerMove, BossRoom *room) {
+void finalcombat(Player *player, Move playerMove, BossRoom *room) {
     Move bossMove = rand() % 3;
 
     printf("Il Signore Oscuro nel frattempo ha scelto...");
@@ -398,7 +395,7 @@ void finalcombat(Move playerMove, BossRoom *room) {
     else if ((playerMove == SHIELD && bossMove == SWORD) ||
              (playerMove == SWORD && bossMove == MAGIC) ||
              (playerMove == MAGIC && bossMove == SHIELD)) {
-        // Eroe vince in caso di pareggio
+        // Eroe vince
         room->win++;
 
         if (playerMove == SHIELD && bossMove == SWORD)
@@ -431,14 +428,14 @@ void finalcombat(Move playerMove, BossRoom *room) {
         puts("Sei il salvatore del regno!\n");
         printf("Premi un tasto per tornare al villaggio...");
         clearInput();
-        HERO.isAlive = false; // Fine gioco
+        player->isAlive = false; // Fine gioco
     }
     else if (room->lose == 3) {
         clearScreen();
         drawTitle("SCONFITTA");
         puts("\n*** IL SIGNORE OSCURO TI HA SCONFITTO! ***\n");
         puts("Le tenebre continuano a dominare il mondo...\n");
-        gameOver();
+        gameOver(player);
         clearInput();
     }
 }

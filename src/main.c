@@ -3,14 +3,17 @@
 #include <time.h>
 #include "game.h"
 #include "menu.h"
+#include "types.h"
 
 int main(void) {
+    Player hero;
+    GameSaves saves;
     
     srand(time(NULL));
-    initGame();
-    initGameSaves();
-    menu();
+    initGame(&hero);
+    initGameSaves(&saves);
+    menu(&hero, &saves);
+    freeGameSaves(&saves);
 
     return 0;
-
 }

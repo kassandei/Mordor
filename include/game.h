@@ -4,17 +4,17 @@
 
 #include "types.h"
 
-void initGame();
-void initGameSaves();
-void freeGameSaves();
+void initGame(Player *player);
+void initGameSaves(GameSaves *saves);
+void freeGameSaves(GameSaves *saves);
 
-void swampDungeon();
-void mansionDungeon();
-void caveDungeon();
-void bossFight();
+void swampDungeon(Player *player);
+void mansionDungeon(Player *player);
+void caveDungeon(Player *player);
+void bossFight(Player *player);
 
-void gameOver();
-void combat(Monster* monster);
-void finalcombat(Move playerMove, BossRoom* room);
+void gameOver(Player *player);
+void combat(Player *player, Monster* monster);
+void finalcombat(Player *player, Move playerMove, BossRoom* room);
 
 #endif

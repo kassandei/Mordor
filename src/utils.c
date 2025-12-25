@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include "types.h"
 #include "utils.h"
-#include "global.h"
 
 void drawTitle(const char *string) {
     int len = strlen(string);
@@ -87,15 +86,15 @@ int missionCompleted(Player* HERO) {
     return completed;
 }
 
-void playerStats() {
+void playerStats(Player *player) {
     printf("\n%s | HP: %d | MONETE: %d | MISSIONI COMPLETATE %d/3\n\n", 
-        HERO.name, HERO.hp, HERO.coins, missionCompleted(&HERO));
+        player->name, player->hp, player->coins, missionCompleted(player));
 }
 
-void rest() {
+void rest(Player *player) {
     clearScreen();
-    if(HERO.hp < MAX_HP) HERO.hp = MAX_HP;
-    printf("Dopo un riposo accanto a un falo l'eroe %s è tornato in piene forze\n", HERO.name);
+    if(player->hp < MAX_HP) player->hp = MAX_HP;
+    printf("Dopo un riposo accanto a un falo l'eroe %s è tornato in piene forze\n", player->name);
     puts("I punti vita sono stati riprestinati");
     printf("Premi un tasto per proseguire...");
     clearInput(); 
@@ -119,11 +118,11 @@ char readOption(const char *valid) {
     return (char)ch;
 }
 
-bool returnHome(int prize) {
+bool returnHome(Player *player, int prize) {
     bool home = false;
-    if(HERO.coins >= prize) {
+    if(player->coins >= prize) {
         puts("Hai pagato 50 monete...");
-        HERO.coins -= prize;
+        player->coins -= prize;
         home = true;
     }
     else 
@@ -133,16 +132,16 @@ bool returnHome(int prize) {
 }
 
 // calcola il danno effettivo considerando l'armatura
-int calculateDamage(int baseDamage) {
-    return baseDamage + (HERO.hasArmor ? ARMOR_REDUCEDMG : 0);
+int calculateDamage(Player *player, int baseDamage) {
+    return baseDamage + (player->inventory.hasArmor ? ARMOR_REDUCEDMG : 0);
 }
 
 // calcola il bonus al dado se si possiede una delle due spade
-int calculateDiceBonus() {
-    if (HERO.hasHeroSword)
+int calculateDiceBonus(Player *player) {
+    if (player->inventory.hasHeroSword)
         return 2;
 
-    if (HERO.hasDmgBuff)
+    if (player->inventory.hasDmgBuff)
         return 1;
 
     return 0;
@@ -156,8 +155,8 @@ CoinFace flipCoin() {
     return rand() % 2;
 }
 
-bool isCompleted(DungeonType type) {
-    return (HERO.missionComplete[type]) ? true : false;
+bool isCompleted(Player *player, DungeonType type) {
+    return (player->missionComplete[type]) ? true : false;
 }
 
 void printDungeon(Dungeon* dungeon) {

@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include "utils.h"
 #include "types.h"
-#include "global.h"
 #include "save.h"
 
 char* currentDateTime(char date[DATESIZE]) {
@@ -14,32 +13,32 @@ char* currentDateTime(char date[DATESIZE]) {
     return date;
 }
 
-void addSave() {
+void addSave(Player *player, GameSaves *saves) {
     SaveFile* save = (SaveFile*)malloc(sizeof(SaveFile));
     if (!save) {
         fprintf(stderr, "Errore: memoria insufficiente\n");
         exit(EXIT_FAILURE);
     }
-    int index = (SAVES.end == NULL) ? 1 : SAVES.end->number + 1;
+    int index = (saves->end == NULL) ? 1 : saves->end->number + 1;
     save->number = index;
     currentDateTime(save->date);
-    save->player = HERO;
+    save->player = *player;
     save->nextSaveFile = NULL;
     
-    if(SAVES.start == NULL) {
-        SAVES.start = save;
-        SAVES.end = save;
+    if(saves->start == NULL) {
+        saves->start = save;
+        saves->end = save;
     } else {
-        SAVES.end->nextSaveFile = save;
-        SAVES.end = save;
+        saves->end->nextSaveFile = save;
+        saves->end = save;
     }
 }
 
-void loadSave(int index) {
-    SaveFile* tmp = SAVES.start;
+void loadSave(Player *player, GameSaves *saves, int index) {
+    SaveFile* tmp = saves->start;
     while(tmp != NULL) {
         if(tmp->number == index) {
-            HERO = tmp->player;
+            *player = tmp->player;
             printf("Salvataggio %d caricato con successo", index);
             return;
         }
@@ -48,18 +47,18 @@ void loadSave(int index) {
     printf("Non esiste il salvataggio numero : %d ...riprova", index);
 }
 
-void showSaves() {
-    SaveFile* tmp = SAVES.start;
+void showSaves(GameSaves *saves) {
+    SaveFile* tmp = saves->start;
     while(tmp != NULL) { 
         printf("%d. %s | %10s | %2d HP | %5d MONETE | %3d OGGETTI | %d MISSIONI COMPLETATE\n",
                 tmp->number, tmp->date, tmp->player.name, tmp->player.hp, tmp->player.coins,
-                tmp->player.potions, missionCompleted(&tmp->player));
+                tmp->player.inventory.potions, missionCompleted(&tmp->player));
         tmp = tmp->nextSaveFile;
     }
 }
 
-void removeSave(int index) {
-    SaveFile* tmp = SAVES.start;
+void removeSave(GameSaves *saves, int index) {
+    SaveFile* tmp = saves->start;
     SaveFile* prev = NULL;
     
     while(tmp != NULL && tmp->number != index) {
@@ -73,21 +72,21 @@ void removeSave(int index) {
     
     // Se è il primo elemento
     if(prev == NULL) {
-        SAVES.start = tmp->nextSaveFile;
-        if(SAVES.start == NULL) {
-            SAVES.end = NULL;
+        saves->start = tmp->nextSaveFile;
+        if(saves->start == NULL) {
+            saves->end = NULL;
         }
     } else {
         prev->nextSaveFile = tmp->nextSaveFile;
-        if(tmp == SAVES.end) {
-            SAVES.end = prev;
+        if(tmp == saves->end) {
+            saves->end = prev;
         }
     }
     
     free(tmp);
     
     // Rinumera i salvataggi successivi
-    tmp = SAVES.start;
+    tmp = saves->start;
     int currentNumber = 1;
     while(tmp != NULL) {
         tmp->number = currentNumber++;
