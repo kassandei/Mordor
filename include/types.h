@@ -38,15 +38,19 @@ typedef enum {
     CAVE
 } DungeonType;
 
-typedef struct Player {
-    char name[NAMESIZE];
-    int hp;
-    int coins;
+typedef struct {
     int potions;
     bool hasDmgBuff;
     bool hasArmor;
     bool hasCastleKey;
     bool hasHeroSword;
+} Inventory;
+
+typedef struct Player {
+    char name[NAMESIZE];
+    int hp;
+    int coins;
+    Inventory inventory;
     bool missionComplete[QUESTS];
     bool isAlive;
     bool konamiCode;
