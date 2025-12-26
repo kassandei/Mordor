@@ -9,6 +9,7 @@ int main(void) {
     Player hero;
     GameSaves saves;
     
+    // Inizializza il generatore di numeri casuali
     srand(time(NULL));
     initGame(&hero);
     initGameSaves(&saves);

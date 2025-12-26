@@ -1,0 +1,153 @@
+\doxysection{include/save.h File Reference}
+\hypertarget{save_8h}{}\label{save_8h}\index{include/save.h@{include/save.h}}
+
+
+Gestione del sistema di salvataggio.  
+
+
+{\ttfamily \#include "{}types.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+char \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{save_8h_a05a701030429fffb4ece49d206c81fbc}{current\+Date\+Time}} (char date\mbox{[}DATESIZE\mbox{]})
+\begin{DoxyCompactList}\small\item\em Ottiene la data e ora corrente formattata. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{save_8h_abf4588b051b86dc734268556ee8b69e7}{add\+Save}} (\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}player, \mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}saves)
+\begin{DoxyCompactList}\small\item\em Aggiunge un nuovo salvataggio alla lista. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{save_8h_a12887777c15dd499ad66a6cb4c6b9934}{load\+Save}} (\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}player, \mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}saves, int index)
+\begin{DoxyCompactList}\small\item\em Carica un salvataggio specifico. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{save_8h_aa0b8a675bb82e7ed366b66a2a56738f4}{show\+Saves}} (\mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}saves)
+\begin{DoxyCompactList}\small\item\em Visualizza tutti i salvataggi disponibili. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{save_8h_a96c1a08a293d6788a7945f75877757eb}{remove\+Save}} (\mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}saves, int index)
+\begin{DoxyCompactList}\small\item\em Rimuove un salvataggio dalla lista. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Gestione del sistema di salvataggio. 
+
+
+
+\label{doc-func-members}
+\Hypertarget{save_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{save_8h_abf4588b051b86dc734268556ee8b69e7}\index{save.h@{save.h}!addSave@{addSave}}
+\index{addSave@{addSave}!save.h@{save.h}}
+\doxysubsubsection{\texorpdfstring{addSave()}{addSave()}}
+{\footnotesize\ttfamily \label{save_8h_abf4588b051b86dc734268556ee8b69e7} 
+void add\+Save (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{, }\item[{\mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}}]{saves}{}\end{DoxyParamCaption})}
+
+
+
+Aggiunge un nuovo salvataggio alla lista. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore da salvare \\
+\hline
+{\em saves} & Puntatore alla struttura dei salvataggi\\
+\hline
+\end{DoxyParams}
+Crea un nuovo nodo nella lista concatenata dei salvataggi, assegnando automaticamente un numero progressivo e salvando il timestamp corrente. I salvataggi sono mantenuti in ordine cronologico di creazione.
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore da salvare \\
+\hline
+{\em saves} & Puntatore alla struttura dei salvataggi \\
+\hline
+\end{DoxyParams}
+\Hypertarget{save_8h_a05a701030429fffb4ece49d206c81fbc}\index{save.h@{save.h}!currentDateTime@{currentDateTime}}
+\index{currentDateTime@{currentDateTime}!save.h@{save.h}}
+\doxysubsubsection{\texorpdfstring{currentDateTime()}{currentDateTime()}}
+{\footnotesize\ttfamily \label{save_8h_a05a701030429fffb4ece49d206c81fbc} 
+char \texorpdfstring{$\ast$}{*} current\+Date\+Time (\begin{DoxyParamCaption}\item[{char}]{date}{\mbox{[}\+DATESIZE\mbox{]}}\end{DoxyParamCaption})}
+
+
+
+Ottiene la data e ora corrente formattata. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em date} & Buffer dove salvare la data formattata \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Puntatore al buffer contenente la data 
+\end{DoxyReturn}
+\Hypertarget{save_8h_a12887777c15dd499ad66a6cb4c6b9934}\index{save.h@{save.h}!loadSave@{loadSave}}
+\index{loadSave@{loadSave}!save.h@{save.h}}
+\doxysubsubsection{\texorpdfstring{loadSave()}{loadSave()}}
+{\footnotesize\ttfamily \label{save_8h_a12887777c15dd499ad66a6cb4c6b9934} 
+void load\+Save (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{, }\item[{\mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}}]{saves}{, }\item[{int}]{index}{}\end{DoxyParamCaption})}
+
+
+
+Carica un salvataggio specifico. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore dove caricare i dati del giocatore \\
+\hline
+{\em saves} & Puntatore alla struttura dei salvataggi \\
+\hline
+{\em index} & Numero del salvataggio da caricare\\
+\hline
+\end{DoxyParams}
+Cerca nella lista dei salvataggi quello con il numero richiesto e, se trovato, copia tutti i dati del giocatore salvato nella struttura player corrente. Se il salvataggio non esiste, mostra un errore.
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore dove caricare i dati del giocatore \\
+\hline
+{\em saves} & Puntatore alla struttura dei salvataggi \\
+\hline
+{\em index} & Numero del salvataggio da caricare \\
+\hline
+\end{DoxyParams}
+\Hypertarget{save_8h_a96c1a08a293d6788a7945f75877757eb}\index{save.h@{save.h}!removeSave@{removeSave}}
+\index{removeSave@{removeSave}!save.h@{save.h}}
+\doxysubsubsection{\texorpdfstring{removeSave()}{removeSave()}}
+{\footnotesize\ttfamily \label{save_8h_a96c1a08a293d6788a7945f75877757eb} 
+void remove\+Save (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}}]{saves}{, }\item[{int}]{index}{}\end{DoxyParamCaption})}
+
+
+
+Rimuove un salvataggio dalla lista. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em saves} & Puntatore alla struttura dei salvataggi \\
+\hline
+{\em index} & Numero del salvataggio da eliminare\\
+\hline
+\end{DoxyParams}
+Elimina il salvataggio specificato dalla lista concatenata e rinumera tutti i salvataggi rimanenti per mantenere una sequenza continua (1, 2, 3...).
+
+Gestisce casi speciali come\+:
+\begin{DoxyItemize}
+\item Rimozione del primo elemento
+\item Rimozione dell\textquotesingle{}ultimo elemento
+\item Rimozione dell\textquotesingle{}unico elemento (la lista diventa vuota)
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em saves} & Puntatore alla struttura dei salvataggi \\
+\hline
+{\em index} & Numero del salvataggio da eliminare \\
+\hline
+\end{DoxyParams}
+\Hypertarget{save_8h_aa0b8a675bb82e7ed366b66a2a56738f4}\index{save.h@{save.h}!showSaves@{showSaves}}
+\index{showSaves@{showSaves}!save.h@{save.h}}
+\doxysubsubsection{\texorpdfstring{showSaves()}{showSaves()}}
+{\footnotesize\ttfamily \label{save_8h_aa0b8a675bb82e7ed366b66a2a56738f4} 
+void show\+Saves (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}}]{saves}{}\end{DoxyParamCaption})}
+
+
+
+Visualizza tutti i salvataggi disponibili. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em saves} & Puntatore alla struttura dei salvataggi \\
+\hline
+\end{DoxyParams}

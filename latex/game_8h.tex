@@ -1,0 +1,287 @@
+\doxysection{include/game.h File Reference}
+\hypertarget{game_8h}{}\label{game_8h}\index{include/game.h@{include/game.h}}
+
+
+Gestione dei dungeon e della logica di combattimento.  
+
+
+{\ttfamily \#include "{}types.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{game_8h_a9273b6925ea5151be0e7ce37fc5bc1fd}{init\+Game}} (\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}player)
+\begin{DoxyCompactList}\small\item\em Inizializza un nuovo giocatore con valori di default. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_a506fffa0f4cb50602617c859edaf7659}{init\+Game\+Saves}} (\mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}saves)
+\begin{DoxyCompactList}\small\item\em Inizializza la struttura dei salvataggi. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_a3e5470be793c799f6d73689a73aa7eef}{free\+Game\+Saves}} (\mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}saves)
+\begin{DoxyCompactList}\small\item\em Libera la memoria allocata per i salvataggi. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_ac81d05c46baa8a0daefedc7897be2a38}{swamp\+Dungeon}} (\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}player)
+\begin{DoxyCompactList}\small\item\em Gestisce il dungeon della palude. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_a023a76b0ebead475a64276053701b26f}{mansion\+Dungeon}} (\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}player)
+\begin{DoxyCompactList}\small\item\em Gestisce il dungeon della magione. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_aea118ebfe326c6e844e4d595eecd1bb8}{cave\+Dungeon}} (\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}player)
+\begin{DoxyCompactList}\small\item\em Gestisce il dungeon della grotta. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_a8591baf647ff78ea31eba54d83326658}{boss\+Fight}} (\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}player)
+\begin{DoxyCompactList}\small\item\em Gestisce lo scontro finale con il boss. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_aaada7b5275abcaa325d8cbc2afdca3e6}{game\+Over}} (\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}player)
+\begin{DoxyCompactList}\small\item\em Gestisce la sconfitta del giocatore. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_aa9bdf63849749e012191b5d736e0fe38}{combat}} (\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}player, \mbox{\hyperlink{struct_monster}{Monster}} \texorpdfstring{$\ast$}{*}monster)
+\begin{DoxyCompactList}\small\item\em Gestisce un combattimento standard. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{game_8h_ad3124480488f2b5f0231bd267b1e1aa4}{finalcombat}} (\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}player, \mbox{\hyperlink{types_8h_a19b869a01ca1a58f4164b4f75c2df388}{Move}} player\+Move, \mbox{\hyperlink{struct_boss_room}{Boss\+Room}} \texorpdfstring{$\ast$}{*}room)
+\begin{DoxyCompactList}\small\item\em Gestisce un singolo round del combattimento finale. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Gestione dei dungeon e della logica di combattimento. 
+
+
+
+\label{doc-func-members}
+\Hypertarget{game_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{game_8h_a8591baf647ff78ea31eba54d83326658}\index{game.h@{game.h}!bossFight@{bossFight}}
+\index{bossFight@{bossFight}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{bossFight()}{bossFight()}}
+{\footnotesize\ttfamily \label{game_8h_a8591baf647ff78ea31eba54d83326658} 
+void boss\+Fight (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{}\end{DoxyParamCaption})}
+
+
+
+Gestisce lo scontro finale con il boss. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore\\
+\hline
+\end{DoxyParams}
+Gestisce lo scontro finale con il boss.
+
+Combattimento finale strutturato in round stile "{}sasso-\/carta-\/forbici"{} con tre mosse\+: Scudo, Magia e Spada. Al meglio di 5 round, il primo a vincere 3 round determina l\textquotesingle{}esito del gioco.
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game_8h_aea118ebfe326c6e844e4d595eecd1bb8}\index{game.h@{game.h}!caveDungeon@{caveDungeon}}
+\index{caveDungeon@{caveDungeon}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{caveDungeon()}{caveDungeon()}}
+{\footnotesize\ttfamily \label{game_8h_aea118ebfe326c6e844e4d595eecd1bb8} 
+void cave\+Dungeon (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{}\end{DoxyParamCaption})}
+
+
+
+Gestisce il dungeon della grotta. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore\\
+\hline
+\end{DoxyParams}
+Gestisce il dungeon della grotta.
+
+Terzo dungeon con obiettivo di recuperare la Spada dell\textquotesingle{}Eroe sconfiggendo il Drago Antico. A differenza degli altri, presenta stanze vuote e alcune trappole possono dare ricompense in monete come il Forziere Misterioso.
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game_8h_aa9bdf63849749e012191b5d736e0fe38}\index{game.h@{game.h}!combat@{combat}}
+\index{combat@{combat}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{combat()}{combat()}}
+{\footnotesize\ttfamily \label{game_8h_aa9bdf63849749e012191b5d736e0fe38} 
+void combat (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{, }\item[{\mbox{\hyperlink{struct_monster}{Monster}} \texorpdfstring{$\ast$}{*}}]{monster}{}\end{DoxyParamCaption})}
+
+
+
+Gestisce un combattimento standard. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+{\em monster} & Puntatore al mostro da affrontare\\
+\hline
+\end{DoxyParams}
+Gestisce un combattimento standard.
+
+Sistema di combattimento basato sul lancio di dadi. Il giocatore continua a tirare finché non sconfigge il mostro o viene sconfitto. Se il risultato è maggiore o uguale al fatal\+Blow del mostro, vince e ottiene monete, altrimenti subisce danno. Il Drago Antico pone una domanda sulla sequenza di Padovan che può annullare il danno se il giocatore risopnde in modo corretto.
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+{\em monster} & Puntatore al mostro da affrontare \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game_8h_ad3124480488f2b5f0231bd267b1e1aa4}\index{game.h@{game.h}!finalcombat@{finalcombat}}
+\index{finalcombat@{finalcombat}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{finalcombat()}{finalcombat()}}
+{\footnotesize\ttfamily \label{game_8h_ad3124480488f2b5f0231bd267b1e1aa4} 
+void finalcombat (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{, }\item[{\mbox{\hyperlink{types_8h_a19b869a01ca1a58f4164b4f75c2df388}{Move}}}]{player\+Move}{, }\item[{\mbox{\hyperlink{struct_boss_room}{Boss\+Room}} \texorpdfstring{$\ast$}{*}}]{room}{}\end{DoxyParamCaption})}
+
+
+
+Gestisce un singolo round del combattimento finale. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+{\em player\+Move} & Mossa scelta dal giocatore \\
+\hline
+{\em room} & Puntatore alla stanza del boss\\
+\hline
+\end{DoxyParams}
+Implementa la logica del round. In caso di pareggio il round non conta. Il combattimento termina quando uno dei due raggiunge 3 vittorie, determinando l\textquotesingle{}esito del gioco.
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+{\em player\+Move} & Mossa scelta dal giocatore \\
+\hline
+{\em room} & Puntatore alla stanza del boss \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game_8h_a3e5470be793c799f6d73689a73aa7eef}\index{game.h@{game.h}!freeGameSaves@{freeGameSaves}}
+\index{freeGameSaves@{freeGameSaves}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{freeGameSaves()}{freeGameSaves()}}
+{\footnotesize\ttfamily \label{game_8h_a3e5470be793c799f6d73689a73aa7eef} 
+void free\+Game\+Saves (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}}]{saves}{}\end{DoxyParamCaption})}
+
+
+
+Libera la memoria allocata per i salvataggi. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em saves} & Puntatore alla struttura dei salvataggi\\
+\hline
+\end{DoxyParams}
+Libera la memoria allocata per i salvataggi.
+
+Attraversa la lista concatenata deallocando ciascun nodo per prevenire memory leak al termine del programma.
+
+
+\begin{DoxyParams}{Parameters}
+{\em saves} & Puntatore alla struttura dei salvataggi \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game_8h_aaada7b5275abcaa325d8cbc2afdca3e6}\index{game.h@{game.h}!gameOver@{gameOver}}
+\index{gameOver@{gameOver}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{gameOver()}{gameOver()}}
+{\footnotesize\ttfamily \label{game_8h_aaada7b5275abcaa325d8cbc2afdca3e6} 
+void game\+Over (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{}\end{DoxyParamCaption})}
+
+
+
+Gestisce la sconfitta del giocatore. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore\\
+\hline
+\end{DoxyParams}
+Visualizza il messaggio di sconfitta e imposta il flag is\+Alive a false, terminando la partita corrente.
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game_8h_a9273b6925ea5151be0e7ce37fc5bc1fd}\index{game.h@{game.h}!initGame@{initGame}}
+\index{initGame@{initGame}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{initGame()}{initGame()}}
+{\footnotesize\ttfamily \label{game_8h_a9273b6925ea5151be0e7ce37fc5bc1fd} 
+void init\+Game (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{}\end{DoxyParamCaption})}
+
+
+
+Inizializza un nuovo giocatore con valori di default. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore da inizializzare\\
+\hline
+\end{DoxyParams}
+Imposta lo stato iniziale del giocatore per una nuova partita\+: punti vita al massimo, inventario vuoto, nessuna missione completata.
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore da inizializzare \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game_8h_a506fffa0f4cb50602617c859edaf7659}\index{game.h@{game.h}!initGameSaves@{initGameSaves}}
+\index{initGameSaves@{initGameSaves}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{initGameSaves()}{initGameSaves()}}
+{\footnotesize\ttfamily \label{game_8h_a506fffa0f4cb50602617c859edaf7659} 
+void init\+Game\+Saves (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}}]{saves}{}\end{DoxyParamCaption})}
+
+
+
+Inizializza la struttura dei salvataggi. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em saves} & Puntatore alla struttura da inizializzare\\
+\hline
+\end{DoxyParams}
+Inizializza la struttura dei salvataggi.
+
+Imposta i puntatori start ed end a NULL creando una lista vuota
+
+
+\begin{DoxyParams}{Parameters}
+{\em saves} & Puntatore alla struttura da inizializzare \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game_8h_a023a76b0ebead475a64276053701b26f}\index{game.h@{game.h}!mansionDungeon@{mansionDungeon}}
+\index{mansionDungeon@{mansionDungeon}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{mansionDungeon()}{mansionDungeon()}}
+{\footnotesize\ttfamily \label{game_8h_a023a76b0ebead475a64276053701b26f} 
+void mansion\+Dungeon (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{}\end{DoxyParamCaption})}
+
+
+
+Gestisce il dungeon della magione. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore\\
+\hline
+\end{DoxyParams}
+Gestisce il dungeon della magione.
+
+Secondo dungeon con obiettivi multipli\+: recuperare la chiave del Castello del Signore Oscuro sconfiggendo il Demone Custode e uccidere un Vampiro Superiore. Il sistema forza gli obiettivi nelle ultime stanze se non completati.
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+\end{DoxyParams}
+\Hypertarget{game_8h_ac81d05c46baa8a0daefedc7897be2a38}\index{game.h@{game.h}!swampDungeon@{swampDungeon}}
+\index{swampDungeon@{swampDungeon}!game.h@{game.h}}
+\doxysubsubsection{\texorpdfstring{swampDungeon()}{swampDungeon()}}
+{\footnotesize\ttfamily \label{game_8h_ac81d05c46baa8a0daefedc7897be2a38} 
+void swamp\+Dungeon (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{}\end{DoxyParamCaption})}
+
+
+
+Gestisce il dungeon della palude. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore\\
+\hline
+\end{DoxyParams}
+Gestisce il dungeon della palude.
+
+Implementazione del primo dungeon con l\textquotesingle{}obiettivo di sconfiggere 3 Generali Orco. Il sistema forza la comparsa dei boss rimanenti nelle ultime stanze se il giocatore si avvicina alla fine senza aver completato l\textquotesingle{}obiettivo, garantendo che la missione sia sempre completabile.
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+\end{DoxyParams}

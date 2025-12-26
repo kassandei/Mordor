@@ -1,0 +1,270 @@
+\doxysection{include/menu.h File Reference}
+\hypertarget{menu_8h}{}\label{menu_8h}\index{include/menu.h@{include/menu.h}}
+
+
+Sistema di menu e navigazione del gioco.  
+
+
+{\ttfamily \#include "{}types.\+h"{}}\newline
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{menu_8h_a8618f72e6be13c3561e807db4ba01acc}{menu}} (\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}player, \mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}saves)
+\begin{DoxyCompactList}\small\item\em Gestisce il menu principale del gioco. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{menu_8h_a1219ce61f863f4e9c74b03987eb737e5}{cheat\+Menu}} (\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}player)
+\begin{DoxyCompactList}\small\item\em Gestisce il menu dei trucchi (cheat). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{menu_8h_afdbb7724303183575f0347f2213223b9}{new\+Game}} (\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}player, \mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}saves)
+\begin{DoxyCompactList}\small\item\em Inizia una nuova partita. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{menu_8h_aad0066a0a7d64c57dae1096093dc213b}{load\+Game}} (\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}player, \mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}saves, bool from\+Cheat\+Menu)
+\begin{DoxyCompactList}\small\item\em Carica una partita salvata. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{menu_8h_a0f6c3b23f761c07fa51a5997a0c8321b}{village\+Menu}} (\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}player, \mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}saves)
+\begin{DoxyCompactList}\small\item\em Gestisce il menu del villaggio. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{menu_8h_ad08fc6ac979cc8a3319e83dc59ab0f3c}{dungeon\+Menu}} (\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}player)
+\begin{DoxyCompactList}\small\item\em Gestisce il menu di selezione dei dungeon. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{menu_8h_aff771ed5de5d51c01e3dd7a26b7af060}{shop\+Menu}} (\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}player)
+\begin{DoxyCompactList}\small\item\em Gestisce il menu del negozio. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{menu_8h_a427cf4592e2fe0cbd7625a8385371320}{save\+Game}} (\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}player, \mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}saves)
+\begin{DoxyCompactList}\small\item\em Salva la partita corrente. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{menu_8h_a12fee9cc858b5ed713795664f96c11a4}{inventory\+Menu}} (\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}player)
+\begin{DoxyCompactList}\small\item\em Gestisce il menu dell\textquotesingle{}inventario. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Sistema di menu e navigazione del gioco. 
+
+
+
+\label{doc-func-members}
+\Hypertarget{menu_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{menu_8h_a1219ce61f863f4e9c74b03987eb737e5}\index{menu.h@{menu.h}!cheatMenu@{cheatMenu}}
+\index{cheatMenu@{cheatMenu}!menu.h@{menu.h}}
+\doxysubsubsection{\texorpdfstring{cheatMenu()}{cheatMenu()}}
+{\footnotesize\ttfamily \label{menu_8h_a1219ce61f863f4e9c74b03987eb737e5} 
+void cheat\+Menu (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{}\end{DoxyParamCaption})}
+
+
+
+Gestisce il menu dei trucchi (cheat). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore\\
+\hline
+\end{DoxyParams}
+Permette di modificare direttamente i parametri del giocatore\+:
+\begin{DoxyItemize}
+\item Modifica HP (1-\/9999)
+\item Modifica Monete (0-\/9999)
+\item Sblocca tutte le missioni e la chiave del castello
+\item Ritorna al villaggio
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+\end{DoxyParams}
+\Hypertarget{menu_8h_ad08fc6ac979cc8a3319e83dc59ab0f3c}\index{menu.h@{menu.h}!dungeonMenu@{dungeonMenu}}
+\index{dungeonMenu@{dungeonMenu}!menu.h@{menu.h}}
+\doxysubsubsection{\texorpdfstring{dungeonMenu()}{dungeonMenu()}}
+{\footnotesize\ttfamily \label{menu_8h_ad08fc6ac979cc8a3319e83dc59ab0f3c} 
+void dungeon\+Menu (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{}\end{DoxyParamCaption})}
+
+
+
+Gestisce il menu di selezione dei dungeon. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore\\
+\hline
+\end{DoxyParams}
+Mostra solo le missioni non ancora completate. Una volta completate tutte e tre le missioni (Palude, Magione, Grotta), offre la possibilità di affrontare il boss finale (Signore Oscuro).
+
+Le missioni completate non vengono più visualizzate nel menu.
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+\end{DoxyParams}
+\Hypertarget{menu_8h_a12fee9cc858b5ed713795664f96c11a4}\index{menu.h@{menu.h}!inventoryMenu@{inventoryMenu}}
+\index{inventoryMenu@{inventoryMenu}!menu.h@{menu.h}}
+\doxysubsubsection{\texorpdfstring{inventoryMenu()}{inventoryMenu()}}
+{\footnotesize\ttfamily \label{menu_8h_a12fee9cc858b5ed713795664f96c11a4} 
+void inventory\+Menu (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{}\end{DoxyParamCaption})}
+
+
+
+Gestisce il menu dell\textquotesingle{}inventario. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore\\
+\hline
+\end{DoxyParams}
+Mostra tutti gli oggetti posseduti dal giocatore e permette di usare le pozioni curative. Ogni pozione ripristina un valore casuale tra 1 e 6 HP.
+
+Impedisce l\textquotesingle{}uso di pozioni se\+:
+\begin{DoxyItemize}
+\item Non ne possiedi
+\item Gli HP sono già al massimo
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+\end{DoxyParams}
+\Hypertarget{menu_8h_aad0066a0a7d64c57dae1096093dc213b}\index{menu.h@{menu.h}!loadGame@{loadGame}}
+\index{loadGame@{loadGame}!menu.h@{menu.h}}
+\doxysubsubsection{\texorpdfstring{loadGame()}{loadGame()}}
+{\footnotesize\ttfamily \label{menu_8h_aad0066a0a7d64c57dae1096093dc213b} 
+void load\+Game (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{, }\item[{\mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}}]{saves}{, }\item[{bool}]{from\+Cheat\+Menu}{}\end{DoxyParamCaption})}
+
+
+
+Carica una partita salvata. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+{\em saves} & Puntatore alla struttura dei salvataggi \\
+\hline
+{\em from\+Cheat\+Menu} & Indica se chiamato dal menu trucchi\\
+\hline
+\end{DoxyParams}
+Mostra la lista dei salvataggi disponibili e permette di\+:
+\begin{DoxyItemize}
+\item Caricare un salvataggio per giocare
+\item Eliminare salvataggi non più necessari
+\item (La funzione se chiamata dal menu trucchi) Caricare e modificare parametri
+\end{DoxyItemize}
+
+La funzione valida che il numero inserito sia nel range corretto e gestisce il caso di lista vuota.
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+{\em saves} & Puntatore alla struttura dei salvataggi \\
+\hline
+{\em from\+Cheat\+Menu} & Indica se chiamato dal menu trucchi \\
+\hline
+\end{DoxyParams}
+\Hypertarget{menu_8h_a8618f72e6be13c3561e807db4ba01acc}\index{menu.h@{menu.h}!menu@{menu}}
+\index{menu@{menu}!menu.h@{menu.h}}
+\doxysubsubsection{\texorpdfstring{menu()}{menu()}}
+{\footnotesize\ttfamily \label{menu_8h_a8618f72e6be13c3561e807db4ba01acc} 
+void menu (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{, }\item[{\mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}}]{saves}{}\end{DoxyParamCaption})}
+
+
+
+Gestisce il menu principale del gioco. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+{\em saves} & Puntatore alla struttura dei salvataggi\\
+\hline
+\end{DoxyParams}
+Loop principale che gestisce la navigazione tra le diverse opzioni del menu. Mostra opzioni diverse in base allo stato del Konami Code\+:
+\begin{DoxyItemize}
+\item Normale\+: Nuova partita, Carica, Esci
+\item Konami sbloccato\+: Aggiunge opzione Trucchi
+\end{DoxyItemize}
+
+L\textquotesingle{}opzione \textquotesingle{}w\textquotesingle{} nascosta attiva la verifica del Konami Code.
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+{\em saves} & Puntatore alla struttura dei salvataggi \\
+\hline
+\end{DoxyParams}
+\Hypertarget{menu_8h_afdbb7724303183575f0347f2213223b9}\index{menu.h@{menu.h}!newGame@{newGame}}
+\index{newGame@{newGame}!menu.h@{menu.h}}
+\doxysubsubsection{\texorpdfstring{newGame()}{newGame()}}
+{\footnotesize\ttfamily \label{menu_8h_afdbb7724303183575f0347f2213223b9} 
+void new\+Game (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{, }\item[{\mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}}]{saves}{}\end{DoxyParamCaption})}
+
+
+
+Inizia una nuova partita. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+{\em saves} & Puntatore alla struttura dei salvataggi \\
+\hline
+\end{DoxyParams}
+\Hypertarget{menu_8h_a427cf4592e2fe0cbd7625a8385371320}\index{menu.h@{menu.h}!saveGame@{saveGame}}
+\index{saveGame@{saveGame}!menu.h@{menu.h}}
+\doxysubsubsection{\texorpdfstring{saveGame()}{saveGame()}}
+{\footnotesize\ttfamily \label{menu_8h_a427cf4592e2fe0cbd7625a8385371320} 
+void save\+Game (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{, }\item[{\mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}}]{saves}{}\end{DoxyParamCaption})}
+
+
+
+Salva la partita corrente. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+{\em saves} & Puntatore alla struttura dei salvataggi \\
+\hline
+\end{DoxyParams}
+\Hypertarget{menu_8h_aff771ed5de5d51c01e3dd7a26b7af060}\index{menu.h@{menu.h}!shopMenu@{shopMenu}}
+\index{shopMenu@{shopMenu}!menu.h@{menu.h}}
+\doxysubsubsection{\texorpdfstring{shopMenu()}{shopMenu()}}
+{\footnotesize\ttfamily \label{menu_8h_aff771ed5de5d51c01e3dd7a26b7af060} 
+void shop\+Menu (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{}\end{DoxyParamCaption})}
+
+
+
+Gestisce il menu del negozio. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore\\
+\hline
+{\em player} & Puntatore al giocatore\\
+\hline
+\end{DoxyParams}
+Gestisce il menu del negozio
+
+Il negozio offre tre tipi di oggetti\+:
+\begin{DoxyItemize}
+\item Pozioni curative (4 monete)\+: acquistabili infinite volte
+\item Spada potenziata (5 monete)\+: +1 al dado, una sola volta
+\item Armatura (10 monete)\+: -\/1 danno ricevuto, una sola volta
+\end{DoxyItemize}
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+\end{DoxyParams}
+\Hypertarget{menu_8h_a0f6c3b23f761c07fa51a5997a0c8321b}\index{menu.h@{menu.h}!villageMenu@{villageMenu}}
+\index{villageMenu@{villageMenu}!menu.h@{menu.h}}
+\doxysubsubsection{\texorpdfstring{villageMenu()}{villageMenu()}}
+{\footnotesize\ttfamily \label{menu_8h_a0f6c3b23f761c07fa51a5997a0c8321b} 
+void village\+Menu (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_player}{Player}} \texorpdfstring{$\ast$}{*}}]{player}{, }\item[{\mbox{\hyperlink{struct_game_saves}{Game\+Saves}} \texorpdfstring{$\ast$}{*}}]{saves}{}\end{DoxyParamCaption})}
+
+
+
+Gestisce il menu del villaggio. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em player} & Puntatore al giocatore \\
+\hline
+{\em saves} & Puntatore alla struttura dei salvataggi \\
+\hline
+\end{DoxyParams}

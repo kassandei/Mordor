@@ -1,0 +1,67 @@
+\doxysection{Room Struct Reference}
+\hypertarget{struct_room}{}\label{struct_room}\index{Room@{Room}}
+
+
+Nodo della lista concatenata delle stanze.  
+
+
+
+
+{\ttfamily \#include $<$types.\+h$>$}
+
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{struct_room_a25fa14e2fbbf132a5f568343d2ec0650}{room\+Number}}
+\item 
+\mbox{\hyperlink{types_8h_ab540f7414f306325d92272bcef1e34e1}{Room\+Type}} \mbox{\hyperlink{struct_room_abc1995e0e7d4695f2806fdec02798356}{type}}
+\item 
+\mbox{\hyperlink{struct_monster}{Monster}} \mbox{\hyperlink{struct_room_aa7c1444e852207f19875c5843dc62a1c}{monster}}
+\item 
+\mbox{\hyperlink{struct_trap}{Trap}} \mbox{\hyperlink{struct_room_a4a01e75be02e867da69645798631a67e}{trap}}
+\item 
+struct \mbox{\hyperlink{struct_room}{Room}} \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{struct_room_a1f7dc15b104f6fcceb89a00a7e3e61b6}{next\+Room}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Nodo della lista concatenata delle stanze. 
+
+\label{doc-variable-members}
+\Hypertarget{struct_room_doc-variable-members}
+\doxysubsection{Member Data Documentation}
+\Hypertarget{struct_room_aa7c1444e852207f19875c5843dc62a1c}\index{Room@{Room}!monster@{monster}}
+\index{monster@{monster}!Room@{Room}}
+\doxysubsubsection{\texorpdfstring{monster}{monster}}
+{\footnotesize\ttfamily \label{struct_room_aa7c1444e852207f19875c5843dc62a1c} 
+\mbox{\hyperlink{struct_monster}{Monster}} Room\+::monster}
+
+Mostro presente (se COMBAT) \Hypertarget{struct_room_a1f7dc15b104f6fcceb89a00a7e3e61b6}\index{Room@{Room}!nextRoom@{nextRoom}}
+\index{nextRoom@{nextRoom}!Room@{Room}}
+\doxysubsubsection{\texorpdfstring{nextRoom}{nextRoom}}
+{\footnotesize\ttfamily \label{struct_room_a1f7dc15b104f6fcceb89a00a7e3e61b6} 
+struct \mbox{\hyperlink{struct_room}{Room}}\texorpdfstring{$\ast$}{*} Room\+::next\+Room}
+
+Puntatore alla prossima stanza \Hypertarget{struct_room_a25fa14e2fbbf132a5f568343d2ec0650}\index{Room@{Room}!roomNumber@{roomNumber}}
+\index{roomNumber@{roomNumber}!Room@{Room}}
+\doxysubsubsection{\texorpdfstring{roomNumber}{roomNumber}}
+{\footnotesize\ttfamily \label{struct_room_a25fa14e2fbbf132a5f568343d2ec0650} 
+int Room\+::room\+Number}
+
+Numero progressivo della stanza \Hypertarget{struct_room_a4a01e75be02e867da69645798631a67e}\index{Room@{Room}!trap@{trap}}
+\index{trap@{trap}!Room@{Room}}
+\doxysubsubsection{\texorpdfstring{trap}{trap}}
+{\footnotesize\ttfamily \label{struct_room_a4a01e75be02e867da69645798631a67e} 
+\mbox{\hyperlink{struct_trap}{Trap}} Room\+::trap}
+
+Trappola presente (se TRAP) \Hypertarget{struct_room_abc1995e0e7d4695f2806fdec02798356}\index{Room@{Room}!type@{type}}
+\index{type@{type}!Room@{Room}}
+\doxysubsubsection{\texorpdfstring{type}{type}}
+{\footnotesize\ttfamily \label{struct_room_abc1995e0e7d4695f2806fdec02798356} 
+\mbox{\hyperlink{types_8h_ab540f7414f306325d92272bcef1e34e1}{Room\+Type}} Room\+::type}
+
+Tipo di stanza 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{types_8h}{types.\+h}}\end{DoxyCompactItemize}

@@ -7,6 +7,19 @@
 #include "types.h"
 #include "save.h"
 
+/**
+ * @brief Gestisce il menu principale del gioco
+ * 
+ * Loop principale che gestisce la navigazione tra le diverse opzioni del menu.
+ * Mostra opzioni diverse in base allo stato del Konami Code:
+ * - Normale: Nuova partita, Carica, Esci
+ * - Konami sbloccato: Aggiunge opzione Trucchi
+ * 
+ * L'opzione 'w' nascosta attiva la verifica del Konami Code.
+ * 
+ * @param player Puntatore al giocatore
+ * @param saves Puntatore alla struttura dei salvataggi
+ */
 void menu(Player *player, GameSaves *saves) {
     char choice;
 
@@ -16,6 +29,7 @@ void menu(Player *player, GameSaves *saves) {
         puts("1. Inzia una nuova partita");
         puts("2. Carica un salvataggio");
         puts("3. Esci");
+        
         if(player->konamiCode) {
             puts("4. TRUCCHI");
             printf("Seleziona una delle opzioni [1-4]: ");
@@ -46,6 +60,17 @@ void menu(Player *player, GameSaves *saves) {
     }
 }
 
+/**
+ * @brief Gestisce il menu dei trucchi (cheat)
+ * 
+ * Permette di modificare direttamente i parametri del giocatore:
+ * - Modifica HP (1-9999)
+ * - Modifica Monete (0-9999)
+ * - Sblocca tutte le missioni e la chiave del castello
+ * - Ritorna al villaggio
+ * 
+ * @param player Puntatore al giocatore
+ */
 void cheatMenu(Player *player) {
     char hpInput[NAMESIZE];
     char coinInput[NAMESIZE];
@@ -107,6 +132,11 @@ void cheatMenu(Player *player) {
     }
 }
 
+/**
+ * @brief Inizia una nuova partita
+ * @param player Puntatore al giocatore
+ * @param saves Puntatore alla struttura dei salvataggi
+ */
 void newGame(Player *player, GameSaves *saves) {
     clearScreen();
     story();
@@ -116,6 +146,21 @@ void newGame(Player *player, GameSaves *saves) {
     villageMenu(player, saves);
 }
 
+/**
+ * @brief Carica una partita salvata
+ * 
+ * Mostra la lista dei salvataggi disponibili e permette di:
+ * - Caricare un salvataggio per giocare
+ * - Eliminare salvataggi non più necessari
+ * - (La funzione se chiamata dal menu trucchi) Caricare e modificare parametri
+ * 
+ * La funzione valida che il numero inserito sia nel range corretto
+ * e gestisce il caso di lista vuota.
+ * 
+ * @param player Puntatore al giocatore
+ * @param saves Puntatore alla struttura dei salvataggi
+ * @param fromCheatMenu Indica se chiamato dal menu trucchi
+ */
 void loadGame(Player *player, GameSaves *saves, bool fromCheatMenu) {
     char saveNumber[NAMESIZE];
     int selectedSave;
@@ -124,15 +169,19 @@ void loadGame(Player *player, GameSaves *saves, bool fromCheatMenu) {
     while(1) {
         clearScreen();
         drawTitle("SALVATAGGI");
+        
         if(saves->start == NULL) {
             printf("Non ci sono salvataggi presenti in memoria...");
             clearInput();
             return;
         }
+        
         showSaves(saves);
+        
         printf("\nSeleziona un salvataggio [1-%d]: ", saves->end->number);
         readString(saveNumber, NAMESIZE);
         selectedSave = atoi(saveNumber);
+        
         while(selectedSave <= 0 || selectedSave > saves->end->number) {
             printf("Salvataggio non valido inserisci un numero valido: ");
             readString(saveNumber, NAMESIZE);
@@ -178,12 +227,22 @@ void loadGame(Player *player, GameSaves *saves, bool fromCheatMenu) {
     }
 }
 
+/**
+ * @brief Salva la partita corrente
+ * @param player Puntatore al giocatore
+ * @param saves Puntatore alla struttura dei salvataggi
+ */
 void saveGame(Player *player, GameSaves *saves) {
     addSave(player, saves);
     printf("Partita salvata...");
     clearInput();
 }
 
+/**
+ * @brief Gestisce il menu del villaggio
+ * @param player Puntatore al giocatore
+ * @param saves Puntatore alla struttura dei salvataggi
+ */
 void villageMenu(Player *player, GameSaves *saves) {
     char choice;
 
@@ -218,7 +277,7 @@ void villageMenu(Player *player, GameSaves *saves) {
                 if(choice == 'S') {
                     addSave(player, saves);
                 }
-                return;  // torna al menu
+                return;  // Ritorna al menu principale
                 break;
             default:
                 break;
@@ -226,6 +285,17 @@ void villageMenu(Player *player, GameSaves *saves) {
     }
 }
 
+/**
+ * @brief Gestisce il menu di selezione dei dungeon
+ * 
+ * Mostra solo le missioni non ancora completate. Una volta completate
+ * tutte e tre le missioni (Palude, Magione, Grotta), offre la possibilità
+ * di affrontare il boss finale (Signore Oscuro).
+ * 
+ * Le missioni completate non vengono più visualizzate nel menu.
+ * 
+ * @param player Puntatore al giocatore
+ */
 void dungeonMenu(Player *player) {
     char choice;
 
@@ -255,6 +325,18 @@ void dungeonMenu(Player *player) {
     }
 }
 
+/**
+ * @brief Gestisce il menu dell'inventario
+ * 
+ * Mostra tutti gli oggetti posseduti dal giocatore e permette di usare
+ * le pozioni curative. Ogni pozione ripristina un valore casuale tra 1 e 6 HP.
+ * 
+ * Impedisce l'uso di pozioni se:
+ * - Non ne possiedi
+ * - Gli HP sono già al massimo
+ *  
+ * @param player Puntatore al giocatore
+ */
 void inventoryMenu(Player *player) {    
     char choice;
     int restoreHP;
@@ -285,7 +367,7 @@ void inventoryMenu(Player *player) {
                 break;
             }
             int hpBefore = player->hp;
-            restoreHP = 1 + (rand() % 6);  
+            restoreHP = 1 + (rand() % 6);  // Cura casuale tra 1 e 6 HP
             player->hp += restoreHP;
             
             if(player->hp > MAX_HP) {
@@ -301,6 +383,21 @@ void inventoryMenu(Player *player) {
         }
     }
 }
+
+/**
+ * @brief Gestisce il menu del negozio
+ * @param player Puntatore al giocatore
+ */
+/**
+ * @brief Gestisce il menu del negozio
+ * 
+ * Il negozio offre tre tipi di oggetti:
+ * - Pozioni curative (4 monete): acquistabili infinite volte
+ * - Spada potenziata (5 monete): +1 al dado, una sola volta
+ * - Armatura (10 monete): -1 danno ricevuto, una sola volta
+ * 
+ * @param player Puntatore al giocatore
+ */
 void shopMenu(Player *player) {
     char choice;
 
