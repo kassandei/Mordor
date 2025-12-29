@@ -20,12 +20,12 @@
  * @param player Puntatore al giocatore
  * @param saves Puntatore alla struttura dei salvataggi
  */
-void menu(Player *player, GameSaves *saves) {
+void menu(Player* player, GameSaves* saves) {
     char choice;
 
     while(1) {  
         clearScreen();
-        drawTitle("Il gioco RPG ASCII text");
+        drawTitle("Mordor");
         puts("1. Inzia una nuova partita");
         puts("2. Carica un salvataggio");
         puts("3. Esci");
@@ -71,7 +71,7 @@ void menu(Player *player, GameSaves *saves) {
  * 
  * @param player Puntatore al giocatore
  */
-void cheatMenu(Player *player) {
+void cheatMenu(Player* player) {
     char hpInput[NAMESIZE];
     char coinInput[NAMESIZE];
     char choice;
@@ -137,7 +137,7 @@ void cheatMenu(Player *player) {
  * @param player Puntatore al giocatore
  * @param saves Puntatore alla struttura dei salvataggi
  */
-void newGame(Player *player, GameSaves *saves) {
+void newGame(Player* player, GameSaves* saves) {
     clearScreen();
     story();
     initGame(player);
@@ -161,7 +161,7 @@ void newGame(Player *player, GameSaves *saves) {
  * @param saves Puntatore alla struttura dei salvataggi
  * @param fromCheatMenu Indica se chiamato dal menu trucchi
  */
-void loadGame(Player *player, GameSaves *saves, bool fromCheatMenu) {
+void loadGame(Player* player, GameSaves* saves, bool fromCheatMenu) {
     char saveNumber[NAMESIZE];
     int selectedSave;
     char choice;
@@ -232,7 +232,7 @@ void loadGame(Player *player, GameSaves *saves, bool fromCheatMenu) {
  * @param player Puntatore al giocatore
  * @param saves Puntatore alla struttura dei salvataggi
  */
-void saveGame(Player *player, GameSaves *saves) {
+void saveGame(Player* player, GameSaves* saves) {
     addSave(player, saves);
     printf("Partita salvata...");
     clearInput();
@@ -243,7 +243,7 @@ void saveGame(Player *player, GameSaves *saves) {
  * @param player Puntatore al giocatore
  * @param saves Puntatore alla struttura dei salvataggi
  */
-void villageMenu(Player *player, GameSaves *saves) {
+void villageMenu(Player* player, GameSaves* saves) {
     char choice;
 
     while(player->isAlive) {  
@@ -296,7 +296,7 @@ void villageMenu(Player *player, GameSaves *saves) {
  * 
  * @param player Puntatore al giocatore
  */
-void dungeonMenu(Player *player) {
+void dungeonMenu(Player* player) {
     char choice;
 
     while (player->isAlive) {
@@ -337,7 +337,7 @@ void dungeonMenu(Player *player) {
  *  
  * @param player Puntatore al giocatore
  */
-void inventoryMenu(Player *player) {    
+void inventoryMenu(Player* player) {    
     char choice;
     int restoreHP;
 
@@ -398,7 +398,7 @@ void inventoryMenu(Player *player) {
  * 
  * @param player Puntatore al giocatore
  */
-void shopMenu(Player *player) {
+void shopMenu(Player* player) {
     char choice;
 
     while(1) {

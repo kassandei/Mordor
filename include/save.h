@@ -20,7 +20,7 @@ char* currentDateTime(char date[DATESIZE]);
  * @param player Puntatore al giocatore da salvare
  * @param saves Puntatore alla struttura dei salvataggi
  */
-void addSave(Player *player, GameSaves *saves);
+void addSave(Player* player, GameSaves* saves);
 
 /**
  * @brief Carica un salvataggio specifico
@@ -28,19 +28,19 @@ void addSave(Player *player, GameSaves *saves);
  * @param saves Puntatore alla struttura dei salvataggi
  * @param index Numero del salvataggio da caricare
  */
-void loadSave(Player *player, GameSaves *saves, int index);
+void loadSave(Player* player, GameSaves* saves, int index);
 
 /**
  * @brief Visualizza tutti i salvataggi disponibili
  * @param saves Puntatore alla struttura dei salvataggi
  */
-void showSaves(GameSaves *saves);
+void showSaves(GameSaves* saves);
 
 /**
  * @brief Rimuove un salvataggio dalla lista
  * @param saves Puntatore alla struttura dei salvataggi
  * @param index Numero del salvataggio da eliminare
  */
-void removeSave(GameSaves *saves, int index);
+void removeSave(GameSaves* saves, int index);
 
 #endif

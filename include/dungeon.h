@@ -39,28 +39,28 @@ Room* addRoom(Dungeon* dungeon);
  * @param dungeon Puntatore al dungeon
  * @return Puntatore alla stanza generata
  */
-Room* generateRoom(Dungeon *dungeon);
+Room* generateRoom(Dungeon* dungeon);
 
 /**
  * @brief Genera una stanza specifica per il dungeon della palude
  * @param room Puntatore alla stanza da configurare
  * @return Puntatore alla stanza configurata
  */
-Room *generateRoomSwamp(Room *room);
+Room* generateRoomSwamp(Room* room);
 
 /**
  * @brief Genera una stanza specifica per il dungeon della magione
  * @param room Puntatore alla stanza da configurare
  * @return Puntatore alla stanza configurata
  */
-Room *generateRoomMansion(Room *room);
+Room* generateRoomMansion(Room* room);
 
 /**
  * @brief Genera una stanza specifica per il dungeon della grotta
  * @param room Puntatore alla stanza da configurare
  * @return Puntatore alla stanza configurata
  */
-Room *generateRoomCave(Room *room);
+Room* generateRoomCave(Room* room);
 
 /**
  * @brief Configura una stanza come trappola
@@ -69,7 +69,7 @@ Room *generateRoomCave(Room *room);
  * @param random Indice casuale per la selezione della trappola
  * @return Puntatore alla stanza configurata
  */
-Room *trapRoom(Room *area, DungeonType type, int random);
+Room* trapRoom(Room* area, DungeonType type, int random);
 
 /**
  * @brief Configura una stanza come combattimento
@@ -78,7 +78,7 @@ Room *trapRoom(Room *area, DungeonType type, int random);
  * @param random Indice casuale per la selezione del mostro
  * @return Puntatore alla stanza configurata
  */
-Room* combatRoom(Room *area, DungeonType type, int random);
+Room* combatRoom(Room* area, DungeonType type, int random);
 
 /**
  * @brief Libera la memoria allocata per il dungeon

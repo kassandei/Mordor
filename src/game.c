@@ -15,7 +15,7 @@
  * 
  * @param player Puntatore al giocatore da inizializzare
  */
-void initGame(Player *player) {
+void initGame(Player* player) {
     // Imposta i valori iniziali del giocatore
     player->hp = MAX_HP;
     player->coins = 0;
@@ -42,7 +42,7 @@ void initGame(Player *player) {
  * 
  * @param saves Puntatore alla struttura da inizializzare
  */
-void initGameSaves(GameSaves *saves) {
+void initGameSaves(GameSaves* saves) {
     saves->start = NULL;
     saves->end = NULL;
 }
@@ -55,7 +55,7 @@ void initGameSaves(GameSaves *saves) {
  * 
  * @param saves Puntatore alla struttura dei salvataggi
  */
-void freeGameSaves(GameSaves *saves) {
+void freeGameSaves(GameSaves* saves) {
     while(saves->start != NULL) {
         SaveFile* tmp = saves->start;
         saves->start = saves->start->nextSaveFile;
@@ -74,7 +74,7 @@ void freeGameSaves(GameSaves *saves) {
  * @param player Puntatore al giocatore
  * @param currentRoom Puntatore alla stanza corrente
  */
-static void handleRoomEvent(Player *player, Room *currentRoom) {
+static void handleRoomEvent(Player* player, Room* currentRoom) {
     if (currentRoom->type == TRAP) {
         // Gestisce una trappola: calcola il danno considerando l'armatura
         int trapDamage = calculateDamage(player, currentRoom->trap.dmg);
@@ -103,13 +103,13 @@ static void handleRoomEvent(Player *player, Room *currentRoom) {
  * 
  * @param player Puntatore al giocatore
  */
-void swampDungeon(Player *player) {
-    Dungeon *dungeon = (Dungeon *)malloc(sizeof(Dungeon));
+void swampDungeon(Player* player) {
+    Dungeon* dungeon = (Dungeon *)malloc(sizeof(Dungeon));
     if (!dungeon) {
         fprintf(stderr, "Errore: memoria insufficiente\n");
         exit(EXIT_FAILURE);
     }
-    Room *currentRoom = NULL;
+    Room* currentRoom = NULL;
     char choice;
     int orcGeneralKilled = 0;  // Contatore per i boss uccisi
     
@@ -191,13 +191,13 @@ void swampDungeon(Player *player) {
  * 
  * @param player Puntatore al giocatore
  */
-void mansionDungeon(Player *player) {
-    Dungeon *dungeon = (Dungeon *)malloc(sizeof(Dungeon));
+void mansionDungeon(Player* player) {
+    Dungeon* dungeon = (Dungeon *)malloc(sizeof(Dungeon));
     if (!dungeon) {
         fprintf(stderr, "Errore: memoria insufficiente\n");
         exit(EXIT_FAILURE);
     }
-    Room *currentRoom = NULL;
+    Room* currentRoom = NULL;
     char choice;
     bool vampireKilled = false;
     
@@ -280,13 +280,13 @@ void mansionDungeon(Player *player) {
  * 
  * @param player Puntatore al giocatore
  */
-void caveDungeon(Player *player) {
-    Dungeon *dungeon = (Dungeon *)malloc(sizeof(Dungeon));
+void caveDungeon(Player* player) {
+    Dungeon* dungeon = (Dungeon *)malloc(sizeof(Dungeon));
     if (!dungeon) {
         fprintf(stderr, "Errore: memoria insufficiente\n");
         exit(EXIT_FAILURE);
     }
-    Room *currentRoom = NULL;
+    Room* currentRoom = NULL;
     char choice;
     bool dragonKilled = false;
     
@@ -366,8 +366,8 @@ void caveDungeon(Player *player) {
  * 
  * @param player Puntatore al giocatore
  */
-void bossFight(Player *player) {
-    BossRoom *room = (BossRoom *)malloc(sizeof(BossRoom));
+void bossFight(Player* player) {
+    BossRoom* room = (BossRoom *)malloc(sizeof(BossRoom));
     if (!room) {
         fprintf(stderr, "Errore: memoria insufficiente\n");
         exit(EXIT_FAILURE);
@@ -414,7 +414,7 @@ void bossFight(Player *player) {
  * 
  * @param player Puntatore al giocatore
  */
-void gameOver(Player *player) {
+void gameOver(Player* player) {
     printf("\nSei stato sconfitto!\n");
     player->isAlive = false;
 }
@@ -431,14 +431,14 @@ void gameOver(Player *player) {
  * @param player Puntatore al giocatore
  * @param monster Puntatore al mostro da affrontare
  */
-void combat(Player *player, Monster *monster) {
+void combat(Player* player, Monster* monster) {
     printf("Hai incontrato %s\n", monster->name);
     bool isDragon = (strcmp(monster->name, "Drago Antico") == 0);
-    bool isGeneralOrco = (strcmp(monster->name, "Generale Orco") == 0);
+    bool isGeneraleOrco = (strcmp(monster->name, "Generale Orco") == 0);
     
     // Il Generale Orco ha colpo fatale 6, ma con Spada dell'Eroe diventa 5
     int effectiveFatalBlow = monster->fatalBlow;
-    if (isGeneralOrco && player->inventory.hasHeroSword) {
+    if (isGeneraleOrco && player->inventory.hasHeroSword) {
         effectiveFatalBlow = 5;
     }
 
@@ -510,7 +510,7 @@ void combat(Player *player, Monster *monster) {
  * @param playerMove Mossa scelta dal giocatore
  * @param room Puntatore alla stanza del boss
  */
-void finalcombat(Player *player, Move playerMove, BossRoom *room) {
+void finalcombat(Player* player, Move playerMove, BossRoom* room) {
     // Il boss sceglie casualmente una delle tre mosse
     Move bossMove = rand() % 3;
 

@@ -8,7 +8,7 @@
  * @brief Disegna un titolo incorniciato con bordi ASCII
  * @param string Il testo del titolo da visualizzare
  */
-void drawTitle(const char *string) {
+void drawTitle(const char* string) {
     int len = strlen(string);
     
     // Bordo superiore
@@ -54,7 +54,7 @@ void clearInput() {
  * @param buffer Buffer dove salvare la stringa letta
  * @param size Dimensione massima del buffer
  */
-void readString(char *buffer, int size) {
+void readString(char* buffer, int size) {
     while (1) {
         if (fgets(buffer, size, stdin) == NULL) {
             puts("Errore di lettura, riprova");
@@ -62,7 +62,7 @@ void readString(char *buffer, int size) {
             continue;
         }
 
-        char *newline = strchr(buffer, '\n');
+        char* newline = strchr(buffer, '\n');
         if (newline) {
             *newline = '\0';
         } else {
@@ -131,7 +131,7 @@ int missionCompleted(Player* player) {
  * @brief Visualizza le statistiche del giocatore
  * @param player Puntatore al giocatore
  */
-void playerStats(Player *player) {
+void playerStats(Player* player) {
     printf("\n%s | HP: %d | MONETE: %d | MISSIONI COMPLETATE %d/3\n\n", 
         player->name, player->hp, player->coins, missionCompleted(player));
 }
@@ -140,7 +140,7 @@ void playerStats(Player *player) {
  * @brief Ripristina i punti vita del giocatore al massimo
  * @param player Puntatore al giocatore
  */
-void rest(Player *player) {
+void rest(Player* player) {
     clearScreen();
     if(player->hp < MAX_HP) player->hp = MAX_HP;
     printf("Dopo un riposo accanto a un falo l'eroe %s è tornato in piene forze\n", player->name);
@@ -165,7 +165,7 @@ void missionMenu() {
  * @param valid Stringa contenente i caratteri validi
  * @return Il carattere valido letto
  */
-char readOption(const char *valid) {
+char readOption(const char* valid) {
     char ch;                    
     while((ch = getchar()) && !strchr(valid, ch)) {
         clearInput();
@@ -181,7 +181,7 @@ char readOption(const char *valid) {
  * @param prize Costo del ritorno
  * @return true se il pagamento è andato a buon fine, false altrimenti
  */
-bool returnHome(Player *player, int prize) {
+bool returnHome(Player* player, int prize) {
     bool home = false;
     if(player->coins >= prize) {
         puts("Hai pagato 50 monete...");
@@ -204,7 +204,7 @@ bool returnHome(Player *player, int prize) {
  * @param baseDamage Danno base da calcolare
  * @return Danno effettivo dopo la riduzione
  */
-int calculateDamage(Player *player, int baseDamage) {
+int calculateDamage(Player* player, int baseDamage) {
     return baseDamage + (player->inventory.hasArmor ? ARMOR_REDUCEDMG : 0);
 }
 
@@ -219,7 +219,7 @@ int calculateDamage(Player *player, int baseDamage) {
  * @param player Puntatore al giocatore
  * @return Bonus da aggiungere al tiro del dado
  */
-int calculateDiceBonus(Player *player) {
+int calculateDiceBonus(Player* player) {
     if (player->inventory.hasHeroSword)
         return 2;
 
@@ -251,7 +251,7 @@ CoinFace flipCoin() {
  * @param type Tipo di dungeon da verificare
  * @return true se completata, false altrimenti
  */
-bool isCompleted(Player *player, DungeonType type) {
+bool isCompleted(Player* player, DungeonType type) {
     return (player->missionComplete[type]) ? true : false;
 }
 

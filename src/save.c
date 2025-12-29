@@ -28,7 +28,7 @@ char* currentDateTime(char date[DATESIZE]) {
  * @param player Puntatore al giocatore da salvare
  * @param saves Puntatore alla struttura dei salvataggi
  */
-void addSave(Player *player, GameSaves *saves) {
+void addSave(Player* player, GameSaves* saves) {
     SaveFile* save = (SaveFile*)malloc(sizeof(SaveFile));
     if (!save) {
         fprintf(stderr, "Errore: memoria insufficiente\n");
@@ -62,7 +62,7 @@ void addSave(Player *player, GameSaves *saves) {
  * @param saves Puntatore alla struttura dei salvataggi
  * @param index Numero del salvataggio da caricare
  */
-void loadSave(Player *player, GameSaves *saves, int index) {
+void loadSave(Player* player, GameSaves* saves, int index) {
     SaveFile* tmp = saves->start;
     while(tmp != NULL) {
         if(tmp->number == index) {
@@ -80,7 +80,7 @@ void loadSave(Player *player, GameSaves *saves, int index) {
  * @brief Visualizza tutti i salvataggi disponibili
  * @param saves Puntatore alla struttura dei salvataggi
  */
-void showSaves(GameSaves *saves) {
+void showSaves(GameSaves* saves) {
     SaveFile* tmp = saves->start;
     while(tmp != NULL) { 
         printf("%d. %s | %10s | %2d HP | %5d MONETE | %3d OGGETTI | %d MISSIONI COMPLETATE\n",
@@ -104,7 +104,7 @@ void showSaves(GameSaves *saves) {
  * @param saves Puntatore alla struttura dei salvataggi
  * @param index Numero del salvataggio da eliminare
  */
-void removeSave(GameSaves *saves, int index) {
+void removeSave(GameSaves* saves, int index) {
     SaveFile* tmp = saves->start;
     SaveFile* prev = NULL;
     

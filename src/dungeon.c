@@ -104,7 +104,7 @@ Room* addRoom(Dungeon* dungeon) {
  * @return Puntatore alla stanza generata
  */
 Room* generateRoom(Dungeon* dungeon) {
-    Room *room = (Room*)malloc(sizeof(Room));
+    Room* room = (Room*)malloc(sizeof(Room));
     if (!room) {
         fprintf(stderr, "Errore: memoria insufficiente\n");
         exit(EXIT_FAILURE);
