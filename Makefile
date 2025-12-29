@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Iinclude
+CFLAGS = -std=c99 -Wall -Wextra -Iinclude
 SRC_DIR = src
 
 # Legge tutti i file .c all'interno della cartella
@@ -12,3 +12,6 @@ all:
 
 compile: 
 	$(CC) $(CFLAGS) $(SRCS) -o $(TARGET)
+
+clean:
+	rm -f $(TARGET)
